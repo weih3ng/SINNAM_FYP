@@ -12,6 +12,7 @@
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
+            height: 100%;
         }
 
         .navbar, footer {
@@ -36,10 +37,10 @@
 
         .navbar-links {
             display: flex;
-            flex-grow: 1;  /* This helps to distribute space more evenly */
-            justify-content: center; /* Center all navbar links */
-            gap: 20px; /* Adjust the gap to manage space between navigation links */
-            margin-right: 480px; 
+            flex-grow: 1;
+            justify-content: center;
+            gap: 20px;
+            margin-right: 480px;
         }
 
         .nav-custom {
@@ -48,13 +49,13 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 5px 10px; /* Small padding around text and icon */
-            margin-left: 10px; /* Manage left margin to bring items closer */
-            margin-right: 10px; /* Manage right margin to bring items closer */
+            padding: 5px 10px;
+            margin-left: 10px;
+            margin-right: 10px;
         }
 
         .nav-custom:last-child {
-            margin-right: 0; 
+            margin-right: 0;
         }
 
         .container {
@@ -62,7 +63,9 @@
             align-items: center;
             justify-content: center;
             background-color: #F1EDE2;
-            height: calc(100vh - 120px);
+            min-height: calc(100vh - 120px);
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         .left-decoration img {
@@ -72,17 +75,22 @@
         }
 
         .login-form {
-            background: white;
-            padding: 25px;
-            margin: 100px;
-            height: 400px;
-            border-radius: 20px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 550px;
+    width: 100%;
+    min-height: 400px; /* Ensure a longer height */
+}
 
         .login-form h1 {
             color: #80352F;
             text-align: center;
+            margin-bottom: 20px;
         }
 
         .login-form p {
@@ -92,24 +100,25 @@
         .login-form form {
             display: flex;
             flex-direction: column;
+            align-items: center;
+            width: 100%;
         }
 
-        #idEmail {
-            border-radius: 20px;
-            width: 330px; 
-            height: 35px; 
-            border: 1px solid #DC3545; 
-            background-color: #F8D7DA;
-            margin-left: 110px;
+        .login-form label {
+            align-self: flex-start;
+            margin-left: 15%;
+            margin-bottom: 5px;
+            color: #949494;
         }
-            
-        #idPassword {
-            border-radius: 20px;
-            width: 330px; 
-            height: 35px; 
-            border: 1px solid #DC3545; 
+
+        #idEmail, #idPassword {
+            border-radius: 30px;
+            width: 70%;
+            height: 30px;
+            border: 1px solid #DC3545;
             background-color: #F8D7DA;
-            margin-left: 110px;
+            margin-bottom: 15px;
+            padding: 5px 10px;
         }
 
         #idLoginBtn {
@@ -120,10 +129,7 @@
             padding: 10px 50px;
             border: none;
             border-radius: 30px;
-            border: none;
             cursor: pointer;
-            width: 150px;
-            margin-left: 200px;
         }
 
         .social-media a {
@@ -149,7 +155,7 @@
         </div>
 
         <!-- Sign Up & Login Button -->
-        <a class="nav-custom"></a>
+        <a class="nav-custom" href="#">
             <i class="fa-solid fa-user" style="color: #ffffff;"></i> Sign Up
         </a>
         <a class="nav-custom" href="login.php" style="color: #F8D7DA;">
@@ -164,18 +170,17 @@
         </div>
         
         <div class="login-form">
-            <h1 >Welcome Back</h1>
+            <h1>Welcome Back</h1>
             <form>
-                <label for="idEmail" style="display: block; margin-bottom: 5px; margin-left: 120px;">
-                    <i class="fa-solid fa-envelope" style="color: #949494;"></i> Email
+                <label for="idEmail">
+                    <i class="fa-solid fa-envelope"></i> Email
                 </label>
                 <input id="idEmail" type="text" name="email" required/>
-                <br/><br/>
-                <label for="idPassword" style="display: block; margin-bottom: 5px; margin-left: 120px;">
-                    <i class="fa-solid fa-lock" style="color: #949494;"></i> Password
+                
+                <label for="idPassword">
+                    <i class="fa-solid fa-lock"></i> Password
                 </label>
                 <input id="idPassword" type="password" required/>
-                <br/><br/>
 
                 <button id="idLoginBtn" type="submit">Login</button>
                 
