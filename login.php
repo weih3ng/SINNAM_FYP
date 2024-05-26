@@ -112,13 +112,13 @@
         }
 
         #idEmail, #idPassword {
-            border-radius: 30px;
+            border-radius: 20px;
             width: 70%;
             height: 30px;
             border: 1px solid #DC3545;
             background-color: #F8D7DA;
             margin-bottom: 15px;
-            padding: 5px 10px;
+            padding: 5px 5px;
         }
 
         #idLoginBtn {
@@ -130,6 +130,10 @@
             border: none;
             border-radius: 30px;
             cursor: pointer;
+        }
+        .social-media {
+            margin-top: 2px;
+            
         }
 
         .social-media a {
@@ -191,17 +195,16 @@
 
     <!-- Footer -->
     <footer>
-        <img src="images/logo.jpeg" alt="logo" class="logo">
-        <div class="footer-links">
-            <a href="home.html">Home</a>
-            <a href="#">About Us</a>
-            <a href="#">Services</a>
-            <a href="#">Contact Us</a>
-        </div>
-        <div class="social-media">
-            Follow us <br>
-            <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook" style="color: #ffffff;"></i></a>
-        </div>
-    </footer>
+    <img src="images/logo.jpeg" alt="logo" class="logo">
+    <div>
+        @ 2024 Sin Nam Medical Hall All Rights Reserved
+    </div>
+    <div class="social-media">
+        <span style="margin-right: 10px;">Follow us</span> <!-- Added a span to apply margin -->
+        <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook" style="color: #ffffff;"></i></a>
+    </div>
+</footer>
+
+
 </body>
 </html>
