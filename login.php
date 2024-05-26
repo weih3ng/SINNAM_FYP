@@ -142,18 +142,17 @@
             <img src="images/logo.jpeg" alt="logo" class="logo">
         </a>
         <div class="navbar-links">
-            <a href="#">Home</a>
+            <a href="home.html">Home</a>
             <a href="#">About Us</a>
             <a href="#">Appointment</a>
             <a href="#">Contact Us</a>
         </div>
 
         <!-- Sign Up & Login Button -->
-        <a class="nav-custom" href="signUp.php">
+        <a class="nav-custom"></a>
             <i class="fa-solid fa-user" style="color: #ffffff;"></i> Sign Up
         </a>
-
-        <a class="nav-custom" href="login.php" style="color: #F8D7DA;">
+        <a class="nav-custom" href="login.html" style="color: #F8D7DA;">
             <i class="fa-solid fa-right-to-bracket" style="color: #F8D7DA;"></i> Login
         </a>  
     </div>
@@ -189,7 +188,7 @@
     <footer>
         <img src="images/logo.jpeg" alt="logo" class="logo">
         <div class="footer-links">
-            <a href="#">Home</a>
+            <a href="home.html">Home</a>
             <a href="#">About Us</a>
             <a href="#">Services</a>
             <a href="#">Contact Us</a>
