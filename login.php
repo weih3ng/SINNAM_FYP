@@ -152,7 +152,7 @@
         <a class="nav-custom"></a>
             <i class="fa-solid fa-user" style="color: #ffffff;"></i> Sign Up
         </a>
-        <a class="nav-custom" href="login.html" style="color: #F8D7DA;">
+        <a class="nav-custom" href="login.php" style="color: #F8D7DA;">
             <i class="fa-solid fa-right-to-bracket" style="color: #F8D7DA;"></i> Login
         </a>  
     </div>
