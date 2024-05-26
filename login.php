@@ -69,23 +69,23 @@
         }
 
         .left-decoration img {
-            max-width: 730px;
+            max-width: 850px;
             margin-left: -120px;
             margin-top: 35px;
         }
 
         .login-form {
-    background: white;
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 550px;
-    width: 100%;
-    min-height: 400px; /* Ensure a longer height */
-}
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 550px;
+            width: 100%;
+            min-height: 400px; /* Ensure a longer height */
+        }
 
         .login-form h1 {
             color: #80352F;
