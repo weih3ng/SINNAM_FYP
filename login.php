@@ -1,3 +1,21 @@
+<?php 
+session_start();
+
+$db_host = "localhost:3307";
+$db_user = "root";
+$db_pass = "";
+$db_name = "sinnam_db";
+
+// Create connection
+$link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
+
+// Check connection
+if (isset ($_SESSION['Username'])) {
+    session_destroy();
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -131,9 +149,9 @@
             border-radius: 30px;
             cursor: pointer;
         }
+
         .social-media {
             margin-top: 2px;
-            
         }
 
         .social-media a {
@@ -175,7 +193,11 @@
         
         <div class="login-form">
             <h1>Welcome Back</h1>
-            <form>
+
+           
+
+
+            <form method="post" action="doLogin.php">
                 <label for="idEmail">
                     <i class="fa-solid fa-envelope"></i> Email
                 </label>
@@ -184,10 +206,14 @@
                 <label for="idPassword">
                     <i class="fa-solid fa-lock"></i> Password
                 </label>
-                <input id="idPassword" type="password" required/>
-
-                <button id="idLoginBtn" type="submit">Login</button>
+                <input id="idPassword" type="password" name="password" required/>
                 
+                <button id="idLoginBtn" type="submit">Login</button>
+                <?php if (isset($_SESSION['error_message'])): ?>
+                <p style="color: red;"><?php echo $_SESSION['error_message']; ?></p>
+                <?php unset($_SESSION['error_message']); ?>
+            <?php endif; ?>
+
                 <p>By clicking "LOGIN", I acknowledge that I have read, understood and agree that I am bound by the <a href="#">Account Terms of Use</a>.</p>
             </form>
         </div>
@@ -195,16 +221,16 @@
 
     <!-- Footer -->
     <footer>
-    <img src="images/logo.jpeg" alt="logo" class="logo">
-    <div>
-        @ 2024 Sin Nam Medical Hall All Rights Reserved
-    </div>
-    <div class="social-media">
-        <span style="margin-right: 10px;">Follow us</span> <!-- Added a span to apply margin -->
-        <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook" style="color: #ffffff;"></i></a>
-    </div>
-</footer>
-
-
+        <img src="images/logo.jpeg" alt="logo" class="logo">
+        <div>
+            @ 2024 Sin Nam Medical Hall All Rights Reserved
+        </div>
+        <div class="social-media">
+            <span style="margin-right: 10px;">Follow us</span>
+            <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook" style="color: #ffffff;"></i></a>
+        </div>
+    </footer>
 </body>
 </html>
+
+
