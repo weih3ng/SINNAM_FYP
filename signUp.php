@@ -177,7 +177,7 @@
             </div>
     
             <!-- Sign Up & Login Button -->
-            <a class="nav-custom" href="signup.html">
+            <a class="nav-custom" href="signUp.php">
                 <i class="fa-solid fa-user" style="color: #ffffff;"></i> Sign Up
             </a>
     
