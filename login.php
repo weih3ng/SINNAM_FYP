@@ -1,5 +1,5 @@
 <?php 
-session_start();
+session_start(); // Start the session
 
 $db_host = "localhost:3307";
 $db_user = "root";
@@ -209,10 +209,10 @@ if (isset ($_SESSION['Username'])) {
                 <input id="idPassword" type="password" name="password" required/>
                 
                 <button id="idLoginBtn" type="submit">Login</button>
-                <?php if (isset($_SESSION['error_message'])): ?>
+                <?php if (isset($_SESSION['error_message'])): ?> <!--set error msg (displays in red)-->
                 <p style="color: red;"><?php echo $_SESSION['error_message']; ?></p>
-                <?php unset($_SESSION['error_message']); ?>
-            <?php endif; ?>
+                <?php unset($_SESSION['error_message']); ?> <!-- unsets error msg to clear from session-->
+            <?php endif; ?> <!-- End of 'if' block-->
 
                 <p>By clicking "LOGIN", I acknowledge that I have read, understood and agree that I am bound by the <a href="#">Account Terms of Use</a>.</p>
             </form>
