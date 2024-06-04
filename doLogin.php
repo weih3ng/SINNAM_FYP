@@ -16,7 +16,7 @@ $password = $_POST['password'];
 $msg = "";
 
 // Fetching user details and executing it
-$query = "SELECT * FROM patients WHERE email = '$email' AND Password = '$password'";
+$query = "SELECT * FROM patients WHERE email = '$email' AND Password = SHA1('$password')";
 $result = mysqli_query($link, $query);
 
 // If results exist, fetch into $row

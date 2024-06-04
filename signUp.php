@@ -8,9 +8,9 @@
     <title>Registration Page</title>
     <style>
         body, html {
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
         }
         .navbar, footer {
             background-color: #80352F;
@@ -194,37 +194,37 @@
         <div class="register-form-container">
             <h1>Create New Account</h1>
             <p>Already a member? <a href="login.php">Log in</a></p>
-            <form>
+            <form action="doSignUp.php" method="POST">
                 <label for="idName">
                     <i class="fa-solid fa-user" style="color: #949494;"></i> Name
                 </label>
-                <input id="idName" type="text">
+                <input id="idName" type="text" name="name" required>
                 <label for="idAge">
                     <i class="fa-solid fa-calendar" style="color: #949494;"></i> Age
                 </label>
-                <input id="idAge" type="text">
+                <input id="idAge" type="text" name="age" required>
                 <label for="idEmail">
                     <i class="fa-solid fa-envelope" style="color: #949494;"></i> Email
                 </label>
-                <input id="idEmail" type="email">
+                <input id="idEmail" type="email" name="email" required>
                 <label for="idPassword">
                     <i class="fa-solid fa-lock" style="color: #949494;"></i> Password
                 </label>
-                <input id="idPassword" type="password">
+                <input id="idPassword" type="password" name="password" required>
                 <label for="idDob">
                     <i class="fa-solid fa-calendar-alt" style="color: #949494;"></i> Date of Birth
                 </label>
-                <input id="idDob" type="date">
+                <input id="idDob" type="date" name="dob" required>
                 <div class="gender-container">
                     <label class="gender-label">
                         <i class="fa-solid fa-venus-mars" style="color: #949494;"></i> Gender
                     </label>
                     <div class="gender-radio-buttons">
                     <label class="radio-label">
-                        <input type="radio" name="gender" value="male"> Male
+                        <input type="radio" name="gender" value="male" required> Male
                     </label>
                     <label class="radio-label">
-                        <input type="radio" name="gender" value="female"> Female
+                        <input type="radio" name="gender" value="female" required> Female
                     </label>
                 </div>
             </div>

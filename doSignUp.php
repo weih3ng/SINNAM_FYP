@@ -1,3 +1,40 @@
+<?php
+session_start();
+
+$db_host = "localhost:3307";
+$db_user = "root";
+$db_pass = "";
+$db_name = "sinnam_db";
+
+// Create connection
+$link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
+
+$name = $_POST['name'];
+$age = $_POST['age'];
+$email = $_POST['email'];
+$password = $_POST['password'];
+$dob = $_POST['dob'];
+$gender = $_POST['gender'];
+
+// build sql query
+$query = "INSERT INTO patients(name, age, email, password, dob, gender)
+          VALUES ('$name', '$age', '$email', SHA1('$password'), '$dob', '$gender')";
+
+// execute sql query
+$result = mysqli_query($link, $query) or die ('Error querying database');
+
+// process the result
+if ($result) {
+    $message = "Account Created Successfully";
+}
+else {
+    $message = "record insertion failed";
+}
+
+mysqli_close($link);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
