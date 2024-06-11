@@ -23,60 +23,11 @@ if (isset ($_SESSION['Username'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">  <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->  
+    <link rel="stylesheet" href="style.css"> <!-- External stylesheet for navigation bar and footer -->
     <title>Login Page</title>
 
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            height: 100%;
-        }
-
-        .navbar, footer {
-            background-color: #80352F;
-            color: white;
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .logo {
-            width: 90px;
-            margin-left: 10px;
-        }
-
-        .navbar-links a, .footer-links a {
-            color: white;
-            text-decoration: none;
-            margin: 0 25px;
-        }
-
-        .navbar-links {
-            display: flex;
-            flex-grow: 1;
-            justify-content: center;
-            gap: 20px;
-            margin-right: 480px;
-        }
-
-        .nav-custom {
-            color: white;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 5px 10px;
-            margin-left: 10px;
-            margin-right: 10px;
-        }
-
-        .nav-custom:last-child {
-            margin-right: 0;
-        }
-
-        .container {
+        .login-container {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -126,7 +77,7 @@ if (isset ($_SESSION['Username'])) {
             align-self: flex-start;
             margin-left: 15%;
             margin-bottom: 5px;
-            color: #949494;
+            color: #000000;
         }
 
         #idEmail, #idPassword {
@@ -148,63 +99,53 @@ if (isset ($_SESSION['Username'])) {
             border: none;
             border-radius: 30px;
             cursor: pointer;
+            transition: background-color 0.1s ease;
         }
 
-        .social-media {
-            margin-top: 2px;
+        #idLoginBtn:hover {
+            background-color: #6b2c27; 
         }
-
-        .social-media a {
-            color: white;
-            text-decoration: none;
-            font-size: 24px;
-        }
-
     </style>
 </head>
 <body>
 
     <!-- Navigation Bar -->
     <div class="navbar">
-        <a class="navbar-brand text-dark" href="home.html">
+        <a class="navbar-brand text-dark" href="home.php">
             <img src="images/logo.jpeg" alt="logo" class="logo">
         </a>
         <div class="navbar-links">
-            <a href="home.html">Home</a>
-            <a href="#">About Us</a>
+            <a href="home.php">Home</a>
+            <a href="aboutUs.php">About Us</a>
             <a href="#">Appointment</a>
-            <a href="#">Contact Us</a>
+            <a href="contact.php">Contact Us</a>
         </div>
 
         <!-- Sign Up & Login Button -->
-        <a class="nav-custom" href="#">
-            <i class="fa-solid fa-user" style="color: #ffffff;"></i> Sign Up
+        <a class="nav-custom" href="signUp.php">
+            <i class="fa-solid fa-user"></i> Sign Up
         </a>
-        <a class="nav-custom" href="login.php" style="color: #F8D7DA;">
-            <i class="fa-solid fa-right-to-bracket" style="color: #F8D7DA;"></i> Login
+        <a class="nav-custom" href="login.php">
+            <i class="fa-solid fa-right-to-bracket"></i> Login
         </a>  
     </div>
     
     <!-- Login Container -->
-    <div class="container">
+    <div class="login-container">
         <div class="left-decoration">
             <img src="images/1.png" alt="Decoration">
         </div>
         
         <div class="login-form">
             <h1>Welcome Back</h1>
-
-           
-
-
             <form method="post" action="doLogin.php">
                 <label for="idEmail">
-                    <i class="fa-solid fa-envelope"></i> Email
+                    <i class="fa-solid fa-envelope" style="color: #949494;"></i> Email
                 </label>
                 <input id="idEmail" type="text" name="email" required/>
                 
                 <label for="idPassword">
-                    <i class="fa-solid fa-lock"></i> Password
+                    <i class="fa-solid fa-lock"  style="color: #949494;"></i> Password
                 </label>
                 <input id="idPassword" type="password" name="password" required/>
                 
@@ -221,13 +162,15 @@ if (isset ($_SESSION['Username'])) {
 
     <!-- Footer -->
     <footer>
-        <img src="images/logo.jpeg" alt="logo" class="logo">
+        <a href="home.php">
+            <img src="images/logo.jpeg" alt="logo" class="logo">
+        </a>
         <div>
             @ 2024 Sin Nam Medical Hall All Rights Reserved
         </div>
         <div class="social-media">
             <span style="margin-right: 10px;">Follow us</span>
-            <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook" style="color: #ffffff;"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook"></i></a>
         </div>
     </footer>
 </body>

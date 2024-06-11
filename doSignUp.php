@@ -18,7 +18,7 @@ $gender = $_POST['gender'];
 
 // build sql query
 $query = "INSERT INTO patients(name, age, email, password, dob, gender)
-          VALUES ('$name', '$age', '$email', SHA1('$password'), '$dob', '$gender')";
+            VALUES ('$name', '$age', '$email', SHA1('$password'), '$dob', '$gender')";
 
 // execute sql query
 $result = mysqli_query($link, $query) or die ('Error querying database');
@@ -163,10 +163,10 @@ mysqli_close($link);
 
         <!-- Sign Up & Login Button -->
         <a class="nav-custom" href="#">
-            <i class="fa-solid fa-user" style="color: #ffffff;"></i> Sign Up
+            <i class="fa-solid fa-user"></i> Sign Up
         </a>
-        <a class="nav-custom" href="login.php" style="color: #F8D7DA;">
-            <i class="fa-solid fa-right-to-bracket" style="color: #F8D7DA;"></i> Login
+        <a class="nav-custom" href="login.php">
+            <i class="fa-solid fa-right-to-bracket"></i> Login
         </a>  
     </div>
 
@@ -176,22 +176,22 @@ mysqli_close($link);
             <h1>Registration Successful!</h1><br>
             <p>You have successfully registered<br> an account.</p><br>
             <a href="login.php">
-                <button><b>Login</b></button>
+                <button>Login</button>
             </a>
         </div>
     </div>
 
-        <!-- Footer -->
-        <footer>
-        <img src="images/logo.jpeg" alt="logo" class="logo">
-        <div>
-            @ 2024 Sin Nam Medical Hall All Rights Reserved
-        </div>
-        <div class="social-media">
-            <span style="margin-right: 10px;">Follow us</span>
-            <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook" style="color: #ffffff;"></i></a>
-        </div>
+    <!-- Footer -->
+    <footer>
+    <img src="images/logo.jpeg" alt="logo" class="logo">
+    <div>
+        @ 2024 Sin Nam Medical Hall All Rights Reserved
+    </div>
+    <div class="social-media">
+        <span style="margin-right: 10px;">Follow us</span>
+        <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook"></i></a>
+    </div>
     </footer>
-    </body>
+</body>
 </html>
 

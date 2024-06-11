@@ -122,11 +122,11 @@
     
             <!-- Sign Up & Login Button -->
             <a class="nav-custom" href="signUp.php">
-                <i class="fa-solid fa-user" style="color: #ffffff;"></i> Sign Up
+                <i class="fa-solid fa-user"></i> Sign Up
             </a>
     
-            <a class="nav-custom" href="login.php" style="color: #F8D7DA;">
-                <i class="fa-solid fa-right-to-bracket" style="color: #F8D7DA;"></i> Login
+            <a class="nav-custom" href="login.php">
+                <i class="fa-solid fa-right-to-bracket"></i> Login
             </a>  
         </div>
 
@@ -188,7 +188,7 @@
             </div>
             <div class="social-media">
                 <span style="margin-right: 10px;">Follow us</span> <!-- Added a span to apply margin -->
-                <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook" style="color: #ffffff;"></i></a>
+                <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook"></i></a>
             </div>
         </footer>
 </body>

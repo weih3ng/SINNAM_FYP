@@ -123,11 +123,11 @@
         </div>
     <!-- Sign Up & Login Button -->
             <a class="nav-custom" href="signUp.php">
-                <i class="fa-solid fa-user" style="color: #ffffff;"></i> Sign Up
+                <i class="fa-solid fa-user"></i> Sign Up
             </a>
 
-            <a class="nav-custom" href="login.php" style="color: #F8D7DA;">
-                <i class="fa-solid fa-right-to-bracket" style="color: #F8D7DA;"></i> Login
+            <a class="nav-custom" href="login.php">
+                <i class="fa-solid fa-right-to-bracket"></i> Login
             </a>  
         </div>
         <!-- Contact Us Container -->
@@ -157,15 +157,15 @@
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.5821468522818!2d103.82907987310031!3d1.4263036613292244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da14719291728d%3A0xdada9f87c45b6ac8!2sSin%20Nam%20Medical%20Hall%20Pte%20Ltd!5e0!3m2!1sen!2ssg!4v1717591901703!5m2!1sen!2ssg"></iframe>
         </div>
 
-     <!-- Footer -->
-     <footer>
+    <!-- Footer -->
+    <footer>
         <img src="images/logo.jpeg" alt="logo" class="logo">
         <div>
             @ 2024 Sin Nam Medical Hall All Rights Reserved
         </div>
         <div class="social-media">
             <span style="margin-right: 10px;">Follow us</span> <!-- Added a span to apply margin -->
-            <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook" style="color: #ffffff;"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook"></i></a>
         </div>
     </footer>
 
