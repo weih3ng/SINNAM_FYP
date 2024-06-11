@@ -60,7 +60,7 @@
             background-color: #80352F;
             color: white;
             border: none;
-            border-radius: 20px;
+            border-radius: 30px;
             font-size: 16px;
             cursor: pointer;
             margin-top: 10px;
@@ -112,13 +112,13 @@
 <body>
     <!-- Navigation Bar -->
     <div class="navbar">
-        <a class="navbar-brand text-dark" href="home.html">
+        <a class="navbar-brand text-dark" href="home.php">
             <img src="images/logo.jpeg" alt="logo" class="logo">
         </a>
         <div class="navbar-links">
-            <a href="home.html">Home</a>
+            <a href="home.php">Home</a>
             <a href="aboutUs.php">About Us</a>
-            <a href="#">Appointment</a>
+            <a href="appointment.php">Appointment</a>
             <a href="contact.php">Contact Us</a>
         </div>
     <!-- Sign Up & Login Button -->
@@ -159,7 +159,9 @@
 
     <!-- Footer -->
     <footer>
+    <a href="home.php">
         <img src="images/logo.jpeg" alt="logo" class="logo">
+    </a>
         <div>
             @ 2024 Sin Nam Medical Hall All Rights Reserved
         </div>
