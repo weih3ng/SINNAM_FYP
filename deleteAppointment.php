@@ -1,3 +1,9 @@
+<?php 
+session_start(); // Start the session
+
+include 'dbfunctions.php';
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

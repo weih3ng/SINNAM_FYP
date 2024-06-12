@@ -5,58 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">  <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->  
+    <link rel="stylesheet" href="style.css">
     <title>Sin Nam Medical Hall</title>
+    
 
     <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            height: 100%;
-        }
-
-        .navbar, footer {
-            background-color: #80352F;
-            color: white;
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .logo {
-            width: 90px;
-            margin-left: 10px;
-        }
-
-        .navbar-links a, .footer-links a {
-            color: white;
-            text-decoration: none;
-            margin: 0 25px;
-        }
-
-        .navbar-links {
-            display: flex;
-            flex-grow: 1;
-            justify-content: center;
-            gap: 20px;
-            margin-right: 480px;
-        }
-
-        .nav-custom {
-            color: white;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 5px 10px;
-            margin-left: 10px;
-            margin-right: 10px;
-        }
-
-        .nav-custom:last-child {
-            margin-right: 0;
-        }
 
         .container {
             padding: 20px;
@@ -142,12 +95,6 @@
             font-size: 30px;
             margin: 0; /* Remove default margin of paragraphs */
             margin-bottom: 45px;
-        }
-
-        .social-media a {
-            color: white;
-            text-decoration: none;
-            font-size: 24px;
         }
         p {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Change font to Segoe UI */

@@ -1,18 +1,7 @@
 <?php 
 session_start(); // Start the session
 
-$db_host = "localhost:3307";
-$db_user = "root";
-$db_pass = "";
-$db_name = "sinnam_db";
-
-// Create connection
-$link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
-
-// Check connection
-if (isset ($_SESSION['Username'])) {
-    session_destroy();
-}
+include 'dbfunctions.php';
 
 ?>
 
@@ -24,6 +13,7 @@ if (isset ($_SESSION['Username'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">  <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->  
     <link rel="stylesheet" href="style.css"> <!-- External stylesheet for navigation bar and footer -->
+    <link rel="stylesheet" href="style.css">
     <title>Login Page</title>
 
     <style>
