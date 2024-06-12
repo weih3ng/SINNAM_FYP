@@ -1,3 +1,10 @@
+<?php 
+session_start(); // Start the session
+
+include 'dbfunctions.php';
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -119,10 +126,24 @@
         <a class="nav-custom" href="#">
             <i class="fa-solid fa-user"></i> Sign Up
         </a>
+
+        <?php
+
+        if (isset($_SESSION['Username'])) { ?>
+
         <a class="nav-custom" href="login.php">
             <i class="fa-solid fa-right-to-bracket"></i> Login
         </a>  
-    </div>
+
+        <?php }else { ?>
+
+        <a class="nav-custom" href="logout.php">
+            <i class="fa-solid fa-right-to-bracket"></i> Logout
+        </a>  
+        
+        <?php } ?>
+
+        </div>
 
     <!-- Main Content -->
     <div class="container">

@@ -94,7 +94,7 @@ mysqli_close($link);
             <img src="images/logo.jpeg" alt="logo" class="logo">
         </a>
         <div class="navbar-links">
-            <a href="home.html">Home</a>
+            <a href="home.php">Home</a>
             <a href="#">About Us</a>
             <a href="#">Appointment</a>
             <a href="#">Contact Us</a>
@@ -104,17 +104,30 @@ mysqli_close($link);
         <a class="nav-custom" href="#">
             <i class="fa-solid fa-user"></i> Sign Up
         </a>
+
+        <?php
+
+        if (isset($_SESSION['Username'])) { ?>
+
         <a class="nav-custom" href="login.php">
             <i class="fa-solid fa-right-to-bracket"></i> Login
         </a>  
-    </div>
+
+        <?php }else { ?>
+            
+        <a class="nav-custom" href="logout.php">
+            <i class="fa-solid fa-right-to-bracket"></i> Logout
+        </a>  
+        <?php } ?>
+
+        </div>
 
     <!-- Login Container -->
     <div class="container">
         <div class="content-box">
             <h1>Login Successful!</h1><br>
             <p>You have successfully logged in.</p><br>
-            <a href="home.html">
+            <a href="home.php">
                 <button>Home</button>
             </a>
         </div>
