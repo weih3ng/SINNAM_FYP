@@ -109,7 +109,7 @@
             <img src="images/logo.jpeg" alt="logo" class="logo">
         </a>
         <div class="navbar-links">
-            <a href="home.html">Home</a>
+            <a href="home.php">Home</a>
             <a href="#">About Us</a>
             <a href="#">Appointment</a>
             <a href="#">Contact Us</a>
