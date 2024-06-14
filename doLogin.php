@@ -10,7 +10,7 @@ $password = $_POST['password'];
 $msg = "";
 
 // Fetching user details and executing it
-$query = "SELECT * FROM patients WHERE email = '$email' AND Password = SHA1('$password')";
+$query = "SELECT * FROM patients WHERE email = '$email' AND Password = '$password'";
 $result = mysqli_query($link, $query);
 
 // If results exist, fetch into $row
@@ -18,6 +18,7 @@ if ($result && mysqli_num_rows($result) > 0) {
     $row = mysqli_fetch_array($result);
     $msg = "Login Successful";
     $_SESSION['success_message'] = "Successfully logged in.";
+    $_SESSION['username'] = $row['username'];
 } 
 // If no results found, set error msg and redirect to login.php
 else {
@@ -107,17 +108,18 @@ mysqli_close($link);
 
         <?php
 
-        if (isset($_SESSION['Username'])) { ?>
+        if (isset($_SESSION['username'])) { ?>
 
-        <a class="nav-custom" href="login.php">
-            <i class="fa-solid fa-right-to-bracket"></i> Login
-        </a>  
 
-        <?php }else { ?>
-            
         <a class="nav-custom" href="logout.php">
             <i class="fa-solid fa-right-to-bracket"></i> Logout
         </a>  
+        <?php }else { ?>
+            <a class="nav-custom" href="login.php">
+            <i class="fa-solid fa-right-to-bracket"></i> Login
+        </a>  
+
+        
         <?php } ?>
 
         </div>

@@ -8,7 +8,7 @@ $db_name = "sinnam_db";
 $link = mysqli_connect($db_host, $db_user, $db_pass, $db_name);
 
 // Check connection
-if (isset ($_SESSION['Username'])) {
-    session_destroy();
+if (!$link) {
+    die("Connection failed: " . mysqli_connect_error());
 }
 ?>
