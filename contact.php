@@ -130,7 +130,7 @@ include 'dbfunctions.php';
         </div>
 
         <!-- Sign Up & Login Button -->
-        <a class="nav-custom" href="#">
+        <a class="nav-custom" href="signUp.php">
             <i class="fa-solid fa-user"></i> Sign Up
         </a>
 

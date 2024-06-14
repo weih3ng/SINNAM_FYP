@@ -109,7 +109,7 @@ include 'dbfunctions.php';
         <div class="navbar-links">
             <a href="home.php">Home</a>
             <a href="aboutUs.php">About Us</a>
-            <a href="#">Appointment</a>
+            <a href="appointment.php">Appointment</a>
             <a href="contact.php">Contact Us</a>
         </div>
 
