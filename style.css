@@ -18,6 +18,7 @@
         width: 90px;
         margin-left: 10px;
     }
+
     .navbar-links a, .footer-links a {
         color: white;
         text-decoration: none;
@@ -31,6 +32,7 @@
         gap: 20px; /* Adjust the gap to manage space between navigation links */
         margin-right: 480px; 
     }
+    
     .nav-custom {
         color: white;
         text-decoration: none;
