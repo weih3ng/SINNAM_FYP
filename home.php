@@ -28,11 +28,12 @@ include 'dbfunctions.php';
         }
 
         .carousel-item img {
-            width: 100%; /* Ensures the image takes the full width of the container */
-            max-height: 500px; /* Adjust this value based on your preference */
+            width: 100%; 
+            max-height: 500px; 
             object-fit: cover; /* Ensures the image covers the area without distorting aspect ratio */
         }
 
+        /* Styles for How To Book */
         .how-to-book-section {
             padding: 40px 0; /* Top and bottom padding */
         }
@@ -46,30 +47,32 @@ include 'dbfunctions.php';
 
         .title-wrapper h2 {
             margin: 0 -30px; /* Adds spacing between the lines and the text */
+            font-weight: bold;
         }
 
         .line {
             flex-grow: 1; /* Allows the lines to take up available space */
-            border-top: 1.5px solid #000000; /* Style the line */
+            border-top: 1.5px solid #000000; 
             max-width: 300px; /* Sets a maximum width for the lines */
         }
 
         .booking-info h2 {
-            font-size: 24px; /* Larger font size for heading */
-            color: #333; /* Dark color for text */
-            text-align: center; /* Center align the title */
+            font-size: 24px; 
+            color: #333; 
+            text-align: center; 
         }
 
         .booking-info {
-            margin-top: 50px; /* Additional spacing */
-            margin-bottom: 20px; /* Additional spacing */
+            margin-top: 50px; 
+            margin-bottom: 20px; 
+            padding-left: 15%;
         }
 
         .booking-info ol {
             padding-left: 20px; /* Proper indentation for list */
         }
 
-        .book-now-btn {
+        .book-now-btn { 
             background-color: #80352F;
             color: white;
             font-size: 16px;
@@ -79,20 +82,83 @@ include 'dbfunctions.php';
             border-radius: 30px;
             cursor: pointer;
             transition: background-color 0.1s ease;
+            text-decoration: none; 
         }
 
         .book-now-btn:hover {
-            background-color: #6b2c27; /* Darker shade on hover */
+            background-color: #6b2c27; 
+            color: white;
         }
 
         .booking-image img {
-            width: 100%; /* Full width within the column */
-            height: auto; /* Maintain aspect ratio */
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Subtle shadow for depth */
-            border-radius: 50px; /* Rounded corners for the image */
+            width: 100%; 
+            height: auto; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+            border-radius: 50px; 
         }
 
 
+        /* Styles for Testimonials */
+        .testimonial-section {
+            padding: 40px 0;  /* Top and bottom padding for the section */
+        }
+
+        .testimonial-section img {
+            position: relative; /* Allows for positioning adjustments */
+            left: 8%;
+            width: 650px;  
+            height: 350px; 
+            object-fit: cover; /* Cover the space without distorting aspect ratio */
+        }
+
+        .testimonial-content {
+            position: absolute;
+            top: 50%;  /* Center vertically in relation to the parent */
+            right: 10%; /* Positioned slightly from the right */
+            background: white;
+            padding: 40px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            width: 35%; 
+            transform: translateY(-50%); /* Centering the box */ 
+            margin-bottom: 30px; /* Add space at the bottom */
+        }
+
+        .testimonial-text {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 10px; 
+        }
+
+        .testimonial-author {
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        #carouselIndicators2 {
+            position: absolute;
+            bottom: -40px; /* Position the indicators below the content */
+            left: 20%; /* Center the indicators */
+            width: 100%;
+            justify-content: center; /* Center the indicators */
+            padding-left: 0;
+            margin-right: 15%;
+            list-style: none;
+        }
+
+        #carouselIndicators2 li {
+            background-color: gray; /* Default color */
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin: 0 2px;
+        }
+
+        #carouselIndicators2 .active {
+            background-color: #80352F; /* Active color */
+        }
+
+    
         
     </style>
 </head>
@@ -144,7 +210,7 @@ include 'dbfunctions.php';
         <div class="slideshow-section">
             <div id="demo" class="carousel slide" data-ride="carousel">
                 <!-- Indicators -->
-                <ul class="carousel-indicators">
+                <ul class="carousel-indicators" id="carouselIndicators1">
                     <li data-target="#demo" data-slide-to="0" class="active"></li>
                     <li data-target="#demo" data-slide-to="1"></li>
                 </ul>
@@ -184,13 +250,73 @@ include 'dbfunctions.php';
                         <li>Receive an appointment confirmation</li>
                         <li>Booking successful!</li>
                     </ol>
-                    <button class="book-now-btn">Book Now</button>
+                    <a href="appointment.php" class="book-now-btn btn">Book Now</a>
                 </div>
                 <div class="col-md-6 booking-image">
                     <img src="images/4.jpg" alt="Image describing booking process" class="img-fluid">
                 </div>
             </div>
         </div>
+
+        <!-- Testimonial Section -->
+        <div class="testimonial-section container mt-5">
+            <div class="title-wrapper text-center">
+                <hr class="line">
+                <h2>Testimonials</h2>
+                <hr class="line">
+            </div>
+            <div class="row">
+                <div class="col-lg-12 position-relative">
+                    <img src="images/5.jpg" alt="Testimonial Background" class="img-fluid">
+                    <div class="testimonial-content">
+                        <div id="testimonialCarousel" class="carousel slide" data-ride="carousel">
+
+                            <!-- Indicators -->
+                            <ul class="carousel-indicators" id="carouselIndicators2">
+                                <li data-target="#testimonialCarousel" data-slide-to="0" class="active"></li>
+                                <li data-target="#testimonialCarousel" data-slide-to="1"></li>
+                                <li data-target="#testimonialCarousel" data-slide-to="2"></li>
+                                <li data-target="#testimonialCarousel" data-slide-to="3"></li>
+                                <li data-target="#testimonialCarousel" data-slide-to="4"></li>
+                            </ul>
+
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <h5 class="testimonial-author">Jin H</h5>
+                                    <p class="testimonial-text">Doctor is very patient and powerful, the most powerful Chinese medicine 
+                                        practitioner I have ever encountered, and the results are very good. It's just a long wait in line, 
+                                        but it's well worth it.</p>
+                                </div>
+                                <!-- More testimonials can be added here -->
+                                <div class="carousel-item">
+                                    <h5 class="testimonial-author">Tan Wei Ling</h5>
+                                    <p class="testimonial-text">I was thoroughly impressed by the professionalism and warmth of the staff. 
+                                        The treatment I received was both effective and nurturing. Highly recommended for anyone looking for quality care!</p>
+                                </div>
+                                <div class="carousel-item">
+                                    <h5 class="testimonial-author">Liu Xing</h5>
+                                    <p class="testimonial-text">I have been a patient of Sin Nam Medical Hall for many years. The doctors are 
+                                        knowledgeable and caring. I have always been treated with respect and kindness. I highly recommend this clinic.</p>
+                                </div>
+                                <div class="carousel-item">
+                                    <h5 class="testimonial-author">Sophie Lee</h5>
+                                    <p class="testimonial-text">I have been a patient of Sin Nam Medical Hall for many years. The doctors are 
+                                        knowledgeable and caring. I have always been treated with respect and kindness. I highly recommend this clinic.</p>
+                                </div>
+                                <div class="carousel-item">
+                                    <h5 class="testimonial-author">Ahmed J.</h5>
+                                    <p class="testimonial-text">I have been a patient of Sin Nam Medical Hall for many years. The doctors are 
+                                        knowledgeable and caring. I have always been treated with respect and kindness. I highly recommend this clinic.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
 
 
