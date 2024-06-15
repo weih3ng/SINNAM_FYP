@@ -22,16 +22,19 @@ include 'dbfunctions.php';
     <title>Home Page</title>
 
     <style>
-
         .home-container {
             background-color: #F1EDE2;
         }
 
+
+        /* Styles for Carousel */
         .carousel-item img {
             width: 100%; 
             max-height: 500px; 
             object-fit: cover; /* Ensures the image covers the area without distorting aspect ratio */
         }
+
+
 
         /* Styles for How To Book */
         .how-to-book-section {
@@ -98,9 +101,11 @@ include 'dbfunctions.php';
         }
 
 
+
         /* Styles for Testimonials */
         .testimonial-section {
-            padding: 40px 0;  /* Top and bottom padding for the section */
+            padding-top: 10px;  /* Top and bottom padding for the section */
+            padding-bottom: 80px;
         }
 
         .testimonial-section img {
@@ -157,9 +162,6 @@ include 'dbfunctions.php';
         #carouselIndicators2 .active {
             background-color: #80352F; /* Active color */
         }
-
-    
-        
     </style>
 </head>
 
@@ -203,12 +205,14 @@ include 'dbfunctions.php';
     </div>
 
 
+
     <!-- Home Container -->
     <div class="home-container">
 
-        <!-- SlideShow Section -->
-        <div class="slideshow-section">
+        <!-- Carousel Section -->
+        <div class="carousel-section">
             <div id="demo" class="carousel slide" data-ride="carousel">
+
                 <!-- Indicators -->
                 <ul class="carousel-indicators" id="carouselIndicators1">
                     <li data-target="#demo" data-slide-to="0" class="active"></li>
@@ -315,15 +319,10 @@ include 'dbfunctions.php';
                 </div>
             </div>
         </div>
-
-
-
-
-
-
     </div>
 
 
+    
     <!-- Footer -->
     <footer>
         <a href="home.php">
