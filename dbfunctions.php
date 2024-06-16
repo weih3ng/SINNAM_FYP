@@ -1,5 +1,5 @@
 <?php
-$db_host = "localhost:3307";
+$db_host = "localhost:3306";
 $db_user = "root";
 $db_pass = "";
 $db_name = "sinnam_db";

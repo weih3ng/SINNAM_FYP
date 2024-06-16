@@ -2,6 +2,19 @@
 session_start(); // Start the session
 
 include 'dbfunctions.php';
+// Query to retrieve all appointments
+$query = "SELECT * FROM appointments";
+$result = mysqli_query($link, $query);
+
+// Check if there are appointments in the database
+if (mysqli_num_rows($result) > 0) {
+    $appointments = mysqli_fetch_all($result, MYSQLI_ASSOC);
+} else {
+    $appointments = []; // Empty array if no appointments found
+}
+
+// Close database connection
+mysqli_close($link);
 ?>
 
 <!DOCTYPE html>
@@ -32,7 +45,7 @@ include 'dbfunctions.php';
             padding: 80px;
             text-align: center;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
+            max-width: 670px;
             width: 100%;
         }
 
@@ -151,78 +164,36 @@ include 'dbfunctions.php';
         <div class="content-box">
             <h1>View Appointment</h1>
 
+
             <table>
+            <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>Customer Name</th>
+                    <th>Appointment ID</th>
                     <th>Date</th>
                     <th>Time</th>
+                    <th>Queue Number</th>
+                    <th>Status</th>
                     <th>Action</th>
+                    <!-- Add more columns as needed -->
                 </tr>
-                <!-- Example Data -->
-                <tr>
-                    <td>1</td>
-                    <td>John Tan</td>
-                    <td>23/04/2023</td>
-                    <td>1300</td>
-                    <td class="action-buttons">
+            </thead>
+            <tbody>
+                <?php foreach ($appointments as $appointment) : ?>
+                    <tr>
+                        <td><?php echo $appointment['appointment_id']; ?></td>
+                        <td><?php echo $appointment['date']; ?></td>
+                        <td><?php echo $appointment['time']; ?></td>
+                        <td><?php echo $appointment['queue_number']; ?></td>
+                        <td><?php echo $appointment['booking_status']; ?></td>
+                        <td class="action-buttons">
                         <a href="editAppointment.php" class="btn btn-edit">Edit</a>
                         <a href="deleteAppointment.php" class="btn btn-delete">Delete</a>
                     </td>
-                    </td>
-                </tr>
-                <!-- Repeat for each appointment -->
-                <tr>
-                    <td>2</td>
-                    <td>Kelvin Tan</td>
-                    <td>26/04/2023</td>
-                    <td>1100</td>
-                    <td class="action-buttons">
-                        <a href="editAppointment.php" class="btn btn-edit">Edit</a>
-                        <a href="deleteAppointment.php" class="btn btn-delete">Delete</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Josh Lee</td>
-                    <td>26/04/2023</td>
-                    <td>1115</td>
-                    <td class="action-buttons">
-                        <a href="editAppointment.php" class="btn btn-edit">Edit</a>
-                        <a href="deleteAppointment.php" class="btn btn-delete">Delete</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>Mary Leong</td>
-                    <td>15/05/2023</td>
-                    <td>1200</td>
-                    <td class="action-buttons">
-                        <a href="editAppointment.php" class="btn btn-edit">Edit</a>
-                        <a href="deleteAppointment.php" class="btn btn-delete">Delete</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>John Tan</td>
-                    <td>23/04/2023</td>
-                    <td>1300</td>
-                    <td class="action-buttons">
-                        <a href="editAppointment.php" class="btn btn-edit">Edit</a>
-                        <a href="deleteAppointment.php" class="btn btn-delete">Delete</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>Tan Wei Liang</td>
-                    <td>19/05/2023</td>
-                    <td>1500</td>
-                    <td class="action-buttons">
-                        <a href="editAppointment.php" class="btn btn-edit">Edit</a>
-                        <a href="deleteAppointment.php" class="btn btn-delete">Delete</a>
-                    </td>
-                </tr>
-            </table>
+                        <!-- Add more columns as needed -->
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
             <a href="home.php">
                 <button class="btn btn-done">Done</button>
             </a>
