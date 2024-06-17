@@ -186,9 +186,9 @@ mysqli_close($link);
                         <td><?php echo $appointment['queue_number']; ?></td>
                         <td><?php echo $appointment['booking_status']; ?></td>
                         <td class="action-buttons">
-                        <a href="editAppointment.php" class="btn btn-edit">Edit</a>
-                        <a href="deleteAppointment.php" class="btn btn-delete">Delete</a>
-                    </td>
+                                <a href="editAppointment.php?id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">Edit</a>
+                                <a href="deleteAppointment.php?id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">Delete</a>
+                            </td>
                         <!-- Add more columns as needed -->
                     </tr>
                 <?php endforeach; ?>
