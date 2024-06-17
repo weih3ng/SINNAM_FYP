@@ -79,7 +79,7 @@ include 'dbfunctions.php';
 
         h1 {
             text-align: center;
-            margin: 20px 0;
+            margin: 20px 0 50px 0;
         }
 
         /* Custom styles to make the calendar larger */
