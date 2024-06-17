@@ -79,8 +79,9 @@ mysqli_close($link);
             color: white;
             border: none;
             border-radius: 30px;
-            padding: 10px 35px;
+            padding: 10px 50px;
             cursor: pointer;
+            font-weight: bold;
         }
 
 

@@ -69,17 +69,17 @@ include 'dbfunctions.php';
             background-color: #80352F;
             color: white;
             border: none;
-            padding: 15px 25px;
-            font-size: 18px;
+            padding: 10px 50px;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 30px;
             margin-top: 20px; /* Adjust margin-top to create space */
         }
 
         h1 {
             text-align: center;
-            margin-top: -250px;
-            margin-bottom: 80px;
+            margin: 20px 0;
         }
 
         /* Custom styles to make the calendar larger */
@@ -123,7 +123,7 @@ include 'dbfunctions.php';
         <h1>Schedule Doctor Appointment</h1>
         <div class="content-wrapper">
             <div id="calendar-container" class="calendar"></div>
-            <div class="timeslot-container">
+            <form action="appointmentConfirm.php" method="post" div class="timeslot-container">
                 <label for="timeslot"><b>Select time slot:<b></label>
                 <select id="timeslot">
                     <option value="10:30 AM">10:30 AM</option>
@@ -136,6 +136,7 @@ include 'dbfunctions.php';
                     <option value="5:00 PM">5:00 PM</option>
                 </select>
                 <button class="btn-book">Book</button>
+            </form>
             </div>
         </div>
     </div>

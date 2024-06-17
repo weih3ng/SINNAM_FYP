@@ -168,7 +168,7 @@ include 'dbfunctions.php';
                     <button type="submit" class="btn">Submit</button>
                 </form>
                 <div id="successMessage" style="display:none; color: red; margin-top: 20px;">
-                Your contact form has been submitted successfully!
+                Your contact form has been submitted successfully !
             </div>
             </div>
             <div class="contact-details">
