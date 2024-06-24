@@ -56,7 +56,7 @@ include 'dbfunctions.php';
         .line {
             flex-grow: 1; /* Allows the lines to take up available space */
             border-top: 1.5px solid #000000; 
-            max-width: 300px; /* Sets a maximum width for the lines */
+            max-width: 300px; 
         }
 
         .booking-info h2 {
@@ -161,6 +161,18 @@ include 'dbfunctions.php';
 
         #carouselIndicators2 .active {
             background-color: #80352F; /* Active color */
+        }
+
+
+        /* Additional specificity to ensure it overrides default styles */
+        .navbar-links a, .nav-custom {
+        color: inherit; /* Ensures the links inherit the color of their parent */
+        text-decoration: none; 
+        }
+        
+        .navbar-links a:hover, .nav-custom:hover {
+        color: inherit; /* Ensures the links do not change color on hover */
+        text-decoration: none; 
         }
     </style>
 </head>
