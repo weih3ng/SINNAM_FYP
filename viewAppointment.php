@@ -172,7 +172,6 @@ mysqli_close($link);
                     <th>Date</th>
                     <th>Time</th>
                     <th>Queue Number</th>
-                    <th>Status</th>
                     <th>Action</th>
                     <!-- Add more columns as needed -->
                 </tr>
@@ -184,11 +183,10 @@ mysqli_close($link);
                         <td><?php echo $appointment['date']; ?></td>
                         <td><?php echo $appointment['time']; ?></td>
                         <td><?php echo $appointment['queue_number']; ?></td>
-                        <td><?php echo $appointment['booking_status']; ?></td>
                         <td class="action-buttons">
                                 <a href="editAppointment.php?id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">Edit</a>
                                 <a href="deleteAppointment.php?id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">Delete</a>
-                            </td>
+                        </td>
                         <!-- Add more columns as needed -->
                     </tr>
                 <?php endforeach; ?>
