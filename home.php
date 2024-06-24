@@ -31,7 +31,7 @@ include 'dbfunctions.php';
         .carousel-item img {
             width: 100%; 
             max-height: 500px; 
-            object-fit: cover; /* Ensures the image covers the area without distorting aspect ratio */
+            object-fit: cover; /* Image covers the area without distorted */
         }
 
 
@@ -72,7 +72,7 @@ include 'dbfunctions.php';
         }
 
         .booking-info ol {
-            padding-left: 20px; /* Proper indentation for list */
+            padding-left: 20px; 
         }
 
         .book-now-btn { 
@@ -104,7 +104,7 @@ include 'dbfunctions.php';
 
         /* Styles for Testimonials */
         .testimonial-section {
-            padding-top: 10px;  /* Top and bottom padding for the section */
+            padding-top: 10px;  
             padding-bottom: 80px;
         }
 
@@ -113,19 +113,19 @@ include 'dbfunctions.php';
             left: 8%;
             width: 650px;  
             height: 350px; 
-            object-fit: cover; /* Cover the space without distorting aspect ratio */
+            object-fit: cover; /* Image covers the area without distorted */
         }
 
         .testimonial-content {
             position: absolute;
-            top: 50%;  /* Center vertically in relation to the parent */
-            right: 10%; /* Positioned slightly from the right */
+            top: 50%;  /* Positions the top edge of the box */
+            right: 10%; /* Positions the right edge of the box */
             background: white;
             padding: 40px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
             width: 35%; 
-            transform: translateY(-50%); /* Centering the box */ 
-            margin-bottom: 30px; /* Add space at the bottom */
+            transform: translateY(-50%); /* Center the box */ 
+            margin-bottom: 30px; 
         }
 
         .testimonial-text {
@@ -143,16 +143,16 @@ include 'dbfunctions.php';
         #carouselIndicators2 {
             position: absolute;
             bottom: -40px; /* Position the indicators below the content */
-            left: 20%; /* Center the indicators */
+            left: 20%; /* Move the indicators to the left */
             width: 100%;
-            justify-content: center; /* Center the indicators */
+            justify-content: center; 
             padding-left: 0;
             margin-right: 15%;
             list-style: none;
         }
 
         #carouselIndicators2 li {
-            background-color: gray; /* Default color */
+            background-color: gray; 
             width: 10px;
             height: 10px;
             border-radius: 50%;
@@ -160,19 +160,20 @@ include 'dbfunctions.php';
         }
 
         #carouselIndicators2 .active {
-            background-color: #80352F; /* Active color */
+            background-color: #80352F; 
         }
+
 
 
         /* Additional specificity to ensure it overrides default styles */
         .navbar-links a, .nav-custom {
-        color: inherit; /* Ensures the links inherit the color of their parent */
-        text-decoration: none; 
+            color: inherit; /* Ensure the text color have the same as the parent elements  */
+            text-decoration: none; 
         }
         
         .navbar-links a:hover, .nav-custom:hover {
-        color: inherit; /* Ensures the links do not change color on hover */
-        text-decoration: none; 
+            color: inherit; /* Ensures the links do not change color on hover */
+            text-decoration: none; 
         }
     </style>
 </head>
