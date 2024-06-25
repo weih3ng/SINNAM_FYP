@@ -10,18 +10,38 @@ $password = $_POST['password'];
 $msg = "";
 
 // Fetching user details and executing it
-$query = "SELECT * FROM patients WHERE email = '$email' AND Password = '$password'";
-$result = mysqli_query($link, $query);
+function check_user($link, $email, $password, $table) {
+    $query = "SELECT * FROM $table WHERE email = '$email' AND Password = '$password'";
+    $result = mysqli_query($link, $query);
+    if ($result && mysqli_num_rows($result) > 0) {
+        return mysqli_fetch_array($result);
+    }
+    return false;
+}
 
-// If results exist, fetch into $row
-if ($result && mysqli_num_rows($result) > 0) {
-    $row = mysqli_fetch_array($result);
+// Check patients table
+$user = check_user($link, $email, $password, 'patients');
+$user_type = 'patient';
+
+if (!$user) {
+    // Check admins table
+    $user = check_user($link, $email, $password, 'admins');
+    $user_type = 'admin';
+}
+
+if (!$user) {
+    // Check doctors table
+    $user = check_user($link, $email, $password, 'doctors');
+    $user_type = 'doctor';
+}
+
+// If a user is found, set session variables and success message
+if ($user) {
     $msg = "Login Successful";
     $_SESSION['success_message'] = "Successfully logged in.";
-    $_SESSION['username'] = $row['username'];
-} 
-// If no results found, set error msg and redirect to login.php
-else {
+    $_SESSION['username'] = $user['username'];
+} else {
+    // If no user is found, set error message and redirect to login.php
     $_SESSION['error_message'] = "Invalid email or password. Please try again.";
     header('Location: login.php');
     $msg = "Login Failed";
