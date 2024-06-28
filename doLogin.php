@@ -40,6 +40,7 @@ if ($user) {
     $msg = "Login Successful";
     $_SESSION['success_message'] = "Successfully logged in.";
     $_SESSION['username'] = $user['username'];
+    $_SESSION['patients_id'] = $user['patients_id'];
 } else {
     // If no user is found, set error message and redirect to login.php
     $_SESSION['error_message'] = "Invalid email or password. Please try again.";
