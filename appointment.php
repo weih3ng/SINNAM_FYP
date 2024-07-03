@@ -5,25 +5,6 @@ include 'dbfunctions.php';
 
 
 
-
-// Query to count the number of appointments (joc)
-$count_query = "SELECT COUNT(*) as appointment_count FROM appointments WHERE patients_id = ?";
-if ($stmt = mysqli_prepare($link, $count_query)) {
-    mysqli_stmt_bind_param($stmt, "i", $patients_id);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    $row = mysqli_fetch_assoc($result);
-    $appointment_count = $row['appointment_count'];
-    mysqli_stmt_close($stmt);
-} else {
-    echo "ERROR: Could not prepare query: $count_query. " . mysqli_error($link);
-}
-
-// Check if the patient has already booked two appointments (joc)
-$allow_booking = $appointment_count < 2;
-
-
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['date']) && isset($_POST['timeslot'])) {
         $date = $_POST['date'];
@@ -213,9 +194,7 @@ mysqli_close($link);
 
     <div class="container">
         <?php if (isset($_SESSION['loggedin']) || isset($_SESSION['loggedin']) == true) { ?> <!-- Check if user is logged in (joc) -->
-            
-            <?php if ($allow_booking) { ?> <!-- Check if user has not booked two appointments (joc) -->
-
+        
             <h1>Schedule Doctor Appointment</h1>
             <div class="content-wrapper">
 
@@ -262,10 +241,6 @@ mysqli_close($link);
 
                     <button class="btn-book">Book</button>
                 </form>
-            <?php } else { ?>
-                <h1>Appointment Limit Reached</h1>
-                <p>You have already booked two appointments. Please contact us if you need to make changes.</p>
-            <?php } ?> <!-- End of appointment limit check (joc) -->
             </div>
         <?php }
         else { ?> <!-- If user is not logged in, display message (joc) -->
