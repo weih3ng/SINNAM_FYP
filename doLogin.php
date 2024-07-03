@@ -22,6 +22,7 @@ function check_user($link, $email, $password, $table) {
 // Check patients table
 $user = check_user($link, $email, $password, 'patients');
 $user_type = 'patient';
+header('Location: viewAppointment.php');
 
 if (!$user) {
     // Check admins table
@@ -43,7 +44,6 @@ if ($user) {
     $_SESSION['username'] = $user['username'];
     $_SESSION['patients_id'] = $user['patients_id'];
     $_SESSION['loggedin'] = true; // Set the logged in session variable to true (joc)
-    header('Location: viewAppointment.php');
 } else {
     // If no user is found, set error message and redirect to login.php
     $_SESSION['error_message'] = "Invalid email or password. Please try again.";

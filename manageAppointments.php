@@ -365,7 +365,6 @@ if (isset($_SESSION['username'])) {
                 <th>Appointment ID</th>
                 <th>Patients ID</th>
                 <th>Name</th>
-                <th>Doctor ID</th>
                 <th>Date</th>
                 <th>Time</th>
                 <th>Queue Number</th>
@@ -384,7 +383,6 @@ if (isset($_SESSION['username'])) {
                             <td>{$row['appointment_id']}</td>
                             <td>{$row['patients_id']}</td>
                             <td>{$row['name']}</td>
-                            <td>{$row['doctor_id']}</td>
                             <td>{$row['date']}</td>
                             <td>{$row['time']}</td>
                             <td>{$row['queue_number']}</td>
@@ -398,7 +396,7 @@ if (isset($_SESSION['username'])) {
                           </tr>";
                 }
             } else {
-                echo "<tr><td colspan='11'>No appointments found</td></tr>";
+                echo "<tr><td colspan='10'>No appointments found</td></tr>";
             }
             ?>
             </tbody>
