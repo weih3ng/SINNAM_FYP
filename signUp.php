@@ -171,7 +171,7 @@ if (isset($_SESSION['username'])) {
                 </label>
                 <input id="idName" type="text" name="name" required>
                 <label for="idAge">
-                    <i class="fa-solid fa-calendar" style="color: #949494;"></i> Age
+                    <i class="fa-solid fa-calendar" style="color: #949494;"></i> Age<span class="ipsFieldRow_required">Required</span>
                 </label>
                 <input id="idAge" type="text" name="age" required>
                 <label for="idEmail">

@@ -12,7 +12,7 @@ $gender = $_POST['gender'];
 
 // build sql query
 $query = "INSERT INTO patients(name, age, email, password, dob, gender)
-            VALUES ('$name', '$age', '$email', SHA1('$password'), '$dob', '$gender')";
+            VALUES ('$name', '$age', '$email', '$password', '$dob', '$gender')";
 
 // execute sql query
 $result = mysqli_query($link, $query) or die ('Error querying database');
