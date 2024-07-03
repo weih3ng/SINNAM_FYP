@@ -19,7 +19,7 @@ include 'dbfunctions.php';
             align-items: center;
             justify-content: center;
             background-color: #F1EDE2;
-            height: calc(150vh - 120px);
+            height: calc(180vh - 120px);
         }
 
         .left-decoration img {
@@ -53,6 +53,7 @@ include 'dbfunctions.php';
         }
 
         .register-form-container input[type="text"],
+        .register-form-container input[type="number"],
         .register-form-container input[type="email"],
         .register-form-container input[type="password"],
         .register-form-container input[type="date"] {
@@ -112,14 +113,13 @@ include 'dbfunctions.php';
             text-align: center;
             margin-top: 10px;
         }
-        .ipsFieldRow_required {
-    font-size: 10px;
-    
-    text-transform: uppercase;
-    color: #aa1414;
-    font-weight: 500
 
-}
+        .ipsFieldRow_required {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #aa1414;
+            font-weight: 500
+        }
     </style>
 </head>
 <body>
@@ -139,21 +139,21 @@ include 'dbfunctions.php';
 
 
         <?php
-if (isset($_SESSION['username'])) { 
-    // Display 'Welcome, username'
-    echo "<p style='margin-top: 17px;'>Welcome, <b>" . htmlspecialchars($_SESSION['username']) . "</b>!</p>";
-    ?>
-    <a class="nav-custom" href="logout.php">
-        <i class="fa-solid fa-right-to-bracket"></i> Logout
-    </a>  
-<?php } else { ?>
-    <a class="nav-custom" href="signUp.php">
-        <i class="fa-solid fa-user"></i> Sign Up
-    </a>
-    <a class="nav-custom" href="login.php">
-        <i class="fa-solid fa-right-to-bracket"></i> Login
-    </a>  
-<?php } ?>
+        if (isset($_SESSION['username'])) { 
+            // Display 'Welcome, username'
+            echo "<p style='margin-top: 17px;'>Welcome, <b>" . htmlspecialchars($_SESSION['username']) . "</b>!</p>";
+            ?>
+            <a class="nav-custom" href="logout.php">
+                <i class="fa-solid fa-right-to-bracket"></i> Logout
+            </a>  
+        <?php } else { ?>
+            <a class="nav-custom" href="signUp.php">
+                <i class="fa-solid fa-user"></i> Sign Up
+            </a>
+            <a class="nav-custom" href="login.php">
+                <i class="fa-solid fa-right-to-bracket"></i> Login
+            </a>  
+        <?php } ?>
 
         </div>
 
@@ -170,10 +170,14 @@ if (isset($_SESSION['username'])) {
                     <i class="fa-solid fa-user" style="color: #949494;"></i> Name<span class="ipsFieldRow_required" style="margin-left: 270px;">Required</span>
                 </label>
                 <input id="idName" type="text" name="name" required>
+                <label for="idUsername">
+                    <i class="far fa-user" style="color: #949494;"></i> Username<span class="ipsFieldRow_required" style="margin-left: 240px;">Required</span>
+                </label>
+                <input id="idUsername" type="text" name="username" required>
                 <label for="idAge">
                     <i class="fa-solid fa-calendar" style="color: #949494;"></i> Age<span class="ipsFieldRow_required" style="margin-left: 285px;">Required</span>
                 </label>
-                <input id="idAge" type="text" name="age" required>
+                <input id="idAge" type="number" name="age" required>
                 <label for="idEmail">
                     <i class="fa-solid fa-envelope" style="color: #949494;"></i> Email<span class="ipsFieldRow_required" style="margin-left: 270px;">Required</span>
                 </label>

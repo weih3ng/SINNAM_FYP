@@ -4,6 +4,7 @@ session_start();
 include 'dbfunctions.php';
 
 $name = $_POST['name'];
+$username = $_POST['username'];
 $age = $_POST['age'];
 $email = $_POST['email'];
 $password = $_POST['password'];
@@ -11,8 +12,8 @@ $dob = $_POST['dob'];
 $gender = $_POST['gender'];
 
 // build sql query
-$query = "INSERT INTO patients(name, age, email, password, dob, gender)
-            VALUES ('$name', '$age', '$email', '$password', '$dob', '$gender')";
+$query = "INSERT INTO patients(name, username, age, email, password, dob, gender)
+            VALUES ('$name', '$username', '$age', '$email', '$password', '$dob', '$gender')";
 
 // execute sql query
 $result = mysqli_query($link, $query) or die ('Error querying database');

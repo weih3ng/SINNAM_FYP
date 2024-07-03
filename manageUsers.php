@@ -37,22 +37,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
     $contactnumber = $_POST['contactnumber'];
     $dob = $_POST['dob'];
     $gender = $_POST['gender'];
-    $username = strtolower(str_replace(' ', '', $name)); // Generate a username based on the name
-
-    // Check if password is set (only for adding new user)
-    $password = isset($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : null;
+    $username = $_POST['username'];
+    $password = $_POST['password']; 
 
     if (isset($_POST['patients_id'])) {
         // Update existing user
         $patients_id = $_POST['patients_id'];
         $sql = "UPDATE patients SET name = ?, age = ?, email = ?, contactnumber = ?, dob = ?, gender = ?, username = ? WHERE patients_id = ?";
         $stmt = mysqli_prepare($link, $sql);
-        mysqli_stmt_bind_param($stmt, 'sisssssi', $name, $age, $email, $contactnumber, $dob, $gender, $username, $patients_id);
+        mysqli_stmt_bind_param($stmt, 'sisisssi', $name, $age, $email, $contactnumber, $dob, $gender, $username, $patients_id);
     } else {
         // Insert the new user into the database
         $sql = "INSERT INTO patients (name, age, email, contactnumber, password, dob, gender, username) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = mysqli_prepare($link, $sql);
-        mysqli_stmt_bind_param($stmt, 'sissssss', $name, $age, $email, $contactnumber, $password, $dob, $gender, $username);
+        mysqli_stmt_bind_param($stmt, 'sisissss', $name, $age, $email, $contactnumber, $password, $dob, $gender, $username);
     }
 
     if (mysqli_stmt_execute($stmt)) {
@@ -393,7 +391,7 @@ if (isset($_SESSION['username'])) {
                     <label for="email">Email:</label>
                     <input type="email" id="email" name="email" required>
                     <label for="contactnumber">Contact Number:</label>
-                    <input type="text" id="contactnumber" name="contactnumber" required>
+                    <input type="number" id="contactnumber" name="contactnumber" required>
                     <label for="password">Password:</label>
                     <input type="password" id="password" name="password" required>
                     <label for="dob">Date of Birth:</label>
@@ -403,6 +401,8 @@ if (isset($_SESSION['username'])) {
                         <label><input type="radio" id="male" name="gender" value="male" required> Male</label>
                         <label><input type="radio" id="female" name="gender" value="female" required> Female</label>
                     </div>
+                    <label for="name">Username:</label>
+                    <input type="text" id="username" name="username" required>
                     <div class="button-container">
                         <button type="submit">Add User</button>
                     </div>
@@ -432,6 +432,8 @@ if (isset($_SESSION['username'])) {
                     <label><input type="radio" id="edit_male" name="gender" value="male" required> Male</label>
                     <label><input type="radio" id="edit_female" name="gender" value="female" required> Female</label>
                 </div>
+                <label for="name">Username:</label>
+                <input type="text" id="username" name="username" required>
                 <div class="button-container">
                     <button type="submit">Update User</button>
                 </div>
@@ -515,6 +517,7 @@ if (isset($_SESSION['username'])) {
                 } else {
                     document.getElementById('edit_female').checked = true;
                 }
+                document.getElementById('edit_username').value = this.dataset.username;
                 document.getElementById('editUserForm').style.display = 'block';
             });
         });
