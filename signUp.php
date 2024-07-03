@@ -114,7 +114,7 @@ include 'dbfunctions.php';
         }
         .ipsFieldRow_required {
     font-size: 10px;
-    margin-left: 270px;
+    
     text-transform: uppercase;
     color: #aa1414;
     font-weight: 500
@@ -167,28 +167,28 @@ if (isset($_SESSION['username'])) {
             <p>Already a member? <a href="login.php">Log in</a></p>
             <form action="doSignUp.php" method="POST">
                 <label for="idName">
-                    <i class="fa-solid fa-user" style="color: #949494;"></i> Name<span class="ipsFieldRow_required">Required</span>
+                    <i class="fa-solid fa-user" style="color: #949494;"></i> Name<span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
                 </label>
                 <input id="idName" type="text" name="name" required>
                 <label for="idAge">
-                    <i class="fa-solid fa-calendar" style="color: #949494;"></i> Age<span class="ipsFieldRow_required">Required</span>
+                    <i class="fa-solid fa-calendar" style="color: #949494;"></i> Age<span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
                 </label>
                 <input id="idAge" type="text" name="age" required>
                 <label for="idEmail">
-                    <i class="fa-solid fa-envelope" style="color: #949494;"></i> Email
+                    <i class="fa-solid fa-envelope" style="color: #949494;"></i> Email<span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
                 </label>
                 <input id="idEmail" type="email" name="email" required>
                 <label for="idPassword">
-                    <i class="fa-solid fa-lock" style="color: #949494;"></i> Password
+                    <i class="fa-solid fa-lock" style="color: #949494;"></i> Password<span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
                 </label>
                 <input id="idPassword" type="password" name="password" required>
                 <label for="idDob">
-                    <i class="fa-solid fa-calendar-alt" style="color: #949494;"></i> Date of Birth
+                    <i class="fa-solid fa-calendar-alt" style="color: #949494;"></i> Date of Birth<span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
                 </label>
                 <input id="idDob" type="date" name="dob" required>
                 <div class="gender-container">
                     <label class="gender-label">
-                        <i class="fa-solid fa-venus-mars" style="color: #949494;"></i> Gender
+                        <i class="fa-solid fa-venus-mars" style="color: #949494;"></i> Gender<span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
                     </label>
                     <div class="gender-radio-buttons">
                     <label class="radio-label">
