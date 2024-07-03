@@ -4,7 +4,7 @@ session_start(); // Start the session
 include 'dbfunctions.php';
 
 
-$patients_id = $_SESSION['patients_id']; // Assuming you store patient's ID in session (joc)
+
 
 // Query to count the number of appointments (joc)
 $count_query = "SELECT COUNT(*) as appointment_count FROM appointments WHERE patients_id = ?";
