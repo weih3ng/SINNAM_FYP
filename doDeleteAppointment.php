@@ -3,8 +3,14 @@ session_start();
 
 include 'dbfunctions.php';
 
-if (isset($_POST['id'])) {
-    $appointment_id = $_POST['id'];
+// Check if the user is logged in (joc)
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header('Location: login.php');
+    exit;
+}
+
+if (isset($_POST['appointment_id'])) {
+    $appointment_id = $_POST['appointment_id'];
 
     // Prepare delete query
     $query = "DELETE FROM appointments WHERE appointment_id = $appointment_id";

@@ -3,9 +3,15 @@ session_start(); // Start the session
 
 include 'dbfunctions.php';
 
-// Check if appointment ID is provided
-if (isset($_GET['id'])) {
-    $appointment_id = $_GET['id'];
+// Check if the user is logged in (joc)
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header('Location: login.php');
+    exit;
+}
+
+// Check if appointment ID is provided (joc)
+if (isset($_GET['appointment_id'])) { // Get from viewAppointment.php (joc)
+    $appointment_id = $_GET['appointment_id']; // Get from viewAppointment.php (joc)
 
     // Fetch existing appointment data
     $query = "SELECT * FROM appointments WHERE appointment_id = $appointment_id";
@@ -15,20 +21,30 @@ if (isset($_GET['id'])) {
     if (!empty($row)) {
         $appointmentDate = $row['date'];
         $appointmentTime = $row['time'];
+        $is_for_self = $row['is_for_self'];
+        $relationship_type = $row['relationship_type'];
+        $medical_condition = $row['medical_condition'];
     }
 }
 
-// Handle form submission
+// Handle form submission (joc)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $appointment_id = $_POST['id'];
+    $appointment_id = $_POST['appointment_id'];
     $date = $_POST['date'];
     $time = $_POST['time'];
+    $is_for_self = ($_POST['booking_for'] === 'self') ? 1 : 0;
+    $relationship_type = ($is_for_self == 0) ? $_POST['relationship_type'] : null;
+    $medical_condition = $_POST['medical_conditions'];
 
     // Update the appointment in the database
-    $query = "UPDATE appointments SET date = '$date', time = '$time' WHERE appointment_id = $appointment_id";
-    mysqli_query($link, $query) or die(mysqli_error($link));
+    $query = "UPDATE appointments SET date = ?, time = ?, is_for_self = ?, relationship_type = ?, medical_condition = ? WHERE appointment_id = ?";
+    if ($stmt = mysqli_prepare($link, $query)) {
+        mysqli_stmt_bind_param($stmt, "ssissi", $date, $time, $is_for_self, $relationship_type, $medical_condition, $appointment_id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    }
 
-    // Redirect to viewAppointment.php after update
+    // Redirect back to viewAppointment.php after update
     header("Location: viewAppointment.php");
     exit();
 }
@@ -147,10 +163,10 @@ mysqli_close($link);
     <div class="edit-container">
         <div class="edit-box">
             <h1>Edit Appointment</h1>
-            <form method="post" action="editAppointment.php?id=<?php echo $appointment_id; ?>">
+            <form method="post" action="editAppointment.php?appointment_id=<?php echo $appointment_id; ?>">
                 <div class="form-group">
                     <label for="id">Appt ID:</label>
-                    <input type="text" id="id" name="id" value="<?php echo $appointment_id; ?>" readonly>
+                    <input type="text" id="id" name="appointment_id" value="<?php echo $appointment_id; ?>" readonly>
                 </div>
                 <div class="form-group">
                     <label for="date">Date:</label>
@@ -160,6 +176,31 @@ mysqli_close($link);
                     <label for="time">Time:</label>
                     <input type="time" id="time" name="time" value="<?php echo $appointmentTime; ?>">
                 </div>
+
+                <!-- Booking for self or family member and medicial condition (joc) -->
+                <div class="form-group">
+                    <label>Booking for:</label>
+                    <div>
+                        <input type="radio" id="for_self" name="booking_for" value="self" <?php echo $is_for_self ? 'checked' : ''; ?>>
+                        <label for="for_self">Myself</label>
+                        <input type="radio" id="for_family" name="booking_for" value="family" <?php echo !$is_for_self ? 'checked' : ''; ?>>
+                        <label for="for_family">Family Member</label>
+                    </div>
+                </div>
+                <div class="form-group" id="family_info" style="display: none;">
+                    <label for="relationship_type">Relationship Type:</label>
+                    <select id="relationship_type" name="relationship_type">
+                        <option value="spouse" <?php echo ($relationship_type == 'spouse') ? 'selected' : ''; ?>>Spouse</option>
+                        <option value="child" <?php echo ($relationship_type == 'child') ? 'selected' : ''; ?>>Child</option>
+                        <option value="parent" <?php echo ($relationship_type == 'parent') ? 'selected' : ''; ?>>Parent</option>
+                        <option value="other" <?php echo ($relationship_type == 'other') ? 'selected' : ''; ?>>Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="medical-conditions">Medical Condition:</label>
+                    <textarea id="medical-conditions" name="medical_conditions" rows="4"><?php echo $medical_condition; ?></textarea>
+                </div>
+
                 <br>
                 <button type="submit" class="btn">Confirm Edit</button>
             </form>
@@ -179,5 +220,36 @@ mysqli_close($link);
             <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook"></i></a>
         </div>
     </footer>
+
+    <script>
+
+        // Function to update display of the relationship type dropdown (joc)
+        document.querySelectorAll('input[name="booking_for"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const display = this.value === 'family' ? 'block' : 'none';
+                document.getElementById('family_info').style.display = display;
+            });
+        });
+
+        // Call the function on page load to check the initial state (joc)
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to update display of the relationship type dropdown
+            function updateRelationshipDisplay() {
+                const isFamily = document.getElementById('for_family').checked;
+                document.getElementById('family_info').style.display = isFamily ? 'block' : 'none';
+            }
+
+            // Attach event listeners to radio inputs for dynamic changes
+            document.querySelectorAll('input[name="booking_for"]').forEach(input => {
+                input.addEventListener('change', updateRelationshipDisplay);
+            });
+
+            // Call the function on page load to check the initial state
+            updateRelationshipDisplay();
+        });
+
+    </script>
+
+
 </body>
 </html>

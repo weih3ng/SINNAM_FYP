@@ -2,19 +2,36 @@
 session_start(); // Start the session
 
 include 'dbfunctions.php';
-// Query to retrieve all appointments
-$query = "SELECT * FROM appointments";
-$result = mysqli_query($link, $query);
 
-// Check if there are appointments in the database
-if (mysqli_num_rows($result) > 0) {
+// Check if the user is logged in (joc)
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header('Location: login.php');
+    exit;
+}
+
+$patients_id = $_SESSION['patients_id']; // Retrieve patient ID from session (joc)
+
+// Retrieve appointments for the logged in patient (joc)
+$query = "SELECT a.appointment_id, a.date, a.time, a.queue_number, a.is_for_self, a.relationship_type, a.medical_condition, p.name
+        FROM appointments AS a
+        INNER JOIN patients AS p ON a.patients_id = p.patients_id
+        WHERE a.patients_id = ?";
+
+if ($stmt = mysqli_prepare($link, $query)) {
+    mysqli_stmt_bind_param($stmt, "i", $patients_id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
     $appointments = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    mysqli_free_result($result);
+    mysqli_stmt_close($stmt);
 } else {
-    $appointments = []; // Empty array if no appointments found
+    echo "ERROR: Could not prepare query: $query. " . mysqli_error($link);
 }
 
 // Close database connection
 mysqli_close($link);
+
 ?>
 
 <!DOCTYPE html>
@@ -34,7 +51,7 @@ mysqli_close($link);
             align-items: center;
             justify-content: center;
             background-color: #F1EDE2;
-            min-height: calc(100vh - 120px);
+            min-height: calc(110vh - 120px);
             padding: 20px;
             box-sizing: border-box;
         }
@@ -42,10 +59,10 @@ mysqli_close($link);
         .content-box {
             background-color: #DECFBC;
             border-radius: 80px;
-            padding: 80px;
+            padding: 60px;
             text-align: center;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 670px;
+            max-width: 850px;
             width: 100%;
         }
 
@@ -168,26 +185,32 @@ mysqli_close($link);
             <table>
             <thead>
                 <tr>
-                    <th>Appointment ID</th>
-                    <th>Date</th>
-                    <th>Time</th>
-                    <th>Queue Number</th>
-                    <th>Action</th>
-                    <!-- Add more columns as needed -->
+                <th>Appointment ID</th>
+                <th>Patient Name</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Medical Condition</th>
+                <th>Self/Family</th>
+                <th>Relationship Type</th>
+                <th>Queue Number</th>
+                <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($appointments as $appointment) : ?>
                     <tr>
-                        <td><?php echo $appointment['appointment_id']; ?></td>
-                        <td><?php echo $appointment['date']; ?></td>
-                        <td><?php echo $appointment['time']; ?></td>
-                        <td><?php echo $appointment['queue_number']; ?></td>
-                        <td class="action-buttons">
-                                <a href="editAppointment.php?id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">Edit</a>
-                                <a href="deleteAppointment.php?id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">Delete</a>
-                        </td>
-                        <!-- Add more columns as needed -->
+                    <td><?php echo htmlspecialchars($appointment['appointment_id']); ?></td>
+                    <td><?php echo htmlspecialchars($appointment['name']); ?></td>
+                    <td><?php echo htmlspecialchars($appointment['date']); ?></td>
+                    <td><?php echo htmlspecialchars($appointment['time']); ?></td>
+                    <td><?php echo htmlspecialchars($appointment['medical_condition']); ?></td>
+                    <td><?php echo $appointment['is_for_self'] ? 'Self' : 'Family'; ?></td>
+                    <td><?php echo htmlspecialchars($appointment['relationship_type']); ?></td>
+                    <td><?php echo htmlspecialchars($appointment['queue_number']); ?></td>
+                    <td class="action-buttons">
+                        <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">Edit</a>
+                        <a href="deleteAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">Delete</a>
+                    </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>

@@ -125,7 +125,7 @@ include 'dbfunctions.php';
             <h1>Thank you for booking an appointment<br>with us!</h1>
             <p>Please check your email for more information.</p>
             <div class="button-container">
-                <a href="editAppointment.php" class="btn">Edit</a>
+                <a href="editAppointment.php?appointment_id=<?php echo $_SESSION['appointment_id']; ?>" class="btn">Edit</a>
                 <a href="viewAppointment.php" class="btn">View</a>
             </div>
             <a href="appointment.php" class="link">Book another appointment</a>

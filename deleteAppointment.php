@@ -3,9 +3,15 @@ session_start();
 
 include 'dbfunctions.php';
 
+// Check if the user is logged in (joc)
+if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
+    header('Location: login.php');
+    exit;
+}
+
 // Check if 'id' parameter is provided in the URL
-if (isset($_GET['id'])) {
-    $appointment_id = $_GET['id'];
+if (isset($_GET['appointment_id'])) {
+    $appointment_id = $_GET['appointment_id'];
 
     // Prepare query to retrieve appointment details
     $query = "SELECT * FROM appointments WHERE appointment_id = $appointment_id";
@@ -40,6 +46,7 @@ if (isset($_GET['id'])) {
     header("Location: viewAppointment.php");
     exit();
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -162,7 +169,7 @@ if (isset($_GET['id'])) {
             <form method="post" action="doDeleteAppointment.php">
                 <div class="form-group">
                     <label for="id">Appointment ID:</label>
-                    <input type="text" id="id" name="id" value="<?php echo $appointment_id; ?>" readonly>
+                    <input type="text" id="id" name="appointment_id" value="<?php echo $appointment_id; ?>" readonly>
                 </div>
                 <div class="form-group">
                     <label for="date">Date:</label>
