@@ -299,15 +299,16 @@ $total_patients = $total_patients_row['total_patients'];
         </div>
 
     <!-- Sign Up & Login Button -->
-    <a class="nav-custom" href="signUp.php">
-            <i class="fa-solid fa-user"></i> Sign Up
-    </a>
+
 
     <?php if (isset($_SESSION['username'])) { ?>
     <a class="nav-custom" href="logout.php">
         <i class="fa-solid fa-right-to-bracket"></i> Logout
     </a>  
     <?php } else { ?>
+        <a class="nav-custom" href="signUp.php">
+            <i class="fa-solid fa-user"></i> Sign Up
+        </a>
         <a class="nav-custom" href="login.php">
             <i class="fa-solid fa-right-to-bracket"></i> Login
         </a>

@@ -140,9 +140,7 @@ if (isset($_GET['appointment_id'])) {
         </div>
 
         <!-- Sign Up & Login Button -->
-        <a class="nav-custom" href="signUp.php">
-            <i class="fa-solid fa-user"></i> Sign Up
-        </a>
+
 
         <?php
         if (isset($_SESSION['username'])) {
@@ -153,6 +151,9 @@ if (isset($_GET['appointment_id'])) {
         <?php 
         } else {
         ?>
+                <a class="nav-custom" href="signUp.php">
+            <i class="fa-solid fa-user"></i> Sign Up
+        </a>
             <a class="nav-custom" href="login.php">
                 <i class="fa-solid fa-right-to-bracket"></i> Login
             </a>

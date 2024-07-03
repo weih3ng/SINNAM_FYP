@@ -89,9 +89,7 @@ $message = "You have logged out.";
         </div>
 
         <!-- Sign Up & Login Button -->
-        <a class="nav-custom" href="signUp.php">
-            <i class="fa-solid fa-user"></i> Sign Up
-        </a>
+
 
         <?php
 
@@ -102,6 +100,9 @@ $message = "You have logged out.";
             <i class="fa-solid fa-right-to-bracket"></i> Logout
         </a>  
         <?php }else { ?>
+            <a class="nav-custom" href="signUp.php">
+            <i class="fa-solid fa-user"></i> Sign Up
+        </a>
             <a class="nav-custom" href="login.php">
             <i class="fa-solid fa-right-to-bracket"></i> Login
         </a>  
