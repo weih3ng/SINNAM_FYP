@@ -112,6 +112,14 @@ include 'dbfunctions.php';
             text-align: center;
             margin-top: 10px;
         }
+        .ipsFieldRow_required {
+    font-size: 10px;
+    margin-left: 270px;
+    text-transform: uppercase;
+    color: #aa1414;
+    font-weight: 500
+
+}
     </style>
 </head>
 <body>
@@ -159,7 +167,7 @@ if (isset($_SESSION['username'])) {
             <p>Already a member? <a href="login.php">Log in</a></p>
             <form action="doSignUp.php" method="POST">
                 <label for="idName">
-                    <i class="fa-solid fa-user" style="color: #949494;"></i> Name
+                    <i class="fa-solid fa-user" style="color: #949494;"></i> Name<span class="ipsFieldRow_required">Required</span>
                 </label>
                 <input id="idName" type="text" name="name" required>
                 <label for="idAge">
