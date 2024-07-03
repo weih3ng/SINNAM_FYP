@@ -27,6 +27,7 @@ if (!$user) {
     // Check admins table
     $user = check_user($link, $email, $password, 'admins');
     $user_type = 'admin';
+    header('Location: manageUsers.php'); // direct to admin panel page
 }
 
 if (!$user) {
