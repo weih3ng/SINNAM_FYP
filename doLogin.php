@@ -43,6 +43,7 @@ if ($user) {
     $_SESSION['username'] = $user['username'];
     $_SESSION['patients_id'] = $user['patients_id'];
     $_SESSION['loggedin'] = true; // Set the logged in session variable to true (joc)
+    header('Location: viewAppointment.php');
 } else {
     // If no user is found, set error message and redirect to login.php
     $_SESSION['error_message'] = "Invalid email or password. Please try again.";
