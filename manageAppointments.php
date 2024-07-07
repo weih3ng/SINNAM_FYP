@@ -338,7 +338,7 @@ if (isset($_SESSION['username'])) {
         <!-- Manage Appointments Table -->
         <h2>Manage Appointments</h2>
         <div class="button-container">
-            <a href="addAppointment.php"><button>Add Appointment</button></a>
+            <a href="adminAddAppointment.php"><button>Add Appointment</button></a>
         </div>
         <table id="appointmentsTable" class="display">
             <thead>

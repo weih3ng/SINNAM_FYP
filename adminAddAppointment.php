@@ -177,7 +177,7 @@ if (isset($_SESSION['username'])) {
     <div class="admin-panel-container">
         <h1>Add New Appointment</h1>
         <div class="form-container">
-            <form action="addAppointment.php" method="POST">
+            <form action="adminAddAppointment.php" method="POST">
                 <label for="patients_id">Patients Name:</label>
                 <select id="patients_id" name="patients_id" required>
                 <option value="">Select Patient</option>

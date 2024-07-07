@@ -325,7 +325,7 @@ if (isset($_SESSION['username'])) {
     <!-- Manage Users Table -->
     <h2>Manage Users</h2>
     <div class="button-container">
-        <a href="addUser.php"><button>Add User</button></a>
+        <a href="adminAddUser.php"><button>Add User</button></a>
     </div>
         <table id="patientsTable" class="display">
             <thead>
