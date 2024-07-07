@@ -28,7 +28,7 @@ if (isset($_GET['delete_id'])) {
     exit();
 }
 
-// Handle user form submission (Add and Edit)
+// Handle user form submission (Edit)
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
     // Get form data
     $name = $_POST['name'];
@@ -38,20 +38,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
     $dob = $_POST['dob'];
     $gender = $_POST['gender'];
     $username = $_POST['username'];
-    $password = $_POST['password']; 
 
-    if (isset($_POST['patients_id'])) {
         // Update existing user
         $patients_id = $_POST['patients_id'];
         $sql = "UPDATE patients SET name = ?, age = ?, email = ?, contactnumber = ?, dob = ?, gender = ?, username = ? WHERE patients_id = ?";
         $stmt = mysqli_prepare($link, $sql);
         mysqli_stmt_bind_param($stmt, 'sisisssi', $name, $age, $email, $contactnumber, $dob, $gender, $username, $patients_id);
-    } else {
-        // Insert the new user into the database
-        $sql = "INSERT INTO patients (name, age, email, contactnumber, password, dob, gender, username) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = mysqli_prepare($link, $sql);
-        mysqli_stmt_bind_param($stmt, 'sisissss', $name, $age, $email, $contactnumber, $password, $dob, $gender, $username);
-    }
 
     if (mysqli_stmt_execute($stmt)) {
         // Set success message
@@ -59,6 +51,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
     } else {
         $success_message_user = "Error: " . mysqli_error($link);
     }
+
+    // Redirect back to manageUsers.php to reflect changes
+    header("Location: manageUsers.php");
+    exit();  
 }
 
 // Fetch patients data
@@ -144,6 +140,12 @@ $total_patients = $total_patients_row['total_patients'];
             font-weight: bold;
         }
 
+        .form-container label.required-label::before {
+            content: " *";
+            color: red;
+            margin-left: 5px;
+        }
+
         .form-container input {
             margin-bottom: 10px;
             padding: 10px;
@@ -152,6 +154,7 @@ $total_patients = $total_patients_row['total_patients'];
         }
 
         .form-container input[type="text"],
+        .form-container input[type="name"],
         .form-container input[type="number"],
         .form-container input[type="email"],
         .form-container input[type="password"],
@@ -227,41 +230,6 @@ $total_patients = $total_patients_row['total_patients'];
             text-decoration: underline;
         }
 
-        .collapsible {
-            width: 100%;
-            text-align: left;
-        }
-
-        .collapsible-button {
-            background-color: #80352F;
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            width: 40%;
-            text-align: center;
-            margin: 0 auto; /* center the button horizontally */
-            display: block; /* ensure the button is treated as a block element */
-        }
-
-        .collapsible-content {
-            display: none;
-            padding: 0 18px;
-            justify-content: center; 
-            align-items: center; 
-        }
-
-        .collapsible-button.active + .collapsible-content {
-            display: block;
-            margin-top: 10px;
-        }
-
-        .collapsible-content .form-container {
-        margin: 0 auto; /* Center the form-container */
-        }
-
         .search-container {
             text-align: center;
             margin-bottom: 20px;
@@ -282,6 +250,24 @@ $total_patients = $total_patients_row['total_patients'];
             color: white;
             cursor: pointer;
             margin-left: 10px;
+        }
+
+        .button-container button {
+            text-align: center;
+            margin-bottom: 20px;
+            color: white;
+            background-color: #80352F;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 10px 50px;
+            font-size: 16px;
+            width: 180px;
+        }
+
+        .button-container button:hover {
+            background-color: #6b2c27;
         }
     </style>
 </head>
@@ -328,7 +314,7 @@ if (isset($_SESSION['username'])) {
         </div>
 
         <div class="record-links">
-            <h1>Manage Records</h1>
+            <h1>Search Records</h1>
         </div>
 
         <div class="search-container">
@@ -338,6 +324,9 @@ if (isset($_SESSION['username'])) {
 
     <!-- Manage Users Table -->
     <h2>Manage Users</h2>
+    <div class="button-container">
+        <a href="addUser.php"><button>Add User</button></a>
+    </div>
         <table id="patientsTable" class="display">
             <thead>
             <tr>
@@ -366,7 +355,7 @@ if (isset($_SESSION['username'])) {
                             <td>{$row['contactnumber']}</td>
                             <td>{$row['username']}</td>
                             <td>
-                                <a href='#' class='edit-link' data-id='{$row['patients_id']}' data-name='{$row['name']}' data-age='{$row['age']}' data-email='{$row['email']}' data-dob='{$row['dob']}' data-gender='{$row['gender']}' data-contactnumber='{$row['contactnumber']}'>Edit</a> | 
+                                <a href='#' class='edit-link' data-id='{$row['patients_id']}' data-name='{$row['name']}' data-age='{$row['age']}' data-email='{$row['email']}' data-dob='{$row['dob']}' data-gender='{$row['gender']}' data-contactnumber='{$row['contactnumber']}' data-username='{$row['username']}'>Edit</a> | 
                                 <a href='manageUsers.php?delete_id={$row['patients_id']}'>Delete</a>
                             </td>
                           </tr>";
@@ -378,68 +367,34 @@ if (isset($_SESSION['username'])) {
             </tbody>
         </table>
 
-    <!-- Collapsible Add New User Form -->
-    <div class="collapsible">
-        <button class="collapsible-button">Add New User</button>
-        <div class="collapsible-content">
-            <div class="form-container">
-                <form action="manageUsers.php" method="POST">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" required>
-                    <label for="age">Age:</label>
-                    <input type="number" id="age" name="age" required>
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
-                    <label for="contactnumber">Contact Number:</label>
-                    <input type="number" id="contactnumber" name="contactnumber" required>
-                    <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required>
-                    <label for="dob">Date of Birth:</label>
-                    <input type="date" id="dob" name="dob" required>
-                    <div class="radio-group">
-                        <label for="gender">Gender:</label>
-                        <label><input type="radio" id="male" name="gender" value="male" required> Male</label>
-                        <label><input type="radio" id="female" name="gender" value="female" required> Female</label>
-                    </div>
-                    <label for="name">Username:</label>
-                    <input type="text" id="username" name="username" required>
-                    <div class="button-container">
-                        <button type="submit">Add User</button>
-                    </div>
-                    </form>
-                </div>
-            </div>
-        </div><br>
-    </div>
-
-    <!-- Edit User Form -->
-    <div class="form-container" id="editUserForm" style="display:none;">
+    <!--Edit User Form -->
+        <div class="form-container" id="editUserForm" style="display:none;">
         <h2>Edit User</h2>
             <form action="manageUsers.php" method="POST">
                 <input type="hidden" id="edit_patients_id" name="patients_id">
-                <label for="edit_name">Name:</label>
+                <label for="edit_name" class="required-label">Name:</label>
                 <input type="text" id="edit_name" name="name" required>
-                <label for="edit_age">Age:</label>
+                <label for="edit_age" class="required-label">Age:</label>
                 <input type="number" id="edit_age" name="age" required>
-                <label for="edit_email">Email:</label>
+                <label for="edit_email" class="required-label">Email:</label>
                 <input type="email" id="edit_email" name="email" required>
-                <label for="edit_contactnumber">Contact Number:</label>
+                <label for="edit_contactnumber" class="required-label">Contact Number:</label>
                 <input type="text" id="edit_contactnumber" name="contactnumber" required>
-                <label for="edit_dob">Date of Birth:</label>
+                <label for="edit_dob" class="required-label">Date of Birth:</label>
                 <input type="date" id="edit_dob" name="dob" required>
                 <div class="radio-group">
-                    <label for="edit_gender">Gender:</label>
+                    <label for="edit_gender" class="required-label">Gender:</label>
                     <label><input type="radio" id="edit_male" name="gender" value="male" required> Male</label>
                     <label><input type="radio" id="edit_female" name="gender" value="female" required> Female</label>
                 </div>
-                <label for="name">Username:</label>
-                <input type="text" id="username" name="username" required>
+                <label for="edit_username" class="required-label">Username:</label>
+                <input type="text" id="edit_username" name="username" required>
                 <div class="button-container">
                     <button type="submit">Update User</button>
                 </div>
             </form>
         </div>
-    </div><br><br>
+    </div>
 
     <!-- Footer -->
     <footer>
@@ -477,30 +432,39 @@ if (isset($_SESSION['username'])) {
             });
         });
 
-            //function for search
-            function searchTable() {
-            var input, filter, patientsTable, tr, td, i, j, txtValue;
-            input = document.getElementById("searchInput"); // get the search input element
-            filter = input.value.toLowerCase(); // get the search query and convert to lowercase
-            patientsTable = document.getElementById("patientsTable"); // get patients table by ID
+        //function for search
+        function searchTable() {
+        var input, filter, patientsTable, tr, td, i, j, txtValue;
+        input = document.getElementById("searchInput"); // get the search input element
+        filter = input.value.toLowerCase().split(" "); // get the search query and split it into an array of terms
+        patientsTable = document.getElementById("patientsTable"); // get patients table by ID
 
-            // Search patients table
-            tr = patientsTable.getElementsByTagName("tr"); // get all the tr elements in patient table
-            for (i = 1; i < tr.length; i++) {  // start from 1 to skip the header row
-                tr[i].style.display = "none"; // hide the row by default
-                td = tr[i].getElementsByTagName("td"); // get all td elements in the row
-                for (j = 0; j < td.length; j++) {  // loop through all cells in the row
-                    if (td[j]) { // if the cell exists
-                        txtValue = td[j].textContent || td[j].innerText; // get the text content of the cell
-                        //if the cell text contains search query
-                        if (txtValue.toLowerCase().indexOf(filter) > -1) { 
-                            tr[i].style.display = ""; // show the row
-                            break; //stop checking other cells in the row
+        // Search patients table
+        tr = patientsTable.getElementsByTagName("tr"); // get all the tr elements in patient table
+        for (i = 1; i < tr.length; i++) {  // start from 1 to skip the header row
+            tr[i].style.display = "none"; // hide the row by default
+            var matches = 0; // counter for matching criteria
+
+            // get all td elements in the row
+            td = tr[i].getElementsByTagName("td"); 
+            for (j = 0; j < td.length; j++) {  // loop through all cells in the row
+                if (td[j]) { // if the cell exists
+                    txtValue = td[j].textContent || td[j].innerText; // get the text content of the cell
+                    // check if the cell text contains any of the search terms
+                    for (var k = 0; k < filter.length; k++) {
+                        if (txtValue.toLowerCase().indexOf(filter[k]) > -1) {
+                            matches++;
+                            break; // move to the next cell if a match is found
                         }
                     }
                 }
             }
+            // show the row if it matches both search criteria
+            if (matches >= filter.length) {
+                tr[i].style.display = "";
+            }
         }
+    }
 
         // Edit user functionality
         document.querySelectorAll('.edit-link').forEach(link => {

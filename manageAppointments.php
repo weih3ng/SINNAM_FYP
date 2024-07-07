@@ -28,13 +28,12 @@ if (isset($_GET['delete_id'])) {
     exit();
 }
 
-// Handle appointment form submission (Add and Edit)
+// Handle appointment form submission (Edit)
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['patients_id'])) {
     // Get form data
     $patients_id = $_POST['patients_id'] ?? '';
     $date = $_POST['date'] ?? '';
     $time = $_POST['time'] ?? '';
-    $queue_number = $_POST['queue_number'] ?? '';
     $medical_condition = $_POST['medical_condition'] ?? '';
     $is_for_self = $_POST['is_for_self'] ?? '';
     $relationship_type = $_POST['relationship_type'] ?? '';
@@ -48,16 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['patients_id'])) {
         if (isset($_POST['appointment_id'])) {
             // Update existing appointment
             $appointment_id = $_POST['appointment_id'];
-            $sql = "UPDATE appointments SET patients_id = ?, doctor_id = ?, date = ?, time = ?, queue_number = ?, is_for_self = ?, relationship_type = ?, medical_condition = ? WHERE appointment_id = ?";
+            $sql = "UPDATE appointments SET patients_id = ?, doctor_id = ?, date = ?, time = ?, is_for_self = ?, relationship_type = ?, medical_condition = ? WHERE appointment_id = ?";
             $stmt = mysqli_prepare($link, $sql);
-            mysqli_stmt_bind_param($stmt, 'iissiissi', $patients_id, $doctor_id, $date, $time, $queue_number, $is_for_self, $relationship_type, $medical_condition, $appointment_id);
-        } else {
-            // Insert the new appointment into the database
-            $sql = "INSERT INTO appointments (patients_id, doctor_id, date, time, queue_number,is_for_self, relationship_type, medical_condition) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $stmt = mysqli_prepare($link, $sql);
-            mysqli_stmt_bind_param($stmt, 'iissiiss', $patients_id, $doctor_id, $date, $time, $queue_number, $is_for_self, $relationship_type, $medical_condition);
-        }
+            mysqli_stmt_bind_param($stmt, 'iississi', $patients_id, $doctor_id, $date, $time, $is_for_self, $relationship_type, $medical_condition, $appointment_id);
 
         if (mysqli_stmt_execute($stmt)) {
             // Set success message
@@ -65,8 +57,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['patients_id'])) {
         } else {
             $success_message_appointment = "Error: " . mysqli_error($link);
         }
+    
+        // Redirect back to manageAppointments.php
+        header("Location: manageAppointments.php");
+        exit();
     }
-
+}
 
 // Fetching patients data
 $patients_sql = "SELECT patients_id, name FROM patients";
@@ -79,7 +75,7 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
 }
 
 // Fetch appointments data
-$appointments_sql = "SELECT a.appointment_id, a.patients_id, a.doctor_id, a.date, a.time, a.queue_number, a.is_for_self,
+$appointments_sql = "SELECT a.appointment_id, a.patients_id, a.doctor_id, a.date, a.time, a.is_for_self,
         a.relationship_type, a.medical_condition, p.name
         FROM appointments AS a
         INNER JOIN patients AS p ON a.patients_id = p.patients_id";
@@ -247,41 +243,6 @@ $total_appointments = $total_appointments_row['total_appointments'];
             text-decoration: underline;
         }
 
-        .collapsible {
-            width: 100%;
-            text-align: left;
-        }
-
-        .collapsible-button {
-            background-color: #80352F;
-            color: white;
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            width: 40%;
-            text-align: center;
-            margin: 0 auto; /* center the button horizontally */
-            display: block; /* ensure the button is treated as a block element */
-        }
-
-        .collapsible-content {
-            display: none;
-            padding: 0 18px;
-            justify-content: center; 
-            align-items: center; 
-        }
-
-        .collapsible-button.active + .collapsible-content {
-            display: block;
-            margin-top: 10px;
-        }
-
-        .collapsible-content .form-container {
-        margin: 0 auto; /* Center the form-container */
-        }
-
         .search-container {
             text-align: center;
             margin-bottom: 20px;
@@ -304,6 +265,23 @@ $total_appointments = $total_appointments_row['total_appointments'];
             margin-left: 10px;
         }
         
+        .button-container button {
+            text-align: center;
+            margin-bottom: 20px;
+            color: white;
+            background-color: #80352F;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 10px 50px;
+            font-size: 16px;
+            width: 180px;
+        }
+
+        .button-container button:hover {
+            background-color: #6b2c27;
+        }
     </style>
 </head>
 <body>
@@ -349,7 +327,7 @@ if (isset($_SESSION['username'])) {
         </div>
 
         <div class="record-links">
-            <h1>Manage Records</h1>
+            <h1>Search Records</h1>
         </div>
 
         <div class="search-container">
@@ -359,6 +337,9 @@ if (isset($_SESSION['username'])) {
 
         <!-- Manage Appointments Table -->
         <h2>Manage Appointments</h2>
+        <div class="button-container">
+            <a href="addAppointment.php"><button>Add Appointment</button></a>
+        </div>
         <table id="appointmentsTable" class="display">
             <thead>
             <tr>
@@ -367,7 +348,6 @@ if (isset($_SESSION['username'])) {
                 <th>Name</th>
                 <th>Date</th>
                 <th>Time</th>
-                <th>Queue Number</th>
                 <th>Medical Condition</th>
                 <th>Self/Family</th>
                 <th>Relationship Type</th>
@@ -385,68 +365,21 @@ if (isset($_SESSION['username'])) {
                             <td>{$row['name']}</td>
                             <td>{$row['date']}</td>
                             <td>{$row['time']}</td>
-                            <td>{$row['queue_number']}</td>
                             <td>{$row['medical_condition']}</td>
                             <td>{$is_for_self_display}</td>
                             <td>{$row['relationship_type']}</td>
                             <td>
-                                <a href='#' class='edit-link' data-id='{$row['appointment_id']}' data-patients_id='{$row['patients_id']}' data-name='{$row['name']}' data-date='{$row['date']}' data-time='{$row['time']}' data-queue_number='{$row['queue_number']}' data-medical_condition='{$row['medical_condition']}' data-is_for_self='{$row['is_for_self']}' data-relationship_type='{$row['relationship_type']}'>Edit</a> |  
+                                <a href='#' class='edit-link' data-id='{$row['appointment_id']}' data-patients_id='{$row['patients_id']}' data-name='{$row['name']}' data-date='{$row['date']}' data-time='{$row['time']}' data-medical_condition='{$row['medical_condition']}' data-is_for_self='{$row['is_for_self']}' data-relationship_type='{$row['relationship_type']}'>Edit</a> |  
                                 <a href='manageAppointments.php?delete_id={$row['appointment_id']}'>Delete</a>
                             </td>
                           </tr>";
                 }
             } else {
-                echo "<tr><td colspan='10'>No appointments found</td></tr>";
+                echo "<tr><td colspan='9'>No appointments found</td></tr>";
             }
             ?>
             </tbody>
         </table>
-
-        <!-- Collapsible Add New Appointment Form -->
-        <div class="collapsible">
-        <button class="collapsible-button">Add New Appointment</button>
-            <div class="collapsible-content">
-                <div class="form-container">
-                    <form action="manageAppointments.php" method="POST">
-                        <label for="patients_id">Patients Name:</label>
-                        <select id="patients_id" name="patients_id" required>
-                        <option value="">Select Patient</option>
-                        <?php foreach ($patients as $id => $name): ?>
-                            <option value="<?php echo $id; ?>"><?php echo $name; ?></option>
-                        <?php endforeach; ?>
-                        </select>
-                        <label for="date">Date:</label>
-                        <input type="date" id="date" name="date" required>
-                        <label for="time">Time:</label>
-                        <input type="time" id="time" name="time" required>
-                        <label for="queue_number">Queue Number:</label>
-                        <input type="number" id="queue_number" name="queue_number" required>
-                        <label for="medical_condition">Medical Condition:</label>
-                        <input type="text" id="medical_condition" name="medical_condition" required>
-                        <label for="is_for_self">Booking for:</label>
-                        <div>
-                            <input type="radio" id="is_for_self_myself" name="is_for_self" value="1" required>
-                            <label for="is_for_self_myself">Myself</label>
-                            <input type="radio" id="is_for_self_family" name="is_for_self" value="0" required>
-                            <label for="is_for_self_family">Family</label>
-                        </div>
-                        <div id="family_info" style="display: none;">
-                            <label for="relationship_type">Relationship Type:</label>
-                            <select id="relationship_type" name="relationship_type" required>
-                                <option value="spouse">Spouse</option>
-                                <option value="child">Child</option>
-                                <option value="parent">Parent</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div class="button-container">
-                            <button type="submit">Add Appointment</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 
        <!-- Edit Appointment Form -->
        <div class="form-container" id="editAppointmentForm" style="display:none;">
@@ -464,8 +397,6 @@ if (isset($_SESSION['username'])) {
             <input type="date" id="edit_date" name="date" required>
             <label for="edit_time">Time:</label>
             <input type="time" id="edit_time" name="time" required>
-            <label for="edit_queue_number">Queue Number:</label>
-            <input type="number" id="edit_queue_number" name="queue_number" required>
             <label for="edit_medical_condition">Medical Condition:</label>
             <input type="text" id="edit_medical_condition" name="medical_condition" required>
             <label for="edit_is_for_self">Booking for:</label>
@@ -488,7 +419,8 @@ if (isset($_SESSION['username'])) {
                 <button type="submit">Update Appointment</button>
             </div>
         </form>
-    </div><br><br>
+    </div>
+    </div>
 
     <!-- Footer -->
     <footer>
@@ -526,42 +458,39 @@ if (isset($_SESSION['username'])) {
             });
         });
 
-            //function for search
-            function searchTable() {
-            var input, filter, appointmentsTable, tr, td, i, j, txtValue;
-            input = document.getElementById("searchInput"); // get the search input element
-            filter = input.value.toLowerCase(); // get the search query and convert to lowercase
-            appointmentsTable = document.getElementById("appointmentsTable"); // get appointment table by ID
+        //function for search
+        function searchTable() {
+        var input, filter, appointmentsTable, tr, td, i, j, txtValue;
+        input = document.getElementById("searchInput"); // get the search input element
+        filter = input.value.toLowerCase().split(" "); // get the search query and split it into an array of terms
+        appointmentsTable = document.getElementById("appointmentsTable"); // get appointments table by ID
 
-            // Search appointments table
-            tr = appointmentsTable.getElementsByTagName("tr"); // get all the tr elements in patient table
-            for (i = 1; i < tr.length; i++) {  // start from 1 to skip the header row
-                tr[i].style.display = "none"; // hide the row by default
-                td = tr[i].getElementsByTagName("td"); // get all td elements in the row
-                for (j = 0; j < td.length; j++) {  // loop through all cells in the row
-                    if (td[j]) { // if the cell exists
-                        txtValue = td[j].textContent || td[j].innerText; // get the text content of the cell
-                        //if the cell text contains search query
-                        if (txtValue.toLowerCase().indexOf(filter) > -1) { 
-                            tr[i].style.display = ""; // show the row
-                            break; //stop checking other cells in the row
+        // Search appointments table
+        tr = appointmentsTable.getElementsByTagName("tr"); // get all the tr elements in appointment table
+        for (i = 1; i < tr.length; i++) {  // start from 1 to skip the header row
+            tr[i].style.display = "none"; // hide the row by default
+            var matches = 0; // counter for matching criteria
+
+            // get all td elements in the row
+            td = tr[i].getElementsByTagName("td"); 
+            for (j = 0; j < td.length; j++) {  // loop through all cells in the row
+                if (td[j]) { // if the cell exists
+                    txtValue = td[j].textContent || td[j].innerText; // get the text content of the cell
+                    // check if the cell text contains any of the search terms
+                    for (var k = 0; k < filter.length; k++) {
+                        if (txtValue.toLowerCase().indexOf(filter[k]) > -1) {
+                            matches++;
+                            break; // move to the next cell if a match is found
                         }
                     }
                 }
             }
-        }
-
-        // Display relationship type field if it is family, or else hide field for add form
-        document.querySelectorAll('input[name="is_for_self"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            const familyInfo = document.getElementById('family_info');
-            if (this.value === '0') {
-                familyInfo.style.display = 'block';
-            } else {
-                familyInfo.style.display = 'none';
+            // show the row if it matches both search criteria
+            if (matches >= filter.length) {
+                tr[i].style.display = "";
             }
-        })
-        });
+        }
+    }
 
         // Display relationship type field if it is family, or else hide field for edit form
         document.querySelectorAll('input[name="is_for_self"]').forEach(radio => {
@@ -583,7 +512,6 @@ if (isset($_SESSION['username'])) {
                 document.getElementById('edit_patients_id').value = this.dataset.patients_id;
                 document.getElementById('edit_date').value = this.dataset.date;
                 document.getElementById('edit_time').value = this.dataset.time;
-                document.getElementById('edit_queue_number').value = this.dataset.queue_number;
                 document.getElementById('edit_medical_condition').value = this.dataset.medical_condition;
                 if (this.dataset.is_for_self === '1') { // "1" indicates self
                     document.getElementById('edit_is_for_self_myself').checked = true;
