@@ -136,6 +136,7 @@ if (isset($_GET['appointment_id'])) {
             <a href="home.php">Home</a>
             <a href="aboutUs.php">About Us</a>
             <a href="appointment.php">Appointment</a>
+            <a href="viewAppointment.php">View Appointment</a>
             <a href="contact.php">Contact Us</a>
         </div>
 

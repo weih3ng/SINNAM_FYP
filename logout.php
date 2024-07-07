@@ -85,6 +85,7 @@ $message = "You have logged out.";
             <a href="home.php">Home</a>
             <a href="aboutUs.php">About Us</a>
             <a href="appointment.php">Appointment</a>
+            <a href="viewAppointment.php">View Appointment</a>
             <a href="contact.php">Contact Us</a>
         </div>
 
