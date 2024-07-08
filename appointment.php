@@ -160,6 +160,12 @@ mysqli_close($link);
         .ui-datepicker {
             font-size: 1.5em; 
         }
+        .ipsFieldRow_required {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #aa1414;
+            font-weight: 500
+        }
     </style>
 </head>
 <body>
@@ -217,7 +223,7 @@ if (isset($_SESSION['username'])) {
                         <option value="3:00 PM">3:00 PM</option>
                         <option value="4:00 PM">4:00 PM</option>
                         <option value="5:00 PM">5:00 PM</option>
-                    </select>
+                    </select><span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
 
                     <br><br><br> <!-- Add booking for myself/family member (joc) -->
                     <label><b>Booking for:</b></label> 
@@ -226,7 +232,7 @@ if (isset($_SESSION['username'])) {
                         <input type="radio" id="for_self" name="booking_for" value="self" checked>
                         <label for="for_self" style= "font-size: 17px;">Myself</label>
                         <input type="radio" id="for_family" name="booking_for" value="family">
-                        <label for="for_family" style= "font-size: 17px;">Family Member</label>
+                        <label for="for_family" style= "font-size: 17px;">Family Member</label><span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
                     </div>
                     <br>
                     <div id="family_info" style="display: none;">
@@ -240,7 +246,7 @@ if (isset($_SESSION['username'])) {
                     </div>
                     
                     <br><br> <!-- Add medical condition (joc) -->
-                    <label for="medical-conditions"><b>Reason for consult (Medical Condition): <b></label>
+                    <label for="medical-conditions"><b>Reason for consult (Medical Condition): <b></label><span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
                     <br><br>
                     <textarea id="medical-conditions" name="medical_conditions" rows="4" style="width:100%;"></textarea>
 
@@ -293,7 +299,7 @@ if (isset($_SESSION['username'])) {
                     <br><br>
                     <textarea id="medical-conditions" name="medical_conditions" rows="4" style="width:100%;" disabled></textarea>
 
-                    <button class="btn-book" disabled>Book</button>
+                    
                 </form>
                 </div>
         <?php } ?>
