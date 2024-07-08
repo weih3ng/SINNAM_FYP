@@ -128,6 +128,25 @@ mysqli_close($link);
         .edit-box .btn:hover {
             background-color: #6b2c27;
         }
+
+
+        /* Styles for read-only and disabled input fields */
+        input[readonly] {
+            background-color: #e0e0e0;
+            color: #686868; 
+            cursor: not-allowed; 
+        }
+
+        /* Styles for editable fields */
+        input[type="date"]:not([readonly]), 
+        input[type="time"]:not([readonly]), 
+        textarea:not([readonly]),
+        select:not([disabled]),
+        input[type="radio"]:not([disabled]) {
+            background-color: #ffffff; 
+            border: 2px solid #80352F; 
+        }
+
     </style>
 </head>
 <body>
@@ -148,21 +167,21 @@ mysqli_close($link);
 
 
         <?php
-if (isset($_SESSION['username'])) { 
-    // Display 'Welcome, username'
-    echo "<p style='margin-top: 17px;'>Welcome, <b>" . htmlspecialchars($_SESSION['username']) . "</b>!</p>";
-    ?>
-    <a class="nav-custom" href="logout.php">
-        <i class="fa-solid fa-right-to-bracket"></i> Logout
-    </a>  
-<?php } else { ?>
-    <a class="nav-custom" href="signUp.php">
-        <i class="fa-solid fa-user"></i> Sign Up
-    </a>
-    <a class="nav-custom" href="login.php">
-        <i class="fa-solid fa-right-to-bracket"></i> Login
-    </a>  
-<?php } ?>
+        if (isset($_SESSION['username'])) { 
+            // Display 'Welcome, username'
+            echo "<p style='margin-top: 17px;'>Welcome, <b>" . htmlspecialchars($_SESSION['username']) . "</b>!</p>";
+            ?>
+            <a class="nav-custom" href="logout.php">
+                <i class="fa-solid fa-right-to-bracket"></i> Logout
+            </a>  
+        <?php } else { ?>
+            <a class="nav-custom" href="signUp.php">
+                <i class="fa-solid fa-user"></i> Sign Up
+            </a>
+            <a class="nav-custom" href="login.php">
+                <i class="fa-solid fa-right-to-bracket"></i> Login
+            </a>  
+        <?php } ?>
     </div>
 
     <!-- Edit Appointment Container -->
@@ -228,7 +247,7 @@ if (isset($_SESSION['username'])) {
     </footer>
 
     <script>
-
+    
         // Function to update display of the relationship type dropdown (joc)
         document.querySelectorAll('input[name="booking_for"]').forEach(input => {
             input.addEventListener('change', function() {
