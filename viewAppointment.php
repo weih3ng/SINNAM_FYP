@@ -11,7 +11,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 
 $patients_id = $_SESSION['patients_id']; // Retrieve patient ID from session (joc)
 
-// Retrieve appointments for the logged in patient (joc)
+// Retrieve appointments for the logged-in patient (joc)
 $query = "SELECT a.appointment_id, a.date, a.time, a.queue_number, a.is_for_self, a.relationship_type, a.medical_condition, p.name
         FROM appointments AS a
         INNER JOIN patients AS p ON a.patients_id = p.patients_id
@@ -32,6 +32,7 @@ if ($stmt = mysqli_prepare($link, $query)) {
 // Close database connection
 mysqli_close($link);
 
+$current_date = date('Y-m-d');
 ?>
 
 <!DOCTYPE html>
@@ -181,53 +182,53 @@ if (isset($_SESSION['username'])) {
         <div class="content-box">
             <h1>View Appointment</h1>
 
-
             <table>
-    <thead>
-        <tr>
-            <th>Appointment ID</th>
-            <th>Patient Name</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Medical Condition</th>
-            <th>Self/Family</th>
-            <th>Relationship Type</th>
-            <th>Queue Number</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($appointments as $appointment) : ?>
-            <tr>
-                <td><?php echo htmlspecialchars($appointment['appointment_id']); ?></td>
-                <td><?php echo htmlspecialchars($appointment['name']); ?></td>
-                <td><?php echo htmlspecialchars($appointment['date']); ?></td>
-                <td><?php echo htmlspecialchars($appointment['time']); ?></td>
-                <td><?php echo htmlspecialchars($appointment['medical_condition']); ?></td>
-                <td><?php echo $appointment['is_for_self'] ? 'Self' : 'Family'; ?></td>
-                <td><?php echo htmlspecialchars($appointment['relationship_type']); ?></td>
-                <td><?php echo htmlspecialchars($appointment['queue_number']); ?></td>
-                <td class="action-buttons">
-                    <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">Edit</a>
-                    <a href="deleteAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">Delete</a>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-        <tr>
-            <td colspan="9">
-                <input type="checkbox" id="selfAppointments" name="selfAppointments">
-                <label for="selfAppointments">Show only self-appointments</label>
-            </td>
-        </tr>
-    </tbody>
-</table>
+                <thead>
+                    <tr>
+                        <th>Appointment ID</th>
+                        <th>Patient Name</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Medical Condition</th>
+                        <th>Self/Family</th>
+                        <th>Relationship Type</th>
+                        <th>Queue Number</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($appointments as $appointment) : ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($appointment['appointment_id']); ?></td>
+                            <td><?php echo htmlspecialchars($appointment['name']); ?></td>
+                            <td><?php echo htmlspecialchars($appointment['date']); ?></td>
+                            <td><?php echo htmlspecialchars($appointment['time']); ?></td>
+                            <td><?php echo htmlspecialchars($appointment['medical_condition']); ?></td>
+                            <td><?php echo $appointment['is_for_self'] ? 'Self' : 'Family'; ?></td>
+                            <td><?php echo htmlspecialchars($appointment['relationship_type']); ?></td>
+                            <td><?php echo htmlspecialchars($appointment['queue_number']); ?></td>
+                            <td class="action-buttons">
+                                <?php if ($appointment['date'] >= $current_date) : ?>
+                                    <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">Edit</a>
+                                    <a href="deleteAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">Delete</a>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    <tr>
+                        <td colspan="9">
+                            <input type="checkbox" id="selfAppointments" name="selfAppointments">
+                            <label for="selfAppointments">Show only self-appointments</label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
             <a href="home.php">
                 <button class="btn btn-done">Done</button>
             </a>
         </div>
     </div>
-
 
     <!-- Footer -->
     <footer>
@@ -243,5 +244,5 @@ if (isset($_SESSION['username'])) {
         </div>
     </footer>
 
-    </body>
+</body>
 </html>
