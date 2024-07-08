@@ -165,13 +165,13 @@ if (isset($_SESSION['username'])) {
                 <h1>Contact Us</h1>
                 <form id="contactForm">
                     <div class="input-group">
-                        <input id="name" type="text" name="name" placeholder="Name" required>
-                        <input id="phone" type="phone" name="phone" placeholder="Phone" required>
+                        <input id="name" type="text" name="name" placeholder="Name *" required>
+                        <input id="phone" type="phone" name="phone" placeholder="Phone *" required>
                     </div>
                     <label for="email"></label>
-                    <input id="email" type="email" name="email"placeholder="Email" required>
+                    <input id="email" type="email" name="email"placeholder="Email *" required>
                     <label for="message"></label>
-                    <textarea id="message" name="message"placeholder="Message" required></textarea><span class="ipsFieldRow_required" style="margin-left: 10px;">ALL FIELDS ARE Required</span>
+                    <textarea id="message" name="message"placeholder="Message *" required></textarea><span class="ipsFieldRow_required" style="margin-left: 10px;">ALL FIELDS ARE Required</span>
                     <button type="submit" class="btn">Submit</button> 
                 </form>
                 <div id="successMessage" style="display:none; color: red; margin-top: 20px;">

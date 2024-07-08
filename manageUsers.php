@@ -61,11 +61,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
 $patients_sql = "SELECT patients_id, name, age, dob, gender, email, contactnumber, username FROM patients";
 $patients_result = mysqli_query($link, $patients_sql);
 
-// Count total users (patients)
-$total_patients_sql = "SELECT COUNT(*) as total_patients FROM patients";
-$total_patients_result = mysqli_query($link, $total_patients_sql);
-$total_patients_row = mysqli_fetch_assoc($total_patients_result);
-$total_patients = $total_patients_row['total_patients'];
+// Count total active users (patients who have booked an appointment)
+$active_patients_sql = "SELECT COUNT(DISTINCT patients_id) as active_patients FROM appointments";
+$active_patients_result = mysqli_query($link, $active_patients_sql);
+$active_patients_row = mysqli_fetch_assoc($active_patients_result);
+$active_patients = $active_patients_row['active_patients'];
+
+// Count total inactive users (patients who have not booked an appointment)
+$inactive_patients_sql = "SELECT COUNT(*) as inactive_patients FROM patients WHERE patients_id NOT IN (SELECT DISTINCT patients_id FROM appointments)";
+$inactive_patients_result = mysqli_query($link, $inactive_patients_sql);
+$inactive_patients_row = mysqli_fetch_assoc($inactive_patients_result);
+$inactive_patients = $inactive_patients_row['inactive_patients'];
 ?>
 
 <!DOCTYPE html>
@@ -100,7 +106,7 @@ $total_patients = $total_patients_row['total_patients'];
         .statistics-container {
             display: flex;
             justify-content: space-around;
-            width: 65%;
+            width: 55%;
             margin-bottom: 50px;
         }
 
@@ -283,8 +289,6 @@ $total_patients = $total_patients_row['total_patients'];
         </div>
 
     <!-- Sign Up & Login Button -->
-
-
     <?php
 if (isset($_SESSION['username'])) { 
     // Display 'Welcome, username'
@@ -308,8 +312,12 @@ if (isset($_SESSION['username'])) {
         <h1>Welcome to Admin Panel</h1>
         <div class="statistics-container">
             <div class="stat-box">
-                <h3>Total Users (Patients)</h3>
-                <p><?php echo $total_patients; ?></p>
+                <h3>Active Users</h3>
+                <p><?php echo $active_patients; ?></p>
+            </div>
+            <div class="stat-box">
+                <h3>Inactive Users</h3>
+                <p><?php echo $inactive_patients; ?></p>
             </div>
         </div>
 
