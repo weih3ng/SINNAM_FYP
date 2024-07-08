@@ -95,6 +95,13 @@ include 'dbfunctions.php';
         #idLoginBtn:hover {
             background-color: #6b2c27; 
         }
+
+        .ipsFieldRow_required {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #aa1414;
+            font-weight: 500
+        }
     </style>
 </head>
 <body>
@@ -144,12 +151,12 @@ if (isset($_SESSION['username'])) {
             <h1>Welcome Back</h1>
             <form method="post" action="doLogin.php">
                 <label for="idEmail">
-                    <i class="fa-solid fa-envelope" style="color: #949494;"></i> Email
+                    <i class="fa-solid fa-envelope" style="color: #949494;"></i> Email<span class="ipsFieldRow_required" style="margin-left: 260px;">Required</span>
                 </label>
                 <input id="idEmail" type="text" name="email" required/>
                 
                 <label for="idPassword">
-                    <i class="fa-solid fa-lock"  style="color: #949494;"></i> Password
+                    <i class="fa-solid fa-lock"  style="color: #949494;"></i> Password<span class="ipsFieldRow_required" style="margin-left: 230px;">Required</span>
                 </label>
                 <input id="idPassword" type="password" name="password" required/>
                 
