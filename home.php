@@ -1,7 +1,16 @@
-<?php 
+<?php
 session_start(); // Start the session
 
 include 'dbfunctions.php';
+
+// Fetch testimonials from the database
+$sql = "SELECT * FROM testimonials";
+$result = mysqli_query($link, $sql);
+
+// Check if there are any testimonials
+if (mysqli_num_rows($result) > 0) {
+    $testimonials = mysqli_fetch_all($result, MYSQLI_ASSOC);
+}
 ?>
 
 <!DOCTYPE html>
@@ -26,15 +35,12 @@ include 'dbfunctions.php';
             background-color: #F1EDE2;
         }
 
-
         /* Styles for Carousel */
         .carousel-item img {
             width: 100%; 
             max-height: 500px; 
-            object-fit: cover; /* Image covers the area without distorted */
+            object-fit: cover; /* Image covers the area without distortion */
         }
-
-
 
         /* Styles for How To Book */
         .how-to-book-section {
@@ -100,8 +106,6 @@ include 'dbfunctions.php';
             border-radius: 50px; 
         }
 
-
-
         /* Styles for Testimonials */
         .testimonial-section {
             padding-top: 10px;  
@@ -113,7 +117,7 @@ include 'dbfunctions.php';
             left: 8%;
             width: 650px;  
             height: 350px; 
-            object-fit: cover; /* Image covers the area without distorted */
+            object-fit: cover; /* Image covers the area without distortion */
         }
 
         .testimonial-content {
@@ -128,13 +132,13 @@ include 'dbfunctions.php';
             margin-bottom: 30px; 
         }
 
-        .testimonial-text {
+        .testimonial-comments {
             font-size: 16px;
             color: #555;
             margin-bottom: 10px; 
         }
 
-        .testimonial-author {
+        .testimonial-patient_username {
             font-size: 18px;
             color: #333;
             font-weight: bold;
@@ -163,8 +167,6 @@ include 'dbfunctions.php';
             background-color: #80352F; 
         }
 
-
-
         /* Additional specificity to ensure it overrides default styles */
         .navbar-links a, .nav-custom {
             color: inherit; /* Ensure the text color have the same as the parent elements  */
@@ -177,9 +179,6 @@ include 'dbfunctions.php';
         }
     </style>
 </head>
-
-
-
 <body>
 
     <!-- Navigation Bar -->
@@ -196,44 +195,31 @@ include 'dbfunctions.php';
         </div>
 
         <!-- Sign Up & Login Button -->
-
-
-        <?php
-if (isset($_SESSION['username'])) { 
-    // Display 'Welcome, username'
-    echo "<p style='margin-top: 17px;'>Welcome, <b>" . htmlspecialchars($_SESSION['username']) . "</b>!</p>";
-    ?>
-    <a class="nav-custom" href="logout.php">
-        <i class="fa-solid fa-right-to-bracket"></i> Logout
-    </a>  
-<?php } else { ?>
-    <a class="nav-custom" href="signUp.php">
-        <i class="fa-solid fa-user"></i> Sign Up
-    </a>
-    <a class="nav-custom" href="login.php">
-        <i class="fa-solid fa-right-to-bracket"></i> Login
-    </a>  
-<?php } ?>
-
-
-
+        <?php if (isset($_SESSION['username'])): ?>
+            <p style='margin-top: 17px;'>Welcome, <b><?php echo htmlspecialchars($_SESSION['username']); ?></b>!</p>
+            <a class="nav-custom" href="logout.php">
+                <i class="fa-solid fa-right-to-bracket"></i> Logout
+            </a>  
+        <?php else: ?>
+            <a class="nav-custom" href="signUp.php">
+                <i class="fa-solid fa-user"></i> Sign Up
+            </a>
+            <a class="nav-custom" href="login.php">
+                <i class="fa-solid fa-right-to-bracket"></i> Login
+            </a>  
+        <?php endif; ?>
     </div>
-
-
 
     <!-- Home Container -->
     <div class="home-container">
-
         <!-- Carousel Section -->
         <div class="carousel-section">
             <div id="demo" class="carousel slide" data-ride="carousel">
-
                 <!-- Indicators -->
                 <ul class="carousel-indicators" id="carouselIndicators1">
                     <li data-target="#demo" data-slide-to="0" class="active"></li>
                     <li data-target="#demo" data-slide-to="1"></li>
                 </ul>
-
                 <!-- The slideshow -->
                 <div class="carousel-inner">
                     <div class="carousel-item active">
@@ -243,13 +229,12 @@ if (isset($_SESSION['username'])) {
                         <img src="images/banner2.jpg" alt="Banner 2">
                     </div>
                 </div>
-
                 <!-- Left and right controls -->
                 <a class="carousel-control-prev" href="#demo" data-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
+                    <span class="carousel-control-prev-icon"></span>
                 </a>
                 <a class="carousel-control-next" href="#demo" data-slide="next">
-                <span class="carousel-control-next-icon"></span>
+                    <span class="carousel-control-next-icon"></span>
                 </a>
             </div>
         </div>
@@ -289,45 +274,22 @@ if (isset($_SESSION['username'])) {
                     <img src="images/5.jpg" alt="Testimonial Background" class="img-fluid">
                     <div class="testimonial-content">
                         <div id="testimonialCarousel" class="carousel slide" data-ride="carousel">
-
                             <!-- Indicators -->
                             <ul class="carousel-indicators" id="carouselIndicators2">
-                                <li data-target="#testimonialCarousel" data-slide-to="0" class="active"></li>
-                                <li data-target="#testimonialCarousel" data-slide-to="1"></li>
-                                <li data-target="#testimonialCarousel" data-slide-to="2"></li>
-                                <li data-target="#testimonialCarousel" data-slide-to="3"></li>
-                                <li data-target="#testimonialCarousel" data-slide-to="4"></li>
+                                <!-- Dynamically generate indicators based on testimonials count -->
+                                <?php foreach ($testimonials as $key => $testimonial): ?>
+                                    <li data-target="#testimonialCarousel" data-slide-to="<?php echo $key; ?>" <?php echo $key === 0 ? 'class="active"' : ''; ?>></li>
+                                <?php endforeach; ?>
                             </ul>
-
                             <!-- Wrapper for slides -->
                             <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <h5 class="testimonial-author">Jin H</h5>
-                                    <p class="testimonial-text">Doctor is very patient and powerful, the most powerful Chinese medicine 
-                                        practitioner I have ever encountered, and the results are very good. It's just a long wait in line, 
-                                        but it's well worth it.</p>
-                                </div>
-                                <!-- More testimonials can be added here -->
-                                <div class="carousel-item">
-                                    <h5 class="testimonial-author">Tan Wei Ling</h5>
-                                    <p class="testimonial-text">I was thoroughly impressed by the professionalism and warmth of the staff. 
-                                        The treatment I received was both effective and nurturing. Highly recommended for anyone looking for quality care!</p>
-                                </div>
-                                <div class="carousel-item">
-                                    <h5 class="testimonial-author">Liu Xing</h5>
-                                    <p class="testimonial-text">I have been a patient of Sin Nam Medical Hall for many years. The doctors are 
-                                        knowledgeable and caring. I have always been treated with respect and kindness. I highly recommend this clinic.</p>
-                                </div>
-                                <div class="carousel-item">
-                                    <h5 class="testimonial-author">Sophie Lee</h5>
-                                    <p class="testimonial-text">I have been a patient of Sin Nam Medical Hall for many years. The doctors are 
-                                        knowledgeable and caring. I have always been treated with respect and kindness. I highly recommend this clinic.</p>
-                                </div>
-                                <div class="carousel-item">
-                                    <h5 class="testimonial-author">Ahmed J.</h5>
-                                    <p class="testimonial-text">I have been a patient of Sin Nam Medical Hall for many years. The doctors are 
-                                        knowledgeable and caring. I have always been treated with respect and kindness. I highly recommend this clinic.</p>
-                                </div>
+                                <!-- Dynamically generate carousel items based on testimonials -->
+                                <?php foreach ($testimonials as $key => $testimonial): ?>
+                                    <div class="carousel-item <?php echo $key === 0 ? 'active' : ''; ?>">
+                                        <h5 class="testimonial-patient_username"><?php echo htmlspecialchars($testimonial['patient_username']); ?></h5>
+                                        <p class="testimonial-comments"><?php echo htmlspecialchars($testimonial['comments']); ?></p>
+                                    </div>
+                                <?php endforeach; ?>
                             </div>
                         </div>
                     </div>
@@ -336,8 +298,6 @@ if (isset($_SESSION['username'])) {
         </div>
     </div>
 
-
-    
     <!-- Footer -->
     <footer>
         <a href="home.php">
@@ -352,5 +312,5 @@ if (isset($_SESSION['username'])) {
         </div>
     </footer>
 
-    </body>
+</body>
 </html>

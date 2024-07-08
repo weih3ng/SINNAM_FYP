@@ -35,6 +35,7 @@ if (!$user) {
     // Check doctors table
     $user = check_user($link, $email, $password, 'doctors');
     $user_type = 'doctor';
+    header('Location: viewAppointment.php');
 }
 
 // If a user is found, set session variables and success message
