@@ -114,6 +114,13 @@ include 'dbfunctions.php';
             height: 450px;
             border-radius: 15px;
         }
+        
+        .ipsFieldRow_required {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #aa1414;
+            font-weight: 500
+        }
         </style>
 </head>
 <body>
@@ -164,8 +171,8 @@ if (isset($_SESSION['username'])) {
                     <label for="email"></label>
                     <input id="email" type="email" name="email"placeholder="Email" required>
                     <label for="message"></label>
-                    <textarea id="message" name="message"placeholder="Message" required></textarea>
-                    <button type="submit" class="btn">Submit</button>
+                    <textarea id="message" name="message"placeholder="Message" required></textarea><span class="ipsFieldRow_required" style="margin-left: 10px;">ALL FIELDS ARE Required</span>
+                    <button type="submit" class="btn">Submit</button> 
                 </form>
                 <div id="successMessage" style="display:none; color: red; margin-top: 20px;">
                 Your contact form has been submitted successfully !
