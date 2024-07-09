@@ -12,7 +12,7 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 $patients_id = $_SESSION['patients_id']; // Retrieve patient ID from session (joc)
 
 // Retrieve appointments for the logged-in patient (joc)
-$query = "SELECT a.appointment_id, a.date, a.time, a.queue_number, a.is_for_self, a.relationship_type, a.medical_condition, p.name
+$query = "SELECT a.appointment_id, a.date, a.time, a.is_for_self, a.relationship_type, a.medical_condition, p.name
         FROM appointments AS a
         INNER JOIN patients AS p ON a.patients_id = p.patients_id
         WHERE a.patients_id = ?";
@@ -52,7 +52,7 @@ $current_date = date('Y-m-d');
             align-items: center;
             justify-content: center;
             background-color: #F1EDE2;
-            min-height: calc(110vh - 120px);
+            min-height: calc(130vh - 120px);
             padding: 20px;
             box-sizing: border-box;
         }
@@ -104,6 +104,7 @@ $current_date = date('Y-m-d');
 
         .btn-edit {
             color: #4CAF50; 
+            text-decoration: none;
         }
 
         .btn-edit:hover {
@@ -112,6 +113,7 @@ $current_date = date('Y-m-d');
 
         .btn-delete {
             color: #f44336; 
+            text-decoration: none;
         }
 
         .btn-delete:hover {
@@ -134,6 +136,36 @@ $current_date = date('Y-m-d');
         .btn-done:hover {
             background-color: #6b2c27;
         }
+
+
+
+        /* Color Coding for table rows (joc)*/
+        .self-appointment { 
+            background-color: #D0E8D0; 
+        }  
+
+        .family-appointment { 
+            background-color: #E9E0D1; 
+        } 
+
+        .table-header {
+            display: flex;
+            justify-content: space-between; /* This will push the dropdown to the far right */
+            align-items: center;
+            padding-right: 8px; /* Adjust based on the layout of container */
+            margin-bottom: 10px;
+        }
+
+        select#appointmentFilter {
+            padding: 8px;
+            margin-right: 0;
+            width: 200px;
+            border-radius: 5px;
+            border: 2px solid #80352F;
+        }
+
+
+    
     </style>
 </head>
 
@@ -158,21 +190,21 @@ $current_date = date('Y-m-d');
 
 
         <?php
-if (isset($_SESSION['username'])) { 
-    // Display 'Welcome, username'
-    echo "<p style='margin-top: 17px;'>Welcome, <b>" . htmlspecialchars($_SESSION['username']) . "</b>!</p>";
-    ?>
-    <a class="nav-custom" href="logout.php">
-        <i class="fa-solid fa-right-to-bracket"></i> Logout
-    </a>  
-<?php } else { ?>
-    <a class="nav-custom" href="signUp.php">
-        <i class="fa-solid fa-user"></i> Sign Up
-    </a>
-    <a class="nav-custom" href="login.php">
-        <i class="fa-solid fa-right-to-bracket"></i> Login
-    </a>  
-<?php } ?>
+        if (isset($_SESSION['username'])) { 
+            // Display 'Welcome, username'
+            echo "<p style='margin-top: 17px;'>Welcome, <b>" . htmlspecialchars($_SESSION['username']) . "</b>!</p>";
+            ?>
+            <a class="nav-custom" href="logout.php">
+                <i class="fa-solid fa-right-to-bracket"></i> Logout
+            </a>  
+        <?php } else { ?>
+            <a class="nav-custom" href="signUp.php">
+                <i class="fa-solid fa-user"></i> Sign Up
+            </a>
+            <a class="nav-custom" href="login.php">
+                <i class="fa-solid fa-right-to-bracket"></i> Login
+            </a>  
+        <?php } ?>
 
     </div>
 
@@ -182,23 +214,32 @@ if (isset($_SESSION['username'])) {
         <div class="content-box">
             <h1>View Appointment</h1>
 
+            <div class="table-header">
+                <div></div> <!-- Placeholder for spacing -->
+                <select id="appointmentFilter" name="appointmentFilter">
+                    <option value="all">All Appointments</option>
+                    <option value="self">Only Self Appointments</option>
+                    <option value="family">Only Family Appointments</option>
+                </select>
+            </div>
+
+
             <table>
                 <thead>
                     <tr>
-                        <th>Appointment ID</th>
-                        <th>Patient Name</th>
+                        <th>Queue Number</th>
+                        <th>Booking Name</th>
                         <th>Date</th>
                         <th>Time</th>
                         <th>Medical Condition</th>
                         <th>Self/Family</th>
                         <th>Relationship Type</th>
-                        <th>Queue Number</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($appointments as $appointment) : ?>
-                        <tr>
+                        <tr class="<?= $appointment['is_for_self'] ? 'self-appointment' : 'family-appointment'; ?>">
                             <td><?php echo htmlspecialchars($appointment['appointment_id']); ?></td>
                             <td><?php echo htmlspecialchars($appointment['name']); ?></td>
                             <td><?php echo htmlspecialchars($appointment['date']); ?></td>
@@ -206,21 +247,18 @@ if (isset($_SESSION['username'])) {
                             <td><?php echo htmlspecialchars($appointment['medical_condition']); ?></td>
                             <td><?php echo $appointment['is_for_self'] ? 'Self' : 'Family'; ?></td>
                             <td><?php echo htmlspecialchars($appointment['relationship_type']); ?></td>
-                            <td><?php echo htmlspecialchars($appointment['queue_number']); ?></td>
                             <td class="action-buttons">
                                 <?php if ($appointment['date'] >= $current_date) : ?>
-                                    <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">Edit</a>
-                                    <a href="deleteAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">Delete</a>
+                                    <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="deleteAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
                                 <?php endif; ?>
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                    <tr>
-                        <td colspan="9">
-                            <input type="checkbox" id="selfAppointments" name="selfAppointments">
-                            <label for="selfAppointments">Show only self-appointments</label>
-                        </td>
-                    </tr>
                 </tbody>
             </table>
 
@@ -243,6 +281,38 @@ if (isset($_SESSION['username'])) {
             <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook"></i></a>
         </div>
     </footer>
+    
+    
+    <script>
+
+        // Filter appointments based on 'Self' or 'Family' (joc)
+        document.getElementById('appointmentFilter').addEventListener('change', function() {
+            const filterValue = this.value;
+            const rows = document.querySelectorAll('table tbody tr');
+
+            // First, reset the display state for all rows
+            rows.forEach(row => {
+                row.style.display = '';  // Reset display to default for all rows
+            });
+
+            // Now apply the new filter
+            rows.forEach(row => {
+                const appointmentFor = row.cells[5].textContent.trim();  // Ensure to trim any whitespace
+
+                console.log(`Filtering for: ${filterValue}, Current row: ${appointmentFor}`);  // Debug output
+
+                if (filterValue === 'self' && appointmentFor !== 'Self') {
+                    row.style.display = 'none';
+                } else if (filterValue === 'family' && appointmentFor !== 'Family') {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+
+
+
+    </script>
 
 </body>
 </html>
