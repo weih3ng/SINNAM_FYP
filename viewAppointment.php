@@ -152,7 +152,6 @@ $current_date = date('Y-m-d');
             display: flex;
             justify-content: space-between; /* Push the dropdown towards to the right */
             align-items: center;
-            padding-right: 8px; /* Adjust based on the layout of container */
             margin-bottom: 10px;
         }
 
