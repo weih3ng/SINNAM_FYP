@@ -150,7 +150,7 @@ $current_date = date('Y-m-d');
 
         .table-header {
             display: flex;
-            justify-content: space-between; /* This will push the dropdown to the far right */
+            justify-content: space-between; /* Push the dropdown towards to the right */
             align-items: center;
             padding-right: 8px; /* Adjust based on the layout of container */
             margin-bottom: 10px;
@@ -290,7 +290,7 @@ $current_date = date('Y-m-d');
             const filterValue = this.value;
             const rows = document.querySelectorAll('table tbody tr');
 
-            // First, reset the display state for all rows
+            // Reset the display state for all rows
             rows.forEach(row => {
                 row.style.display = '';  // Reset display to default for all rows
             });
