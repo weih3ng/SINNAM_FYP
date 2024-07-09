@@ -17,6 +17,7 @@ include 'dbfunctions.php';
     <title>Login Page</title>
 
     <style>
+        /* Existing styles */
         .login-container {
             display: flex;
             align-items: center;
@@ -102,6 +103,43 @@ include 'dbfunctions.php';
             color: #aa1414;
             font-weight: 500
         }
+
+        /* Modal styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0, 0, 0, 0.4); 
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; 
+            max-width: 600px;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -120,8 +158,6 @@ include 'dbfunctions.php';
         </div>
 
         <!-- Sign Up & Login Button -->
-
-
         <?php
 if (isset($_SESSION['username'])) { 
     // Display 'Welcome, username'
@@ -166,10 +202,57 @@ if (isset($_SESSION['username'])) {
                 <?php unset($_SESSION['error_message']); ?> <!-- unsets error msg to clear from session-->
             <?php endif; ?> <!-- End of 'if' block-->
 
-                <p>By clicking "LOGIN", I acknowledge that I have read, understood and agree that I am bound by the <a href="#">Account Terms of Use</a>.</p>
+                <p>By clicking "LOGIN", I acknowledge that I have read, understood and agree that I am bound by the <a href="#" id="termsLink">Account Terms of Use</a>.</p>
             </form>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div id="termsModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Account Terms of Use</h2>
+        <p><strong>1. Introduction</strong><br>
+        Welcome to Sin Nam Medical Hall’s website. By accessing or using our website, you agree to comply with and be bound by the following terms and conditions. Please read these terms carefully. If you do not agree with any part of these terms, you should not use our website.</p>
+        
+        <p><strong>2. Definitions</strong><br>
+        "Website" refers to Sin Nam Medical Hall's website.<br>
+        "We", "Us", "Our" refers to Sin Nam Medical Hall.<br>
+        "User", "You" refers to any individual or entity using our website.</p>
+        
+        <p><strong>3. Use of the Website</strong><br>
+        You agree to use the website only for lawful purposes and in a manner that does not infringe the rights of, restrict, or inhibit anyone else's use and enjoyment of the website. Prohibited behavior includes harassing or causing distress or inconvenience to any other user, transmitting obscene or offensive content, or disrupting the normal flow of dialogue within the website.</p>
+        
+        <p><strong>4. Intellectual Property Rights</strong><br>
+        All content, trademarks, and data on this website, including but not limited to software, databases, text, graphics, icons, hyperlinks, private information, designs, and agreements, are the property of or licensed to Sin Nam Medical Hall and as such are protected from infringement by local and international legislation and treaties.</p>
+        
+        <p><strong>5. Medical Advice Disclaimer</strong><br>
+        The content on this website is provided for general information purposes only. It is not intended to replace consultation with a qualified medical professional. We do not provide medical advice, diagnosis, or treatment.</p>
+        
+        <p><strong>6. Appointments and Services</strong><br>
+        By booking an appointment through our website, you agree to provide accurate and truthful information. We reserve the right to cancel or reschedule appointments as necessary. Our services are subject to availability and we do not guarantee that all services will be available at all times.</p>
+        
+        <p><strong>7. Privacy Policy</strong><br>
+        Your privacy is important to us. Please refer to our Privacy Policy for information on how we collect, use, and protect your personal data.</p>
+        
+        <p><strong>8. Limitation of Liability</strong><br>
+        To the fullest extent permitted by law, Sin Nam Medical Hall shall not be liable for any indirect, incidental, special, consequential, or punitive damages, or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of data, use, goodwill, or other intangible losses, resulting from (i) your use or inability to use the website; (ii) any unauthorized access to or use of our servers and/or any personal information stored therein.</p>
+        
+        <p><strong>9. Changes to Terms and Conditions</strong><br>
+        We may revise these terms and conditions from time to time. The revised terms will apply to the use of our website from the date of publication of the revised terms on the website. Please check this page regularly to ensure you are familiar with the current version.</p>
+        
+        <p><strong>10. Governing Law</strong><br>
+        These terms and conditions are governed by and construed in accordance with the laws of Singapore. Any disputes relating to these terms and conditions shall be subject to the exclusive jurisdiction of Singapore Courts.</p>
+        
+        <p><strong>11. Contact Information</strong><br>
+        If you have any questions about these terms and conditions, please contact us at:<br>
+        Sin Nam Medical Hall<br>
+        #01-101 Yishun Street 71, Block 729, Singapore 760729<br>
+        support.sinnam@gmail.com<br>
+        +62 6257 0881</p>
+    </div>
+</div>
+
 
     <!-- Footer -->
     <footer>
@@ -184,7 +267,33 @@ if (isset($_SESSION['username'])) {
             <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook"></i></a>
         </div>
     </footer>
+
+    <script>
+        // Get the modal
+        var modal = document.getElementById("termsModal");
+
+        // Get the button that opens the modal
+        var btn = document.getElementById("termsLink");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+
+        // When the user clicks the button, open the modal 
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>
-
-
