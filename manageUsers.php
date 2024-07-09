@@ -275,6 +275,10 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
         .button-container button:hover {
             background-color: #6b2c27;
         }
+
+        td a.edit-link {
+            color: green;
+        }
     </style>
 </head>
 <body>
@@ -309,20 +313,22 @@ if (isset($_SESSION['username'])) {
 
     <!-- Admin Panel Container -->
     <div class="admin-panel-container">
-        <h1>Welcome to Admin Panel</h1>
+        <h1><i class="fas fa-door-open"></i> Welcome to Admin Panel</h1>
         <div class="statistics-container">
             <div class="stat-box">
-                <h3>Active Users</h3>
+                <h3><i class="fas fa-users"></i> Active Users</h3>
+                <p><b>(booked appointment)</b></p>
                 <p><?php echo $active_patients; ?></p>
             </div>
             <div class="stat-box">
-                <h3>Inactive Users</h3>
+                <h3><i class="fas fa-user-times"></i> Inactive Users</h3>
+                <p><b>(yet to book an appointment)</b></p>
                 <p><?php echo $inactive_patients; ?></p>
             </div>
         </div>
 
         <div class="record-links">
-            <h1>Search Records</h1>
+            <h1>Search Records <i class="fas fa-search-plus"></i></h1>
         </div>
 
         <div class="search-container">

@@ -163,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
 
     <!-- Admin Panel Container -->
     <div class="admin-panel-container">
-        <h1>Add New User</h1>
+        <h1><i class="fas fa-user-plus"></i> Add New User</h1>
         <div class="form-container">
             <form action="AdminAddUser.php" method="POST">
                 <label for="name" class="required-label">Name:</label>

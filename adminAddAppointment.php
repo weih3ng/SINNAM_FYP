@@ -97,6 +97,12 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
             font-weight: bold;
         }
 
+        .form-container label.required-label::before {
+            content: " *";
+            color: red;
+            margin-left: 5px;
+        }
+
         .form-container input,
         .form-container select {
             margin-bottom: 10px;
@@ -175,23 +181,23 @@ if (isset($_SESSION['username'])) {
 
     <!-- Admin Panel Container -->
     <div class="admin-panel-container">
-        <h1>Add New Appointment</h1>
+        <h1><i class="far fa-calendar-check"></i> Add New Appointment</h1>
         <div class="form-container">
             <form action="adminAddAppointment.php" method="POST">
-                <label for="patients_id">Patients Name:</label>
+                <label for="patients_id" class="required-label">Booking Name:</label>
                 <select id="patients_id" name="patients_id" required>
                 <option value="">Select Patient</option>
                 <?php foreach ($patients as $id => $name): ?>
                     <option value="<?php echo $id; ?>"><?php echo $name; ?></option>
                 <?php endforeach; ?>
                 </select>
-                <label for="date">Date:</label>
+                <label for="date" class="required-label">Date:</label>
                 <input type="date" id="date" name="date" required>
-                <label for="time">Time:</label>
+                <label for="time" class="required-label">Time:</label>
                 <input type="time" id="time" name="time" required>
-                <label for="medical_condition">Medical Condition:</label>
+                <label for="medical_condition" class="required-label">Medical Condition:</label>
                 <input type="text" id="medical_condition" name="medical_condition" required>
-                <label for="is_for_self">Booking for:</label>
+                <label for="is_for_self" class="required-label">Booking for:</label>
                 <div>
                     <input type="radio" id="is_for_self_myself" name="is_for_self" value="1" required>
                     <label for="is_for_self_myself">Myself</label>
@@ -199,7 +205,7 @@ if (isset($_SESSION['username'])) {
                     <label for="is_for_self_family">Family</label>
                 </div>
                 <div id="family_info" style="display: none;">
-                    <label for="relationship_type">Relationship Type:</label>
+                    <label for="relationship_type" class="required-label">Relationship Type:</label>
                     <select id="relationship_type" name="relationship_type" required>
                         <option value="spouse">Spouse</option>
                         <option value="child">Child</option>
@@ -240,6 +246,15 @@ if (isset($_SESSION['username'])) {
                     familyInfo.style.display = 'none';
                 }
             })
+        });
+
+        // Disable Sundays and Mondays in the date picker
+        document.getElementById('date').addEventListener('input', function(e) {
+            var day = new Date(this.value).getUTCDay();
+            if (day === 0 || day === 1) {
+                alert('Booking on Sunday and Monday is not allowed. Please select another date.');
+                this.value = '';
+            }
         });
     </script>
 </body>

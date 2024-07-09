@@ -80,12 +80,6 @@ $appointments_sql = "SELECT a.appointment_id, a.patients_id, a.doctor_id, a.date
         FROM appointments AS a
         INNER JOIN patients AS p ON a.patients_id = p.patients_id";
 $appointments_result = mysqli_query($link, $appointments_sql);
-
-// Count total appointments(statistics)
-$total_appointments_sql = "SELECT COUNT(*) as total_appointments FROM appointments";
-$total_appointments_result = mysqli_query($link, $total_appointments_sql);
-$total_appointments_row = mysqli_fetch_assoc($total_appointments_result);
-$total_appointments = $total_appointments_row['total_appointments'];
 ?>
 
 <!DOCTYPE html>
@@ -120,16 +114,16 @@ $total_appointments = $total_appointments_row['total_appointments'];
             display: flex;
             justify-content: space-around;
             width: 65%;
-            margin-bottom: 50px;
+            margin-bottom: 30px;
         }
 
         .stat-box {
             background-color: #ffffff;
-            padding: 20px;
+            padding: 15px;
             border-radius: 30px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
-            width: 25%;
+            width: 40%;
         }
 
         .stat-box h3 {
@@ -282,6 +276,10 @@ $total_appointments = $total_appointments_row['total_appointments'];
         .button-container button:hover {
             background-color: #6b2c27;
         }
+
+        td a.edit-link {
+            color: green;
+        }
     </style>
 </head>
 <body>
@@ -296,39 +294,27 @@ $total_appointments = $total_appointments_row['total_appointments'];
         </div>
 
     <!-- Sign Up & Login Button -->
-
-
     <?php
-if (isset($_SESSION['username'])) { 
+    if (isset($_SESSION['username'])) { 
     // Display 'Welcome, username'
     echo "<p style='margin-top: 17px;'>Welcome, <b>" . htmlspecialchars($_SESSION['username']) . "</b>!</p>";
     ?>
     <a class="nav-custom" href="logout.php">
         <i class="fa-solid fa-right-to-bracket"></i> Logout
     </a>  
-<?php } else { ?>
+    <?php } else { ?>
     <a class="nav-custom" href="signUp.php">
         <i class="fa-solid fa-user"></i> Sign Up
     </a>
     <a class="nav-custom" href="login.php">
         <i class="fa-solid fa-right-to-bracket"></i> Login
     </a>  
-<?php } ?>
+    <?php } ?>
     </div>
 
     <!-- Admin Panel Container -->
     <div class="admin-panel-container">
-        <h1>Welcome to Admin Panel</h1>
-        <div class="statistics-container">
-            <div class="stat-box">
-                <h3>Total Appointments (up-to-date)</h3>
-                <p><?php echo $total_appointments; ?></p>
-            </div>
-        </div>
-
-        <div class="record-links">
-            <h1>Search Records</h1>
-        </div>
+        <h1><i class="fas fa-door-open"></i> Welcome to Admin Panel</h1><br><br>
 
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Search for appointment details...">
@@ -343,39 +329,45 @@ if (isset($_SESSION['username'])) {
         <table id="appointmentsTable" class="display">
             <thead>
             <tr>
-                <th>Appointment ID</th>
-                <th>Patients ID</th>
-                <th>Name</th>
+                <th>Queue Number</th>
+                <th>Booking Name</th>
                 <th>Date</th>
                 <th>Time</th>
                 <th>Medical Condition</th>
                 <th>Self/Family</th>
-                <th>Relationship Type</th>
+                <th>Relationship</th>
                 <th>Actions</th>
             </tr>
             </thead>
             <tbody>
             <?php
+            // Fetch current date
+            $current_date = date("Y-m-d");
+
             if ($appointments_result && mysqli_num_rows($appointments_result) > 0) {
                 while($row = mysqli_fetch_assoc($appointments_result)) {
                     $is_for_self_display = $row['is_for_self'] == 1 ? "Self" : "Family";
                     echo "<tr>
                             <td>{$row['appointment_id']}</td>
-                            <td>{$row['patients_id']}</td>
                             <td>{$row['name']}</td>
                             <td>{$row['date']}</td>
                             <td>{$row['time']}</td>
                             <td>{$row['medical_condition']}</td>
                             <td>{$is_for_self_display}</td>
                             <td>{$row['relationship_type']}</td>
-                            <td>
-                                <a href='#' class='edit-link' data-id='{$row['appointment_id']}' data-patients_id='{$row['patients_id']}' data-name='{$row['name']}' data-date='{$row['date']}' data-time='{$row['time']}' data-medical_condition='{$row['medical_condition']}' data-is_for_self='{$row['is_for_self']}' data-relationship_type='{$row['relationship_type']}'>Edit</a> |  
-                                <a href='manageAppointments.php?delete_id={$row['appointment_id']}'>Delete</a>
-                            </td>
-                          </tr>";
-                }
-            } else {
-                echo "<tr><td colspan='9'>No appointments found</td></tr>";
+                            <td>";
+                            // Check if appointment date is in the past
+                            if ($row['date'] >= $current_date) {
+                                echo"<a href='#' class='edit-link' data-id='{$row['appointment_id']}' data-patients_id='{$row['patients_id']}' data-name='{$row['name']}' data-date='{$row['date']}' data-time='{$row['time']}' data-medical_condition='{$row['medical_condition']}' data-is_for_self='{$row['is_for_self']}' data-relationship_type='{$row['relationship_type']}'>Edit</a> |  
+                                <a href='manageAppointments.php?delete_id={$row['appointment_id']}'>Delete</a>";
+                            } else {
+                                echo "";
+                            }
+                            echo "</td>
+                                  </tr>";
+                            }
+                        } else {
+                echo "<tr><td colspan='8'>No appointments found</td></tr>";
             }
             ?>
             </tbody>
@@ -386,7 +378,7 @@ if (isset($_SESSION['username'])) {
         <h2>Edit Appointment</h2>
         <form action="manageAppointments.php" method="POST">
             <input type="hidden" id="edit_appointment_id" name="appointment_id">
-            <label for="edit_patients_id">Patients ID:</label>
+            <label for="edit_patients_id">Booking Name:</label>
             <select id="edit_patients_id" name="patients_id" required>
             <option value="">Select Patient</option>
             <?php foreach ($patients as $id => $name): ?>
@@ -443,50 +435,35 @@ if (isset($_SESSION['username'])) {
         $(document).ready(function() {
             $('#appointmentsTable').DataTable();
         });
-        
-        //function for collapsible button leading to forms
-        document.querySelectorAll('.collapsible-button').forEach(button => { 
-        //selects all elements that have the class, loop that iterates over each button with the class
-            button.addEventListener('click', () => { //adds a click event listener to each button
-                button.classList.toggle('active');
-                let content = button.nextElementSibling; //select collapsible content
-                if (content.style.display === "block") { //check if display property of the content is set to block
-                    content.style.display = "none"; // hide the content
-                } else {
-                    content.style.display = "block"; // make content visible
-                }
-            });
-        });
 
-        //function for search
         function searchTable() {
-        var input, filter, appointmentsTable, tr, td, i, j, txtValue;
+        var input, filters, table, tr, td, i, j, txtValue;
         input = document.getElementById("searchInput"); // get the search input element
-        filter = input.value.toLowerCase().split(" "); // get the search query and split it into an array of terms
-        appointmentsTable = document.getElementById("appointmentsTable"); // get appointments table by ID
+        filters = input.value.toLowerCase().split(" "); // get the search query and split it into an array of terms
+        table = document.getElementById("appointmentsTable"); // get the table by ID
 
         // Search appointments table
-        tr = appointmentsTable.getElementsByTagName("tr"); // get all the tr elements in appointment table
+        tr = table.getElementsByTagName("tr"); // get all the tr elements in the table
         for (i = 1; i < tr.length; i++) {  // start from 1 to skip the header row
             tr[i].style.display = "none"; // hide the row by default
             var matches = 0; // counter for matching criteria
 
             // get all td elements in the row
-            td = tr[i].getElementsByTagName("td"); 
+            td = tr[i].getElementsByTagName("td");
             for (j = 0; j < td.length; j++) {  // loop through all cells in the row
                 if (td[j]) { // if the cell exists
                     txtValue = td[j].textContent || td[j].innerText; // get the text content of the cell
                     // check if the cell text contains any of the search terms
-                    for (var k = 0; k < filter.length; k++) {
-                        if (txtValue.toLowerCase().indexOf(filter[k]) > -1) {
+                    for (var k = 0; k < filters.length; k++) {
+                        if (txtValue.toLowerCase().indexOf(filters[k]) > -1) {
                             matches++;
                             break; // move to the next cell if a match is found
                         }
                     }
                 }
             }
-            // show the row if it matches both search criteria
-            if (matches >= filter.length) {
+            // show the row if it matches all search criteria
+            if (matches >= filters.length) {
                 tr[i].style.display = "";
             }
         }
@@ -523,6 +500,15 @@ if (isset($_SESSION['username'])) {
                 }
                 document.getElementById('editAppointmentForm').style.display = 'block';
             });
+        });
+
+        // Disable Sundays and Mondays in the date picker
+        document.getElementById('edit_date').addEventListener('input', function(e) {
+            var day = new Date(this.value).getUTCDay();
+            if (day === 0 || day === 1) {
+                alert('Booking on Sunday and Monday is not allowed. Please select another date.');
+                this.value = '';
+            }
         });
     </script>
 </body>
