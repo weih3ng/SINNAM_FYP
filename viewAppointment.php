@@ -12,10 +12,10 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 $patients_id = $_SESSION['patients_id']; // Retrieve patient ID from session (joc)
 
 // Retrieve appointments for the logged-in patient (joc)
-$query = "SELECT a.appointment_id, a.date, a.time, a.is_for_self, a.relationship_type, a.medical_condition, p.name
-        FROM appointments AS a
-        INNER JOIN patients AS p ON a.patients_id = p.patients_id
-        WHERE a.patients_id = ?";
+$query = "SELECT a.appointment_id, a.date, a.time, a.is_for_self, a.relationship_type, a.medical_condition, p.name, a.family_name
+            FROM appointments AS a
+            INNER JOIN patients AS p ON a.patients_id = p.patients_id
+            WHERE a.patients_id = ?";
 
 if ($stmt = mysqli_prepare($link, $query)) {
     mysqli_stmt_bind_param($stmt, "i", $patients_id);
@@ -141,11 +141,11 @@ $current_date = date('Y-m-d');
 
         /* Color Coding for table rows (joc)*/
         .self-appointment { 
-            background-color: #D0E8D0; 
+            background-color: #edede9; 
         }  
 
         .family-appointment { 
-            background-color: #E9E0D1; 
+            background-color: #d6ccc2; 
         } 
 
         .table-header {
@@ -234,6 +234,7 @@ $current_date = date('Y-m-d');
                         <th>Medical Condition</th>
                         <th>Self/Family</th>
                         <th>Relationship Type</th>
+                        <th>Family Name</th> 
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -247,6 +248,7 @@ $current_date = date('Y-m-d');
                             <td><?php echo htmlspecialchars($appointment['medical_condition']); ?></td>
                             <td><?php echo $appointment['is_for_self'] ? 'Self' : 'Family'; ?></td>
                             <td><?php echo htmlspecialchars($appointment['relationship_type']); ?></td>
+                            <td><?php echo $appointment['is_for_self'] ? '' : htmlspecialchars($appointment['family_name']); ?></td> <!-- Display family member's name if not a self appointment -->
                             <td class="action-buttons">
                                 <?php if ($appointment['date'] >= $current_date) : ?>
                                     <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
@@ -308,6 +310,8 @@ $current_date = date('Y-m-d');
                 }
             });
         });
+
+
 
 
 
