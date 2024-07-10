@@ -184,7 +184,7 @@ mysqli_close($link);
 
         <input type="radio" id="female" name="gender" value="Female" <?php if ($gender == 'Female') echo 'checked'; ?>>
         <label for="female">Female</label>
-x
+
     </div>
 </div>
 
