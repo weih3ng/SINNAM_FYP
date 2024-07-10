@@ -196,7 +196,8 @@ if (mysqli_num_rows($result) > 0) {
 
         <!-- Sign Up & Login Button -->
         <?php if (isset($_SESSION['username'])): ?>
-            <p style='margin-top: 17px;'>Welcome, <b><?php echo htmlspecialchars($_SESSION['username']); ?></b>!</p>
+            <p style='margin-top: 17px;'>Welcome, <b><a href="userProfile.php" style="text-decoration: underline;"><?php echo htmlspecialchars($_SESSION['username']); ?></a></b>!</p>
+
             <a class="nav-custom" href="logout.php">
                 <i class="fa-solid fa-right-to-bracket"></i> Logout
             </a>  

@@ -293,22 +293,22 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
         </div>
 
     <!-- Sign Up & Login Button -->
-    <?php
-if (isset($_SESSION['username'])) { 
-    // Display 'Welcome, username'
-    echo "<p style='margin-top: 17px;'>Welcome, <b>" . htmlspecialchars($_SESSION['username']) . "</b>!</p>";
-    ?>
-    <a class="nav-custom" href="logout.php">
-        <i class="fa-solid fa-right-to-bracket"></i> Logout
-    </a>  
-<?php } else { ?>
-    <a class="nav-custom" href="signUp.php">
-        <i class="fa-solid fa-user"></i> Sign Up
-    </a>
-    <a class="nav-custom" href="login.php">
-        <i class="fa-solid fa-right-to-bracket"></i> Login
-    </a>  
-<?php } ?>
+
+    <?php if (isset($_SESSION['username'])): ?>
+            <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: blue;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
+
+
+            <a class="nav-custom" href="logout.php">
+                <i class="fa-solid fa-right-to-bracket"></i> Logout
+            </a>  
+        <?php else: ?>
+            <a class="nav-custom" href="signUp.php">
+                <i class="fa-solid fa-user"></i> Sign Up
+            </a>
+            <a class="nav-custom" href="login.php">
+                <i class="fa-solid fa-right-to-bracket"></i> Login
+            </a>  
+        <?php endif; ?>
     </div>
 
     <!-- Admin Panel Container -->

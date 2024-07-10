@@ -3,50 +3,45 @@ session_start();
 
 include 'dbfunctions.php';
 
-// Check if the user is logged in (joc)
+// Check if the user is logged in
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header('Location: login.php');
     exit;
 }
 
-// Check if 'id' parameter is provided in the URL
-if (isset($_GET['appointment_id'])) {
-    $appointment_id = $_GET['appointment_id'];
+// Get the user's patient ID from the session
+$patients_id = $_SESSION['patients_id'];
 
-    // Prepare query to retrieve appointment details
-    $query = "SELECT * FROM appointments WHERE appointment_id = $appointment_id";
-    $result = mysqli_query($link, $query);
+// Prepare query to retrieve user details
+$query = "SELECT * FROM patients WHERE patients_id = $patients_id";
+$result = mysqli_query($link, $query);
 
-    if ($result) {
-        // Fetch appointment details
-        $appointment = mysqli_fetch_assoc($result);
+if ($result) {
+    // Fetch user details
+    $user = mysqli_fetch_assoc($result);
 
-        if ($appointment) {
-            // Extract appointment details
-            $appointmentDate = $appointment['date'];
-            $appointmentTime = $appointment['time'];
-            // Additional fields to retrieve from the appointment table
-            // $queueNumber = $appointment['queue_number'];
-            // $status = $appointment['booking_status'];
-        } else {
-            // No appointment found with the given ID
-            echo "Appointment not found";
-            exit; // Stop further execution if appointment not found
-        }
+    if ($user) {
+        // Extract user details
+        $username = $user['username'];
+        $name = $user['name'];
+        $email = $user['email'];
+        $dob = $user['dob'];
+        $gender = $user['gender'];
+        $contactnumber = $user['contactnumber'];
+        $password = $user['password'];
     } else {
-        // Error querying the database
-        echo "Error: " . mysqli_error($link);
-        exit; // Stop further execution on database error
+        // No user found with the given ID
+        echo "User not found";
+        exit; // Stop further execution if user not found
     }
-
-    // Close connection
-    mysqli_close($link);
 } else {
-    // Redirect to viewAppointment.php if 'id' parameter is not provided
-    header("Location: viewAppointment.php");
-    exit();
+    // Error querying the database
+    echo "Error: " . mysqli_error($link);
+    exit; // Stop further execution on database error
 }
 
+// Close connection
+mysqli_close($link);
 ?>
 
 <!DOCTYPE html>
@@ -55,11 +50,10 @@ if (isset($_GET['appointment_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">  <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome --> 
     <link rel="stylesheet" href="style.css"> <!-- External stylesheet for navigation bar and footer -->
-    <title>Delete Appointment Page</title>
+    <title>Edit Profile</title>
     <style>
-        .delete-container {
+        .edit-container {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -69,7 +63,7 @@ if (isset($_GET['appointment_id'])) {
             height: calc(100vh - 100px);
         }
 
-        .delete-box {
+        .edit-box {
             background-color: #DECFBC;
             padding: 40px 50px;
             border-radius: 20px;
@@ -77,9 +71,9 @@ if (isset($_GET['appointment_id'])) {
             text-align: center;
         }
 
-        .delete-box h1 {
+        .edit-box h1 {
             margin-bottom: 40px;
-            text-align:center;
+            text-align: center;
         }
 
         .form-group {
@@ -97,8 +91,9 @@ if (isset($_GET['appointment_id'])) {
         }
 
         .form-group input[type="text"], 
+        .form-group input[type="email"], 
         .form-group input[type="date"], 
-        .form-group input[type="time"] {
+        .form-group input[type="number"] {
             display: block;
             width: 250px;
             padding: 10px;
@@ -107,7 +102,7 @@ if (isset($_GET['appointment_id'])) {
             flex: 1;
         }
 
-        .delete-box .btn {
+        .edit-box .btn {
             display: inline-block;
             padding: 10px 50px;
             margin: 5px;
@@ -121,17 +116,8 @@ if (isset($_GET['appointment_id'])) {
             text-decoration: none;
         }
 
-        .delete-box .btn:hover {
+        .edit-box .btn:hover {
             background-color: #6b2c27;
-        }
-
-
-        /* Styles for read-only and disabled input fields */
-        input[readonly]
-        {
-            background-color: #edede9;
-            color: #686868; 
-            cursor: not-allowed; 
         }
     </style>
 </head>
@@ -147,11 +133,10 @@ if (isset($_GET['appointment_id'])) {
             <a href="appointment.php">Appointment</a>
             <a href="viewAppointment.php">View Appointment</a>
             <a href="contact.php">Contact Us</a>
+            <a href="userProfile.php">User Profile</a>
         </div>
 
         <!-- Sign Up & Login Button -->
-
-
 
         <?php if (isset($_SESSION['username'])): ?>
             <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: blue;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
@@ -168,28 +153,44 @@ if (isset($_GET['appointment_id'])) {
                 <i class="fa-solid fa-right-to-bracket"></i> Login
             </a>  
         <?php endif; ?>
-
     </div>
 
-    <!-- Delete Appointment Container -->
-    <div class="delete-container">
-        <div class="delete-box">
-            <h1>Delete Appointment</h1>
-            <form method="post" action="doDeleteAppointment.php">
+    <!-- Edit Profile Container -->
+    <div class="edit-container">
+        <div class="edit-box">
+            <h1>Edit/Delete Profile</h1>
+            <form method="post" action="doEditProfile.php">
                 <div class="form-group">
-                    <label for="id">Appointment ID:</label>
-                    <input type="text" id="id" name="appointment_id" value="<?php echo $appointment_id; ?>" readonly>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($username); ?>">
                 </div>
                 <div class="form-group">
-                    <label for="date">Date:</label>
-                    <input type="date" id="date" name="date" value="<?php echo $appointmentDate; ?>" readonly>
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($name); ?>">
                 </div>
                 <div class="form-group">
-                    <label for="time">Time:</label>
-                    <input type="time" id="time" name="time" value="<?php echo $appointmentTime; ?>" readonly>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>">
+                </div>
+                <div class="form-group">
+                    <label for="dob">Date of Birth:</label>
+                    <input type="date" id="dob" name="dob" value="<?php echo htmlspecialchars($dob); ?>">
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender:</label>
+                    <input type="text" id="gender" name="gender" value="<?php echo htmlspecialchars($gender); ?>">
+                </div>
+                <div class="form-group">
+                    <label for="contactnumber">Contact Number:</label>
+                    <input type="text" id="contactnumber" name="contactnumber" value="<?php echo htmlspecialchars($contactnumber); ?>">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="text" id="password" name="password" value="<?php echo htmlspecialchars($password); ?>">
                 </div>
                 <br>
-                <button type="submit" class="btn">Confirm Deletion</button>
+                <button type="submit" class="btn">Save Changes</button>
+                <button type="button" class="btn" onclick="confirmDelete()">Delete Profile</button>
             </form>
         </div>
     </div>
@@ -207,5 +208,13 @@ if (isset($_GET['appointment_id'])) {
             <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook"></i></a>
         </div>
     </footer>
+
+    <script>
+        function confirmDelete() {
+            if (confirm("Are you sure you want to delete your profile? This action cannot be undone.")) {
+                window.location.href = 'doDeleteProfile.php';
+            }
+        }
+    </script>
 </body>
 </html>
