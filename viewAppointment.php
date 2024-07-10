@@ -3,22 +3,39 @@ session_start(); // Start the session
 
 include 'dbfunctions.php';
 
-// Check if the user is logged in (joc)
+// Check if the user is logged in
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header('Location: login.php');
     exit;
 }
 
-$patients_id = $_SESSION['patients_id']; // Retrieve patient ID from session (joc)
+// Initialize user_type to default value
+$user_type = 'patient'; // Assuming default is patient if not specified
 
-// Retrieve appointments for the logged-in patient (joc)
-$query = "SELECT a.appointment_id, a.date, a.time, a.is_for_self, a.relationship_type, a.medical_condition, p.name, a.family_name
-            FROM appointments AS a
-            INNER JOIN patients AS p ON a.patients_id = p.patients_id
-            WHERE a.patients_id = ?";
+// Check if user_type is provided in the URL
+if (isset($_GET['user_type'])) {
+    $user_type = $_GET['user_type'];
+}
+
+// Determine which appointments to fetch based on user type
+if ($user_type === 'doctor') {
+    // Fetch all appointments if user is a doctor
+    $query = "SELECT a.appointment_id, a.date, a.time, a.is_for_self, a.relationship_type, a.medical_condition, p.name, a.family_name
+              FROM appointments AS a
+              INNER JOIN patients AS p ON a.patients_id = p.patients_id";
+} else {
+    // Fetch appointments only for the logged-in patient
+    $patients_id = $_SESSION['patients_id'];
+    $query = "SELECT a.appointment_id, a.date, a.time, a.is_for_self, a.relationship_type, a.medical_condition, p.name, a.family_name
+              FROM appointments AS a
+              INNER JOIN patients AS p ON a.patients_id = p.patients_id
+              WHERE a.patients_id = ?";
+}
 
 if ($stmt = mysqli_prepare($link, $query)) {
-    mysqli_stmt_bind_param($stmt, "i", $patients_id);
+    if ($user_type !== 'doctor') {
+        mysqli_stmt_bind_param($stmt, "i", $patients_id);
+    }
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
@@ -29,7 +46,6 @@ if ($stmt = mysqli_prepare($link, $query)) {
     echo "ERROR: Could not prepare query: $query. " . mysqli_error($link);
 }
 
-// Close database connection
 mysqli_close($link);
 
 $current_date = date('Y-m-d');
@@ -181,10 +197,7 @@ $current_date = date('Y-m-d');
             <a href="home.php">Home</a>
             <a href="aboutUs.php">About Us</a>
             <a href="appointment.php">Appointment</a>
-            <?php if (isset($_SESSION['username'])): ?>
             <a href="viewAppointment.php">View Appointment</a>
-            <?php else: ?>
-                <?php endif; ?>
             <a href="contact.php">Contact Us</a>
         </div>
 
@@ -241,32 +254,37 @@ $current_date = date('Y-m-d');
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($appointments as $appointment) : ?>
-                        <tr class="<?= $appointment['is_for_self'] ? 'self-appointment' : 'family-appointment'; ?>">
-                            <td><?php echo htmlspecialchars($appointment['appointment_id']); ?></td>
-                            <td><?php echo htmlspecialchars($appointment['name']); ?></td>
-                            <td><?php echo htmlspecialchars($appointment['date']); ?></td>
-                            <td><?php echo htmlspecialchars($appointment['time']); ?></td>
-                            <td><?php echo htmlspecialchars($appointment['medical_condition']); ?></td>
-                            <td><?php echo $appointment['is_for_self'] ? 'Self' : 'Family'; ?></td>
-                            <td><?php echo htmlspecialchars($appointment['relationship_type']); ?></td>
-                            <td><?php echo $appointment['is_for_self'] ? '' : htmlspecialchars($appointment['family_name']); ?></td> <!-- Display family member's name if not a self appointment -->
-                            <td class="action-buttons">
-                                <?php if ($appointment['date'] >= $current_date) : ?>
-                                    <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a href="deleteAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                <?php endif; ?>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
+        <?php 
+        $queue_number = 1; // Initialize queue number
+        
+        foreach ($appointments as $appointment) : ?>
+            <tr class="<?= $appointment['is_for_self'] ? 'self-appointment' : 'family-appointment'; ?>">
+                <td><?php echo $queue_number++; ?></td>
+                <td><?php echo htmlspecialchars($appointment['name']); ?></td>
+                <td><?php echo htmlspecialchars($appointment['date']); ?></td>
+                <td><?php echo htmlspecialchars($appointment['time']); ?></td>
+                <td><?php echo htmlspecialchars($appointment['medical_condition']); ?></td>
+                <td><?php echo $appointment['is_for_self'] ? 'Self' : 'Family'; ?></td>
+                <td><?php echo htmlspecialchars($appointment['relationship_type']); ?></td>
+                <td><?php echo $appointment['is_for_self'] ? '' : htmlspecialchars($appointment['family_name']); ?></td>
+                <td class="action-buttons">
+                    <?php if ($appointment['date'] >= $current_date) : ?>
+                        <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="deleteAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
             </table>
 
-
+            <a href="home.php">
+                <button class="btn btn-done">Done</button>
+            </a>
         </div>
     </div>
 

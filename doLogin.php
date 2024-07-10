@@ -9,10 +9,13 @@ $password = $_POST['password'];
 
 $msg = "";
 
-// Fetching user details and executing it
+// Function to check user in a specific table
 function check_user($link, $email, $password, $table) {
-    $query = "SELECT * FROM $table WHERE email = '$email' AND Password = '$password'";
-    $result = mysqli_query($link, $query);
+    $query = "SELECT * FROM $table WHERE email = ? AND Password = ?";
+    $stmt = mysqli_prepare($link, $query);
+    mysqli_stmt_bind_param($stmt, "ss", $email, $password);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
     if ($result && mysqli_num_rows($result) > 0) {
         return mysqli_fetch_array($result);
     }
@@ -22,7 +25,6 @@ function check_user($link, $email, $password, $table) {
 // Check patients table
 $user = check_user($link, $email, $password, 'patients');
 $user_type = 'patient';
-header('Location: viewAppointment.php');
 
 if (!$user) {
     // Check admins table
@@ -35,25 +37,28 @@ if (!$user) {
     // Check doctors table
     $user = check_user($link, $email, $password, 'doctors');
     $user_type = 'doctor';
-    header('Location: viewAppointment.php');
 }
 
 // If a user is found, set session variables and success message
 if ($user) {
-    $msg = "Login Successful";
     $_SESSION['success_message'] = "Successfully logged in.";
     $_SESSION['username'] = $user['username'];
-    $_SESSION['patients_id'] = $user['patients_id'];
-    $_SESSION['loggedin'] = true; // Set the logged in session variable to true (joc)
+    $_SESSION['loggedin'] = true; // Set the logged in session variable to true
+    if ($user_type === 'doctor') {
+        header('Location: viewAppointment.php?user_type=doctor'); // Redirect doctor to view all appointments
+    } else {
+        $_SESSION['patients_id'] = $user['patients_id'];
+        header('Location: viewAppointment.php?user_type=patient'); // Redirect patient to view their appointments
+    }
 } else {
     // If no user is found, set error message and redirect to login.php
     $_SESSION['error_message'] = "Invalid email or password. Please try again.";
     header('Location: login.php');
-    $msg = "Login Failed";
 }
 
 mysqli_close($link); 
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -124,10 +129,7 @@ mysqli_close($link);
             <a href="home.php">Home</a>
             <a href="aboutUs.php">About Us</a>
             <a href="appointment.php">Appointment</a>
-            <?php if (isset($_SESSION['username'])): ?>
             <a href="viewAppointment.php">View Appointment</a>
-            <?php else: ?>
-                <?php endif; ?>
             <a href="contact.php">Contact Us</a>
         </div>
 
