@@ -24,11 +24,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Check if 'family_member_name' included or not (joc)
         $family_name = ($is_for_self == 0 && isset($_POST['family_name'])) ? $_POST['family_name'] : NULL;
 
-        $sql = "INSERT INTO appointments (patients_id, doctor_id, date, time, queue_number, is_for_self, relationship_type, family_name, medical_condition) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO appointments (patients_id, doctor_id, date, time, is_for_self, relationship_type, family_name, medical_condition) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         if ($stmt = mysqli_prepare($link, $sql)) {
-            mysqli_stmt_bind_param($stmt, "iissiisss", $patients_id, $doctor_id, $formatted_date, $time, $queue_number, $is_for_self, $relationship_type, $family_name, $medical_condition);
+            mysqli_stmt_bind_param($stmt, "iississs", $patients_id, $doctor_id, $formatted_date, $time, $is_for_self, $relationship_type, $family_name, $medical_condition);
             if (mysqli_stmt_execute($stmt)) {
                 $newly_created_appointment_id = mysqli_insert_id($link);  // This captures the last inserted ID (joc)
                 $_SESSION['appointment_id'] = $newly_created_appointment_id;  // Store it in session to use later (joc)
@@ -237,13 +237,29 @@ mysqli_close($link);
                     <input type="hidden" name="date" id="selected-date" />
                     <select id="timeslot" name="timeslot">
                         <option value="10:30 AM">10:30 AM</option>
+                        <option value="10:45 AM">10:45 AM</option>
                         <option value="11:00 AM">11:00 AM</option>
+                        <option value="11:15 AM">11:15 AM</option>
+                        <option value="11:30 AM">11:30 AM</option>
+                        <option value="11:45 AM">11:45 AM</option>
                         <option value="12:00 PM">12:00 PM</option>
+                        <option value="12:15 PM">12:15 PM</option>
+                        <option value="12:30 PM">12:30 PM</option>
+                        <option value="12:45 PM">12:45 PM</option>
                         <option value="1:00 PM">1:00 PM</option>
+                        <option value="1:15 PM">1:15 PM</option>
+                        <option value="1:30 PM">1:30 PM</option>
+                        <option value="1:45 PM">1:45 PM</option>
                         <option value="2:00 PM">2:00 PM</option>
+                        <option value="2:15 PM">2:15 PM</option>
+                        <option value="2:30 PM">2:30 PM</option>
+                        <option value="2:45 PM">2:45 PM</option>
                         <option value="3:00 PM">3:00 PM</option>
+                        <option value="3:15 PM">3:15 PM</option>
+                        <option value="3:30 PM">3:30 PM</option>
+                        <option value="3:45 PM">3:45 PM</option>
                         <option value="4:00 PM">4:00 PM</option>
-                        <option value="5:00 PM">5:00 PM</option>
+                        <option value="4:15 PM">4:15 PM</option>
                     </select><span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
 
                     <br><br><br> <!-- Add booking for myself/family member (joc) -->
@@ -294,14 +310,9 @@ mysqli_close($link);
                 <form action="appointmentConfirm.php" method="post" class="timeslot-container">
                     <label for="timeslot"><b>Select time slot:<b></label>
                     <select id="timeslot" disabled>
-                        <option value="10:30 AM">10:30 AM</option>
-                        <option value="11:00 AM">11:00 AM</option>
-                        <option value="12:00 PM">12:00 PM</option>
-                        <option value="1:00 PM">1:00 PM</option>
-                        <option value="2:00 PM">2:00 PM</option>
-                        <option value="3:00 PM">3:00 PM</option>
-                        <option value="4:00 PM">4:00 PM</option>
-                        <option value="5:00 PM">5:00 PM</option>
+                    <option value=""></option>
+
+
                     </select>
 
                     <br><br><br> <!-- Add booking for myself/family member (joc) -->
@@ -350,44 +361,65 @@ mysqli_close($link);
     </footer>
 
     <script>
-        $(function() {
-            $("#calendar-container").datepicker({
-                inline: true,
-                minDate: 0, // Restrict to today and future dates
-                dateFormat: "yy-mm-dd", // Set the date format to YYYY-MM-DD
-                beforeShowDay: function(date) {
-                    var day = date.getDay(); // Get the day of the week (0 - Sunday, 1 - Monday, ...)
-                    
-                    // Define valid time slots for each day
-                    var validTimeSlots = [];
-                    switch (day) {
-                        case 0: // Sunday
-                            break; // No appointments on Sundays
-                        case 1: // Monday
-                            break; // No appointments on Mondays
-                        case 2: // Tuesday
-                        case 3: // Wednesday
-                        case 4: // Thursday
-                        case 5: // Friday
-                            validTimeSlots = ["11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "1:00 PM", "1:15 PM", "1:30 PM", "1:45 PM", "2:00 PM", "2:15 PM", "2:30 PM", "2:45 PM", "3:00 PM", "3:15 PM", "3:30 PM", "3:45 PM", "4:00 PM", "4:15 PM", "4:30 PM"];
-                            break;
-                        case 6: // Saturday
-                            validTimeSlots = ["10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "1:00 PM", "1:15 PM", "1:30 PM", "1:45 PM", "2:00 PM"];
-                            break;
-                    }
-                    
-                    // Disable the day if there are no valid time slots
-                    if (validTimeSlots.length === 0) {
-                        return [false, "", "No appointments"];
-                    }
+$(function() {
+    $("#calendar-container").datepicker({
+        inline: true,
+        minDate: 0, // Restrict to today and future dates
+        dateFormat: "yy-mm-dd", // Set the date format to YYYY-MM-DD
+        beforeShowDay: function(date) {
+            var day = date.getDay(); // Get the day of the week (0 - Sunday, 1 - Monday, ...)
 
-                    return [true, "", ""]; // Enable the day
-                },
-                onSelect: function(dateText) {
-                    $("#selected-date").val(dateText); // Set the formatted date
-                }
+            // Disable Sundays (0) and Mondays (1)
+            if (day === 0 || day === 1) {
+                return [false, "", "No appointments"];
+            }
+
+            return [true, "", ""]; // Enable all other days
+        },
+        onSelect: function(dateText) {
+            $("#selected-date").val(dateText); // Set the formatted date
+
+            // Reset the timeslot options based on the selected date
+            var dayOfWeek = new Date(dateText).getDay();
+            var timeslotOptions = [];
+
+            // Define timeslots for each day of the week
+            switch (dayOfWeek) {
+                case 2: // Tuesday
+                case 3: // Wednesday
+                case 4: // Thursday
+                case 5: // Friday
+                    timeslotOptions = [
+                        "11:00 AM", "11:15 AM", 
+                        "11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", 
+                        "12:30 PM", "12:45 PM", "1:00 PM", "1:15 PM", 
+                        "1:30 PM", "1:45 PM", "2:00 PM", "2:15 PM", 
+                        "2:30 PM", "2:45 PM", "3:00 PM", "3:15 PM", 
+                        "3:30 PM", "3:45 PM", "4:00 PM", "4:15 PM"
+                    ];
+                    break;
+                case 6: // Saturday
+                    timeslotOptions = [
+                        "10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM", 
+                        "11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", 
+                        "12:30 PM", "12:45 PM", "1:00 PM", "1:15 PM", 
+                        "1:30 PM", "1:45 PM", "2:00 PM", "2:15 PM", 
+                        "2:30 PM", "2:45 PM", "3:00 PM", "3:15 PM", 
+                        "3:30 PM", "3:45 PM", "4:00 PM", "4:15 PM"
+                    ];
+                    break;
+            }
+
+            // Update the timeslot dropdown options
+            var select = $("#timeslot");
+            select.empty();
+            $.each(timeslotOptions, function(index, value) {
+                select.append($("<option></option>").attr("value", value).text(value));
             });
-        });
+        }
+    });
+});
+
 
         // Add event listener to show family info when booking for family (joc)
         document.querySelectorAll('input[name="booking_for"]').forEach(radio => {
