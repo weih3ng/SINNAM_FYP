@@ -141,7 +141,7 @@ include 'dbfunctions.php';
 
 
         <?php if (isset($_SESSION['username'])): ?>
-            <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: blue;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
+            <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: white;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
 
 
             <a class="nav-custom" href="logout.php">
@@ -155,7 +155,6 @@ include 'dbfunctions.php';
                 <i class="fa-solid fa-right-to-bracket"></i> Login
             </a>  
         <?php endif; ?>
-
         </div>
 
         <!-- Contact Us Container -->

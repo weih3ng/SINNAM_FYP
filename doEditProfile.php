@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (mysqli_query($link, $query)) {
         // Redirect to profile page with success message
         $_SESSION['success_message'] = "Profile updated successfully.";
-        header('Location: profile.php');
+        header('Location: userProfile.php');
     } else {
         // Display error message
         echo "Error: " . mysqli_error($link);

@@ -296,7 +296,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
     <!-- Sign Up & Login Button -->
 
     <?php if (isset($_SESSION['username'])): ?>
-            <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: blue;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
+            <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: white;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
 
 
             <a class="nav-custom" href="logout.php">
