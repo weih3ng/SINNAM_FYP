@@ -12,18 +12,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['patients_id'])) {
     $medical_condition = $_POST['medical_condition'] ?? '';
     $is_for_self = $_POST['is_for_self'] ?? '';
     $relationship_type = $_POST['relationship_type'] ?? '';
+    $family_name = $_POST['family_name'] ?? '';
     $doctor_id = 1; // Fixed doctor ID
 
-    // Set relationship_type to empty string if booking is for self
+    // Set relationship_type and family_name to empty string if booking is for self
     if ($is_for_self == '1') {
         $relationship_type = '';
+        $family_name = '';
     } 
 
     // Insert the new appointment into the database
-    $sql = "INSERT INTO appointments (patients_id, doctor_id, date, time, is_for_self, relationship_type, medical_condition) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO appointments (patients_id, doctor_id, date, time, is_for_self, relationship_type, family_name, medical_condition) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($link, $sql);
-    mysqli_stmt_bind_param($stmt, 'iississ', $patients_id, $doctor_id, $date, $time, $is_for_self, $relationship_type, $medical_condition);
+    mysqli_stmt_bind_param($stmt, 'iississs', $patients_id, $doctor_id, $date, $time, $is_for_self, $relationship_type, $family_name, $medical_condition);
 
     if (mysqli_stmt_execute($stmt)) {
         // Set success message
@@ -210,6 +212,8 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
                         <option value="parent">Parent</option>
                         <option value="other">Other</option>
                     </select>
+                    <label for="family_name" class="required-label">Family Name:</label>
+                    <input type="text" id="family_name" name="family_name" required>
                 </div>
                 <div class="button-container">
                     <button type="submit">Add Appointment</button>

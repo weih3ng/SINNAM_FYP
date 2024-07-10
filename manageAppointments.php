@@ -37,19 +37,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['patients_id'])) {
     $medical_condition = $_POST['medical_condition'] ?? '';
     $is_for_self = $_POST['is_for_self'] ?? '';
     $relationship_type = $_POST['relationship_type'] ?? '';
+    $family_name = $_POST['family_name'] ?? '';
     $doctor_id = 1; // Fixed doctor ID
 
-    // Set relationship_type to empty string if booking is for self
+    // Set relationship_type and family_name to empty string if booking is for self
     if ($is_for_self == '1') {
         $relationship_type = '';
+        $family_name = '';
     } 
 
         if (isset($_POST['appointment_id'])) {
             // Update existing appointment
             $appointment_id = $_POST['appointment_id'];
-            $sql = "UPDATE appointments SET patients_id = ?, doctor_id = ?, date = ?, time = ?, is_for_self = ?, relationship_type = ?, medical_condition = ? WHERE appointment_id = ?";
+            $sql = "UPDATE appointments SET patients_id = ?, doctor_id = ?, date = ?, time = ?, is_for_self = ?, relationship_type = ?, family_name = ?, medical_condition = ? WHERE appointment_id = ?";
             $stmt = mysqli_prepare($link, $sql);
-            mysqli_stmt_bind_param($stmt, 'iississi', $patients_id, $doctor_id, $date, $time, $is_for_self, $relationship_type, $medical_condition, $appointment_id);
+            mysqli_stmt_bind_param($stmt, 'iississsi', $patients_id, $doctor_id, $date, $time, $is_for_self, $relationship_type, $family_name, $medical_condition, $appointment_id);
 
         if (mysqli_stmt_execute($stmt)) {
             // Set success message
@@ -76,7 +78,7 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
 
 // Fetch appointments data
 $appointments_sql = "SELECT a.appointment_id, a.patients_id, a.doctor_id, a.date, a.time, a.is_for_self,
-        a.relationship_type, a.medical_condition, p.name
+        a.relationship_type, a.family_name, a.medical_condition, p.name
         FROM appointments AS a
         INNER JOIN patients AS p ON a.patients_id = p.patients_id";
 $appointments_result = mysqli_query($link, $appointments_sql);
@@ -337,6 +339,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
                 <th>Medical Condition</th>
                 <th>Self/Family</th>
                 <th>Relationship</th>
+                <th>Family Name</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -356,10 +359,11 @@ $appointments_result = mysqli_query($link, $appointments_sql);
                             <td>{$row['medical_condition']}</td>
                             <td>{$is_for_self_display}</td>
                             <td>{$row['relationship_type']}</td>
+                            <td>{$row['family_name']}</td>
                             <td>";
                             // Check if appointment date is in the past
                             if ($row['date'] >= $current_date) {
-                                echo"<a href='#' class='edit-link' data-id='{$row['appointment_id']}' data-patients_id='{$row['patients_id']}' data-name='{$row['name']}' data-date='{$row['date']}' data-time='{$row['time']}' data-medical_condition='{$row['medical_condition']}' data-is_for_self='{$row['is_for_self']}' data-relationship_type='{$row['relationship_type']}'>Edit</a> |  
+                                echo"<a href='#' class='edit-link' data-id='{$row['appointment_id']}' data-patients_id='{$row['patients_id']}' data-name='{$row['name']}' data-date='{$row['date']}' data-time='{$row['time']}' data-medical_condition='{$row['medical_condition']}' data-is_for_self='{$row['is_for_self']}' data-relationship_type='{$row['relationship_type']}' data-family_name='{$row['family_name']}'>Edit</a> |  
                                 <a href='manageAppointments.php?delete_id={$row['appointment_id']}'>Delete</a>";
                             } else {
                                 echo "";
@@ -368,7 +372,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
                                   </tr>";
                             }
                         } else {
-                echo "<tr><td colspan='8'>No appointments found</td></tr>";
+                echo "<tr><td colspan='9'>No appointments found</td></tr>";
             }
             ?>
             </tbody>
@@ -407,6 +411,8 @@ $appointments_result = mysqli_query($link, $appointments_sql);
                     <option value="parent">Parent</option>
                     <option value="other">Other</option>
                 </select>
+                <label for="edit_family_name">Family Name:</label>
+                <input type="text" id="edit_family_name" name="family_name">
             </div>
             <div class="button-container">
                 <button type="submit">Update Appointment</button>
@@ -432,7 +438,9 @@ $appointments_result = mysqli_query($link, $appointments_sql);
 
     <script>
         $(document).ready(function() {
-            $('#appointmentsTable').DataTable();
+            $('#appointmentsTable').DataTable({
+                searching: false // Disable the search bar
+            });
         });
 
         function searchTable() {
@@ -496,6 +504,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
                     document.getElementById('edit_is_for_self_family').checked = true;
                     document.getElementById('edit_family_info').style.display = 'block';
                     document.getElementById('edit_relationship_type').value = this.dataset.relationship_type;
+                    document.getElementById('edit_family_name').value = this.dataset.family_name; 
                 }
                 document.getElementById('editAppointmentForm').style.display = 'block';
             });

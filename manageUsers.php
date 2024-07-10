@@ -423,7 +423,9 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
 
     <script>
         $(document).ready(function() {
-            $('#patientsTable').DataTable();
+            $('#patientsTable').DataTable({
+                searching: false // Disable the search bar
+            });
         });
 
         //function for collapsible button leading to forms
