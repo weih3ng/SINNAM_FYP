@@ -153,8 +153,6 @@ $current_date = date('Y-m-d');
             background-color: #6b2c27;
         }
 
-
-
         /* Color Coding for table rows (joc)*/
         .self-appointment { 
             background-color: #edede9; 
@@ -179,12 +177,8 @@ $current_date = date('Y-m-d');
             border: 2px solid #80352F;
         }
 
-
-    
     </style>
 </head>
-
-
 
 <body>
 
@@ -202,12 +196,8 @@ $current_date = date('Y-m-d');
         </div>
 
         <!-- Sign Up & Login Button -->
-
-
-
         <?php if (isset($_SESSION['username'])): ?>
             <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: white;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
-
 
             <a class="nav-custom" href="logout.php">
                 <i class="fa-solid fa-right-to-bracket"></i> Logout
@@ -223,7 +213,6 @@ $current_date = date('Y-m-d');
 
     </div>
 
-
     <!-- View Appointment Container -->
     <div class="view-appointment-container">
         <div class="content-box">
@@ -237,7 +226,6 @@ $current_date = date('Y-m-d');
                     <option value="family">Only Family Appointments</option>
                 </select>
             </div>
-
 
             <table>
                 <thead>
@@ -254,37 +242,40 @@ $current_date = date('Y-m-d');
                     </tr>
                 </thead>
                 <tbody>
-        <?php 
-        $queue_number = 1; // Initialize queue number
-        
-        foreach ($appointments as $appointment) : ?>
-            <tr class="<?= $appointment['is_for_self'] ? 'self-appointment' : 'family-appointment'; ?>">
-                <td><?php echo $queue_number++; ?></td>
-                <td><?php echo htmlspecialchars($appointment['name']); ?></td>
-                <td><?php echo htmlspecialchars($appointment['date']); ?></td>
-                <td><?php echo htmlspecialchars($appointment['time']); ?></td>
-                <td><?php echo htmlspecialchars($appointment['medical_condition']); ?></td>
-                <td><?php echo $appointment['is_for_self'] ? 'Self' : 'Family'; ?></td>
-                <td><?php echo htmlspecialchars($appointment['relationship_type']); ?></td>
-                <td><?php echo $appointment['is_for_self'] ? '' : htmlspecialchars($appointment['family_name']); ?></td>
-                <td class="action-buttons">
-                    <?php if ($appointment['date'] >= $current_date) : ?>
-                        <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <a href="deleteAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">
-                            <i class="fas fa-trash"></i>
-                        </a>
-                    <?php endif; ?>
-                </td>
-            </tr>
-        <?php endforeach; ?>
-    </tbody>
+                    <?php 
+                    $queue_number = 1; // Initialize queue number
+                    
+                    foreach ($appointments as $appointment) : ?>
+                        <tr class="<?= $appointment['is_for_self'] ? 'self-appointment' : 'family-appointment'; ?>">
+                            <td><?php echo $queue_number++; ?></td>
+                            <td><?php echo htmlspecialchars($appointment['name']); ?></td>
+                            <td><?php echo htmlspecialchars($appointment['date']); ?></td>
+                            <td><?php echo htmlspecialchars($appointment['time']); ?></td>
+                            <td><?php echo htmlspecialchars($appointment['medical_condition']); ?></td>
+                            <td><?php echo $appointment['is_for_self'] ? 'Self' : 'Family'; ?></td>
+                            <td><?php echo htmlspecialchars($appointment['relationship_type']); ?></td>
+                            <td><?php echo $appointment['is_for_self'] ? '' : htmlspecialchars($appointment['family_name']); ?></td>
+                            <td class="action-buttons">
+                                <?php if ($appointment['date'] >= $current_date) : ?>
+                                    <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="deleteAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
             </table>
 
-            <a href="home.php">
-                <button class="btn btn-done">Done</button>
-            </a>
+            <?php if ($user_type !== 'doctor'): ?>
+                <a href="home.php">
+                    <button class="btn btn-done">Done</button>
+                </a>
+            <?php endif; ?>
+
         </div>
     </div>
 
@@ -301,11 +292,9 @@ $current_date = date('Y-m-d');
             <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook"></i></a>
         </div>
     </footer>
-    
-    
-    <script>
 
-        // Filter appointments based on 'Self' or 'Family' (joc)
+    <script>
+        // Filter appointments based on 'Self' or 'Family'
         document.getElementById('appointmentFilter').addEventListener('change', function() {
             const filterValue = this.value;
             const rows = document.querySelectorAll('table tbody tr');
@@ -319,8 +308,6 @@ $current_date = date('Y-m-d');
             rows.forEach(row => {
                 const appointmentFor = row.cells[5].textContent.trim();  // Ensure to trim any whitespace
 
-                console.log(`Filtering for: ${filterValue}, Current row: ${appointmentFor}`);  // Debug output
-
                 if (filterValue === 'self' && appointmentFor !== 'Self') {
                     row.style.display = 'none';
                 } else if (filterValue === 'family' && appointmentFor !== 'Family') {
@@ -328,12 +315,6 @@ $current_date = date('Y-m-d');
                 }
             });
         });
-
-
-
-
-
-
     </script>
 
 </body>
