@@ -55,10 +55,12 @@ include 'dbfunctions.php';
         }
 
         .our-doctor {
+            margin-right: 80px;
+            margin-top: -100px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
+            gap: -100px;
         }
         .our-doctor p {
             font-size: 28px; /* Increase the font size for the text */
@@ -68,7 +70,7 @@ include 'dbfunctions.php';
         .our-doctor img {
             max-width: 100%;
             height: auto;
-            max-width: 600px; /* Increase the max width for the image */
+            max-width: 800px; /* Increase the max width for the image */
         }
 
         .our-doctor div {
@@ -166,7 +168,7 @@ include 'dbfunctions.php';
         <p style="margin: 40px 0; text-align: center; font-size: 45px; color: #80352F;"><b>Our Doctor</b></p>
     </div>
         <div class="section our-doctor">
-            <img src="images/about2.png" alt="Doctor Image"> <!-- Replace with your image source -->
+            <img src="images/doc2.png" alt="Doctor Image"> <!-- Replace with your image source -->
             <div>
                 <h1>Desmond Sin</h1>
                 <p>Desmond Sin is a distinguished<br> Traditional Chinese Medicine (TCM)<br> practitioner known for his expertise<br> in herbal medicine and TCM diagnostics. He is<br> dedicated to helping patients<br> achieve balance and well-being through<br> personalized treatment plans that integrate<br> traditional wisdom with modern insights.</p>
