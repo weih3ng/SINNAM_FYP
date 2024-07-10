@@ -24,6 +24,7 @@ if (isset($_GET['appointment_id'])) { // Get from viewAppointment.php (joc)
         $is_for_self = $row['is_for_self'];
         $relationship_type = $row['relationship_type'];
         $medical_condition = $row['medical_condition'];
+        $family_name = $row['family_name'];
     }
 }
 
@@ -34,12 +35,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $time = $_POST['time'];
     $is_for_self = ($_POST['booking_for'] === 'self') ? 1 : 0;
     $relationship_type = ($is_for_self == 0) ? $_POST['relationship_type'] : null;
+    $family_name = $is_for_self == 0 ? $_POST['family_name'] : null; // Ensure this is handled based on 'is_for_self'
     $medical_condition = $_POST['medical_conditions'];
 
     // Update the appointment in the database
-    $query = "UPDATE appointments SET date = ?, time = ?, is_for_self = ?, relationship_type = ?, medical_condition = ? WHERE appointment_id = ?";
+    $query = "UPDATE appointments SET date = ?, time = ?, is_for_self = ?, relationship_type = ?, family_name = ?, medical_condition = ? WHERE appointment_id = ?";
     if ($stmt = mysqli_prepare($link, $query)) {
-        mysqli_stmt_bind_param($stmt, "ssissi", $date, $time, $is_for_self, $relationship_type, $medical_condition, $appointment_id);
+        mysqli_stmt_bind_param($stmt, "ssisssi", $date, $time, $is_for_self, $relationship_type, $family_name, $medical_condition, $appointment_id);
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
     }
@@ -130,7 +132,7 @@ mysqli_close($link);
         }
 
 
-        /* Styles for read-only and disabled input fields */
+        /* Styles for read-only and disabled input fields (joc) */
         input[readonly] {
             background-color: #e0e0e0;
             color: #686868; 
@@ -140,12 +142,31 @@ mysqli_close($link);
         /* Styles for editable fields */
         input[type="date"]:not([readonly]), 
         input[type="time"]:not([readonly]), 
+        input[type="text"]:not([readonly]),
         textarea:not([readonly]),
         select:not([disabled]),
         input[type="radio"]:not([disabled]) {
             background-color: #ffffff; 
             border: 2px solid #80352F; 
         }
+
+        .form-group select,
+        .form-group input[type="text"] {
+            padding: 8px;
+        }
+
+        .form-group label {
+            width: 150px; /* Ensure all labels have the same width */
+            text-align: rigth;
+        }
+
+        /* Specific styles for relationship and family name fields for consistency */
+        #relationship_type, #family_name {
+            display: inline-block;
+            width: auto;
+            flex-grow: 1; /* Allows the input to fill the space */
+        }
+
 
     </style>
 </head>
@@ -190,7 +211,7 @@ mysqli_close($link);
             <h1>Edit Appointment</h1>
             <form method="post" action="editAppointment.php?appointment_id=<?php echo $appointment_id; ?>">
                 <div class="form-group">
-                    <label for="id">Appt ID:</label>
+                    <label for="id">Queue Numbers:</label>
                     <input type="text" id="id" name="appointment_id" value="<?php echo $appointment_id; ?>" readonly>
                 </div>
                 <div class="form-group">
@@ -221,6 +242,10 @@ mysqli_close($link);
                         <option value="other" <?php echo ($relationship_type == 'other') ? 'selected' : ''; ?>>Other</option>
                     </select>
                 </div>
+                <div class="form-group" id="family_name_group" style="display: none;"> <!-- This will be shown/hidden based on booking type (joc) -->
+                    <label for="family_name">Family Member Name:</label>
+                    <input type="text" id="family_name" name="family_name" value="<?php echo htmlspecialchars($family_name); ?>">
+                </div>
                 <div class="form-group">
                     <label for="medical-conditions">Medical Condition:</label>
                     <textarea id="medical-conditions" name="medical_conditions" rows="4"><?php echo $medical_condition; ?></textarea>
@@ -248,30 +273,22 @@ mysqli_close($link);
 
     <script>
     
-        // Function to update display of the relationship type dropdown (joc)
-        document.querySelectorAll('input[name="booking_for"]').forEach(input => {
-            input.addEventListener('change', function() {
-                const display = this.value === 'family' ? 'block' : 'none';
-                document.getElementById('family_info').style.display = display;
-            });
+    // Show/hide family member name based on booking type (joc)
+    document.querySelectorAll('input[name="booking_for"]').forEach(input => {
+        input.addEventListener('change', function() {
+            const isFamily = document.getElementById('for_family').checked;
+            document.getElementById('family_info').style.display = isFamily ? 'block' : 'none';
+            document.getElementById('family_name_group').style.display = isFamily ? 'block' : 'none'; // Add this line
         });
+    });
 
-        // Call the function on page load to check the initial state (joc)
-        document.addEventListener('DOMContentLoaded', function() {
-            // Function to update display of the relationship type dropdown
-            function updateRelationshipDisplay() {
-                const isFamily = document.getElementById('for_family').checked;
-                document.getElementById('family_info').style.display = isFamily ? 'block' : 'none';
-            }
+    // Initialize the display based on current selection when the page loads (joc)
+    document.addEventListener('DOMContentLoaded', function() {
+        const isFamily = document.getElementById('for_family').checked;
+        document.getElementById('family_info').style.display = isFamily ? 'block' : 'none';
+        document.getElementById('family_name_group').style.display = isFamily ? 'block' : 'none';
+    });
 
-            // Attach event listeners to radio inputs for dynamic changes
-            document.querySelectorAll('input[name="booking_for"]').forEach(input => {
-                input.addEventListener('change', updateRelationshipDisplay);
-            });
-
-            // Call the function on page load to check the initial state
-            updateRelationshipDisplay();
-        });
 
     </script>
 

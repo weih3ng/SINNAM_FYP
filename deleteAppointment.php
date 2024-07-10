@@ -177,7 +177,7 @@ if (isset($_GET['appointment_id'])) {
             <h1>Delete Appointment</h1>
             <form method="post" action="doDeleteAppointment.php">
                 <div class="form-group">
-                    <label for="id">Appointment ID:</label>
+                    <label for="id">Queue Number:</label>
                     <input type="text" id="id" name="appointment_id" value="<?php echo $appointment_id; ?>" readonly>
                 </div>
                 <div class="form-group">

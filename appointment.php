@@ -21,11 +21,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $is_for_self = ($_POST['booking_for'] == 'self') ? 1 : 0;
         $relationship_type = ($is_for_self == 0 && isset($_POST['relationship_type'])) ? $_POST['relationship_type'] : NULL;
 
-        $sql = "INSERT INTO appointments (patients_id, doctor_id, date, time, queue_number, is_for_self, relationship_type, medical_condition) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        // Check if 'family_member_name' included or not (joc)
+        $family_name = ($is_for_self == 0 && isset($_POST['family_name'])) ? $_POST['family_name'] : NULL;
+
+        $sql = "INSERT INTO appointments (patients_id, doctor_id, date, time, queue_number, is_for_self, relationship_type, family_name, medical_condition) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         if ($stmt = mysqli_prepare($link, $sql)) {
-            mysqli_stmt_bind_param($stmt, "iissiiss", $patients_id, $doctor_id, $formatted_date, $time, $queue_number, $is_for_self, $relationship_type, $medical_condition);
+            mysqli_stmt_bind_param($stmt, "iissiisss", $patients_id, $doctor_id, $formatted_date, $time, $queue_number, $is_for_self, $relationship_type, $family_name, $medical_condition);
             if (mysqli_stmt_execute($stmt)) {
                 $newly_created_appointment_id = mysqli_insert_id($link);  // This captures the last inserted ID (joc)
                 $_SESSION['appointment_id'] = $newly_created_appointment_id;  // Store it in session to use later (joc)
@@ -74,7 +77,7 @@ mysqli_close($link);
             justify-content: center;
             background-color: #F1EDE2;
             padding: 50px 20px;
-            height: calc(100vh - 100px); /* Adjust height to fit within the viewport */
+            height: calc(110vh - 100px); /* Adjust height to fit within the viewport */
         }
 
         #datepicker {
@@ -87,15 +90,6 @@ mysqli_close($link);
             border-radius: 8px;
             border: 1px solid #ccc;
             width: 150px;
-        }
-
-        /* Add custom styles for the radio button (joc) */
-        #relationship {
-            padding: 8px;
-            font-size: 15px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            width: 100px;
         }
 
         /* Add custom styles for the textarea (joc) */
@@ -166,6 +160,30 @@ mysqli_close($link);
             color: #aa1414;
             font-weight: 500
         }
+
+        /* Custom styles for the family info (joc) */
+        .field-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px; 
+        }
+
+        .field-container label {
+            margin-right: 10px;
+            font-size: 17px; 
+            font-weight: bold; 
+        }
+
+        .field-container input[type="text"], 
+        .field-container select {
+            flex-grow: 1; /* Allows the input field to fill the space */
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            width: auto; 
+        }
+
+        
     </style>
 </head>
 <body>
@@ -236,14 +254,23 @@ mysqli_close($link);
                     </div>
                     <br>
                     <div id="family_info" style="display: none;">
-                        <label for="relationship" style= "font-size: 17px;"><b>Relationship:</b></label>
-                        <select id="relationship" name="relationship_type">
-                            <option value="spouse">Spouse</option>
-                            <option value="child">Child</option>
-                            <option value="parent">Parent</option>
-                            <option value="other">Other</option>
-                        </select>
+                        <div class="field-container">
+                            <label for="family_name"><b>Family Name:</b></label>
+                            <input type="text" id="family_name" name="family_name" placeholder="Enter family member's name"><span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
+                        </div>
+
+                        <div class="field-container">
+                            <label for="relationship"><b>Relationship:</b></label>
+                            <select id="relationship" name="relationship_type">
+                                <option value="spouse">Spouse</option>
+                                <option value="child">Child</option>
+                                <option value="parent">Parent</option>
+                                <option value="other">Other</option>
+                            </select> 
+                            <span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
+                        </div>
                     </div>
+
                     
                     <br><br> <!-- Add medical condition (joc) -->
                     <label for="medical-conditions"><b>Reason for consult (Medical Condition): <b></label><span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
@@ -363,13 +390,17 @@ mysqli_close($link);
         document.querySelectorAll('input[name="booking_for"]').forEach(radio => {
             radio.addEventListener('change', function() {
                 const familyInfo = document.getElementById('family_info');
+                const familyNameInput = document.getElementById('family_name'); // Get the family name input
                 if (this.value === 'family') {
                     familyInfo.style.display = 'block';
+                    familyNameInput.required = true; // Make the family name required if family is selected
                 } else {
                     familyInfo.style.display = 'none';
+                    familyNameInput.required = false; // Not required if booking for self
                 }
             });
         });
+
 
 
     </script>
