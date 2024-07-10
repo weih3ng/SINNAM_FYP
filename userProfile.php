@@ -119,6 +119,7 @@ mysqli_close($link);
         .edit-box .btn:hover {
             background-color: #6b2c27;
         }
+        
     </style>
 </head>
 <body>
@@ -176,17 +177,28 @@ mysqli_close($link);
                     <input type="date" id="dob" name="dob" value="<?php echo htmlspecialchars($dob); ?>">
                 </div>
                 <div class="form-group">
-                    <label for="gender">Gender:</label>
-                    <input type="text" id="gender" name="gender" value="<?php echo htmlspecialchars($gender); ?>">
-                </div>
+    <label for="gender">Gender:</label>
+    <div class="gender-options">
+        <input type="radio" id="male" name="gender" value="Male" <?php if ($gender == 'Male') echo 'checked'; ?>>
+        <label for="male">Male</label>
+
+        <input type="radio" id="female" name="gender" value="Female" <?php if ($gender == 'Female') echo 'checked'; ?>>
+        <label for="female">Female</label>
+
+        <input type="radio" id="other" name="gender" value="Other" <?php if ($gender == 'Other') echo 'checked'; ?>>
+        <label for="other">Other</label>
+    </div>
+</div>
+
                 <div class="form-group">
                     <label for="contactnumber">Contact Number:</label>
                     <input type="text" id="contactnumber" name="contactnumber" value="<?php echo htmlspecialchars($contactnumber); ?>">
                 </div>
                 <div class="form-group">
                     <label for="password">Password:</label>
-                    <input type="text" id="password" name="password" value="<?php echo htmlspecialchars($password); ?>">
+                    <input type="text" id="password" name="password" value="<?php echo htmlspecialchars($password); ?>"> <span class="eye-toggle fa fa-eye" onclick="togglePasswordVisibility()"></span>
                 </div>
+
                 <br>
                 <button type="submit" class="btn" onclick="confirmEdit()">Save Changes</button>
                 <button type="button" class="btn" onclick="confirmDelete()">Delete Profile</button>
@@ -219,6 +231,23 @@ mysqli_close($link);
                 window.location.href = 'doDeleteProfile.php';
             }
         }
+        
+function togglePasswordVisibility() {
+    var passwordInput = document.getElementById("password");
+    var eyeIcon = document.querySelector(".eye-toggle");
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        eyeIcon.classList.remove("fa-eye");
+        eyeIcon.classList.add("fa-eye-slash");
+    } else {
+        passwordInput.type = "password";
+        eyeIcon.classList.remove("fa-eye-slash");
+        eyeIcon.classList.add("fa-eye");
+    }
+}
+
+
     </script>
 </body>
 </html>
