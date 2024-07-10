@@ -256,7 +256,7 @@ $current_date = date('Y-m-d');
                             <td><?php echo htmlspecialchars($appointment['relationship_type']); ?></td>
                             <td><?php echo $appointment['is_for_self'] ? '' : htmlspecialchars($appointment['family_name']); ?></td>
                             <td class="action-buttons">
-                                <?php if ($appointment['date'] >= $current_date) : ?>
+                                <?php if ($user_type !== 'doctor' && $appointment['date'] >= $current_date) : ?>
                                     <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
@@ -269,12 +269,6 @@ $current_date = date('Y-m-d');
                     <?php endforeach; ?>
                 </tbody>
             </table>
-
-            <?php if ($user_type !== 'doctor'): ?>
-                <a href="home.php">
-                    <button class="btn btn-done">Done</button>
-                </a>
-            <?php endif; ?>
 
         </div>
     </div>
