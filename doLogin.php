@@ -25,6 +25,8 @@ function check_user($link, $email, $password, $table) {
 // Check patients table
 $user = check_user($link, $email, $password, 'patients');
 $user_type = 'patient';
+$_SESSION['patients_id'] = $user['patients_id'];
+header('Location: viewAppointment.php?user_type=patient');
 
 if (!$user) {
     // Check admins table
@@ -37,6 +39,7 @@ if (!$user) {
     // Check doctors table
     $user = check_user($link, $email, $password, 'doctors');
     $user_type = 'doctor';
+    header('Location: viewAppointment.php?user_type=doctor');
 }
 
 // If a user is found, set session variables and success message
@@ -44,12 +47,7 @@ if ($user) {
     $_SESSION['success_message'] = "Successfully logged in.";
     $_SESSION['username'] = $user['username'];
     $_SESSION['loggedin'] = true; // Set the logged in session variable to true
-    if ($user_type === 'doctor') {
-        header('Location: viewAppointment.php?user_type=doctor'); // Redirect doctor to view all appointments
-    } else {
-        $_SESSION['patients_id'] = $user['patients_id'];
-        header('Location: viewAppointment.php?user_type=patient'); // Redirect patient to view their appointments
-    }
+
 } else {
     // If no user is found, set error message and redirect to login.php
     $_SESSION['error_message'] = "Invalid email or password. Please try again.";
