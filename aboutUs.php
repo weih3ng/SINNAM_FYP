@@ -55,7 +55,7 @@ include 'dbfunctions.php';
         }
 
         .our-doctor {
-            margin-right: 80px;
+            margin-right: 100dpx;
             margin-top: -100px;
             display: flex;
             align-items: center;
