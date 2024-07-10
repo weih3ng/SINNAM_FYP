@@ -7,7 +7,6 @@ include 'dbfunctions.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
     // Get form data
     $name = $_POST['name'];
-    $age = $_POST['age'];
     $email = $_POST['email'];
     $contactnumber = $_POST['contactnumber'];
     $dob = $_POST['dob'];
@@ -16,9 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
     $password = $_POST['password'];
 
     // Insert the new user into the database
-    $sql = "INSERT INTO patients (name, age, email, contactnumber, password, dob, gender, username) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO patients (name, email, contactnumber, password, dob, gender, username) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($link, $sql);
-    mysqli_stmt_bind_param($stmt, 'sisissss', $name, $age, $email, $contactnumber, $password, $dob, $gender, $username);
+    mysqli_stmt_bind_param($stmt, 'ssissss', $name, $email, $contactnumber, $password, $dob, $gender, $username);
 
     if (mysqli_stmt_execute($stmt)) {
         // Set success message
@@ -135,7 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
 <body>
     <!-- Navigation Bar -->
     <div class="navbar">
-        <a class="navbar-brand text-dark" href="home.php">
+        <a class="navbar-brand text-dark">
             <img src="images/logo.jpeg" alt="logo" class="logo">
         </a>
         <div class="navbar-links">
@@ -145,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
 
         <!-- Sign Up & Login Button -->
         <?php if (isset($_SESSION['username'])): ?>
-            <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: white;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
+            <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
 
 
             <a class="nav-custom" href="logout.php">
@@ -168,8 +167,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
             <form action="AdminAddUser.php" method="POST">
                 <label for="name" class="required-label">Name:</label>
                 <input type="name" id="name" name="name" required>
-                <label for="age" class="required-label">Age:</label>
-                <input type="number" id="age" name="age" required>
                 <label for="email" class="required-label">Email:</label>
                 <input type="email" id="email" name="email" required>
                 <label for="contactnumber" class="required-label">Contact Number:</label>
@@ -194,9 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
 
     <!-- Footer -->
     <footer>
-        <a href="home.php">
             <img src="images/logo.jpeg" alt="logo" class="logo">
-        </a>
         <div>
             @ 2024 Sin Nam Medical Hall All Rights Reserved
         </div>
