@@ -285,7 +285,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
 <body>
     <!-- Navigation Bar -->
     <div class="navbar">
-        <a class="navbar-brand text-dark" href="home.php">
+        <a class="navbar-brand text-dark">
             <img src="images/logo.jpeg" alt="logo" class="logo">
         </a>
         <div class="navbar-links">
@@ -296,7 +296,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
     <!-- Sign Up & Login Button -->
 
     <?php if (isset($_SESSION['username'])): ?>
-            <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: white;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
+            <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
 
 
             <a class="nav-custom" href="logout.php">
@@ -314,7 +314,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
 
     <!-- Admin Panel Container -->
     <div class="admin-panel-container">
-        <h1><i class="fas fa-door-open"></i> Welcome to Admin Panel</h1><br><br>
+        <h1>Welcome to Admin Panel</h1><br><br>
 
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Search for appointment details...">
@@ -416,9 +416,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
 
     <!-- Footer -->
     <footer>
-        <a href="home.php">
             <img src="images/logo.jpeg" alt="logo" class="logo">
-        </a>
         <div>
             @ 2024 Sin Nam Medical Hall All Rights Reserved
         </div>

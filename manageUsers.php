@@ -32,7 +32,6 @@ if (isset($_GET['delete_id'])) {
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
     // Get form data
     $name = $_POST['name'];
-    $age = $_POST['age'];
     $email = $_POST['email'];
     $contactnumber = $_POST['contactnumber'];
     $dob = $_POST['dob'];
@@ -41,9 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
 
         // Update existing user
         $patients_id = $_POST['patients_id'];
-        $sql = "UPDATE patients SET name = ?, age = ?, email = ?, contactnumber = ?, dob = ?, gender = ?, username = ? WHERE patients_id = ?";
+        $sql = "UPDATE patients SET name = ?, email = ?, contactnumber = ?, dob = ?, gender = ?, username = ? WHERE patients_id = ?";
         $stmt = mysqli_prepare($link, $sql);
-        mysqli_stmt_bind_param($stmt, 'sisisssi', $name, $age, $email, $contactnumber, $dob, $gender, $username, $patients_id);
+        mysqli_stmt_bind_param($stmt, 'ssisssi', $name, $email, $contactnumber, $dob, $gender, $username, $patients_id);
 
     if (mysqli_stmt_execute($stmt)) {
         // Set success message
@@ -284,7 +283,7 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
 <body>
     <!-- Navigation Bar -->
     <div class="navbar">
-        <a class="navbar-brand text-dark" href="home.php">
+        <a class="navbar-brand text-dark">
             <img src="images/logo.jpeg" alt="logo" class="logo">
         </a>
         <div class="navbar-links">
@@ -295,7 +294,7 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
     <!-- Sign Up & Login Button -->
 
     <?php if (isset($_SESSION['username'])): ?>
-            <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: white;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
+            <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
 
 
             <a class="nav-custom" href="logout.php">
@@ -313,7 +312,7 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
 
     <!-- Admin Panel Container -->
     <div class="admin-panel-container">
-        <h1><i class="fas fa-door-open"></i> Welcome to Admin Panel</h1>
+        <h1>Welcome to Admin Panel</h1>
         <div class="statistics-container">
             <div class="stat-box">
                 <h3><i class="fas fa-users"></i> Active Users</h3>
@@ -328,7 +327,7 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
         </div>
 
         <div class="record-links">
-            <h1>Search Records <i class="fas fa-search-plus"></i></h1>
+            <h1>Search Records</h1>
         </div>
 
         <div class="search-container">
@@ -346,7 +345,6 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
             <tr>
                 <th>Patients ID</th>
                 <th>Name</th>
-                <th>Age</th>
                 <th>Date of Birth</th>
                 <th>Gender</th>
                 <th>Email</th>
@@ -362,20 +360,19 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
                     echo "<tr>
                             <td>{$row['patients_id']}</td>
                             <td>{$row['name']}</td>
-                            <td>{$row['age']}</td>
                             <td>{$row['dob']}</td>
                             <td>{$row['gender']}</td>
                             <td>{$row['email']}</td>
                             <td>{$row['contactnumber']}</td>
                             <td>{$row['username']}</td>
                             <td>
-                                <a href='#' class='edit-link' data-id='{$row['patients_id']}' data-name='{$row['name']}' data-age='{$row['age']}' data-email='{$row['email']}' data-dob='{$row['dob']}' data-gender='{$row['gender']}' data-contactnumber='{$row['contactnumber']}' data-username='{$row['username']}'>Edit</a> | 
+                                <a href='#' class='edit-link' data-id='{$row['patients_id']}' data-name='{$row['name']}' data-email='{$row['email']}' data-dob='{$row['dob']}' data-gender='{$row['gender']}' data-contactnumber='{$row['contactnumber']}' data-username='{$row['username']}'>Edit</a> | 
                                 <a href='manageUsers.php?delete_id={$row['patients_id']}'>Delete</a>
                             </td>
                           </tr>";
                 }
             } else {
-                echo "<tr><td colspan='9'>No users found</td></tr>";
+                echo "<tr><td colspan='8'>No users found</td></tr>";
             }
             ?>
             </tbody>
@@ -388,8 +385,6 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
                 <input type="hidden" id="edit_patients_id" name="patients_id">
                 <label for="edit_name" class="required-label">Name:</label>
                 <input type="text" id="edit_name" name="name" required>
-                <label for="edit_age" class="required-label">Age:</label>
-                <input type="number" id="edit_age" name="age" required>
                 <label for="edit_email" class="required-label">Email:</label>
                 <input type="email" id="edit_email" name="email" required>
                 <label for="edit_contactnumber" class="required-label">Contact Number:</label>
@@ -412,9 +407,7 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
 
     <!-- Footer -->
     <footer>
-        <a href="home.php">
             <img src="images/logo.jpeg" alt="logo" class="logo">
-        </a>
         <div>
             @ 2024 Sin Nam Medical Hall All Rights Reserved
         </div>
@@ -486,7 +479,6 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
                 e.preventDefault();
                 document.getElementById('edit_patients_id').value = this.dataset.id;
                 document.getElementById('edit_name').value = this.dataset.name;
-                document.getElementById('edit_age').value = this.dataset.age;
                 document.getElementById('edit_email').value = this.dataset.email;
                 document.getElementById('edit_contactnumber').value = this.dataset.contactnumber;
                 document.getElementById('edit_dob').value = this.dataset.dob;

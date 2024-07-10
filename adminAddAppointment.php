@@ -150,7 +150,7 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
 <body>
     <!-- Navigation Bar -->
     <div class="navbar">
-        <a class="navbar-brand text-dark" href="home.php">
+        <a class="navbar-brand text-dark">
             <img src="images/logo.jpeg" alt="logo" class="logo">
         </a>
         <div class="navbar-links">
@@ -163,7 +163,7 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
 
 
     <?php if (isset($_SESSION['username'])): ?>
-            <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: white;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
+            <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
 
 
             <a class="nav-custom" href="logout.php">
@@ -222,9 +222,7 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
 
     <!-- Footer -->
     <footer>
-        <a href="home.php">
             <img src="images/logo.jpeg" alt="logo" class="logo">
-        </a>
         <div>
             @ 2024 Sin Nam Medical Hall All Rights Reserved
         </div>
