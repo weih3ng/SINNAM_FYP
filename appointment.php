@@ -183,7 +183,15 @@ mysqli_close($link);
             width: auto; 
         }
 
-        
+        #medical-conditions {
+    padding: 10px; /* Adjust padding as needed */
+    font-size: 18px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box; /* Include padding and border in width calculation */
+}
+
     </style>
 </head>
 <body>
