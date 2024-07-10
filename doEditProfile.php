@@ -16,6 +16,7 @@ $patients_id = $_SESSION['patients_id'];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Get form data
     $name = mysqli_real_escape_string($link, $_POST['name']);
+    $username = mysqli_real_escape_string($link, $_POST['username']);
     $email = mysqli_real_escape_string($link, $_POST['email']);
     $dob = mysqli_real_escape_string($link, $_POST['dob']);
     $gender = mysqli_real_escape_string($link, $_POST['gender']);
@@ -25,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Prepare the update query
     $query = "UPDATE patients SET 
                 name = '$name', 
+                username = '$username',
                 email = '$email', 
                 dob = '$dob', 
                 gender = '$gender', 

@@ -188,7 +188,7 @@ mysqli_close($link);
                     <input type="text" id="password" name="password" value="<?php echo htmlspecialchars($password); ?>">
                 </div>
                 <br>
-                <button type="submit" class="btn">Save Changes</button>
+                <button type="submit" class="btn" onclick="confirmEdit()">Save Changes</button>
                 <button type="button" class="btn" onclick="confirmDelete()">Delete Profile</button>
             </form>
         </div>
@@ -209,6 +209,11 @@ mysqli_close($link);
     </footer>
 
     <script>
+        function confirmEdit() {
+            if (confirm("Are you sure you want to edit your profile?")) {
+                window.location.href = 'doEditProfile.php';
+            }
+        }
         function confirmDelete() {
             if (confirm("Are you sure you want to delete your profile? This action cannot be undone.")) {
                 window.location.href = 'doDeleteProfile.php';
