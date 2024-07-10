@@ -190,7 +190,10 @@ if (mysqli_num_rows($result) > 0) {
             <a href="home.php">Home</a>
             <a href="aboutUs.php">About Us</a>
             <a href="appointment.php">Appointment</a>
+            <?php if (isset($_SESSION['username'])): ?>
             <a href="viewAppointment.php">View Appointment</a>
+            <?php else: ?>
+                <?php endif; ?>
             <a href="contact.php">Contact Us</a>
         </div>
 

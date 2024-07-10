@@ -181,7 +181,10 @@ $current_date = date('Y-m-d');
             <a href="home.php">Home</a>
             <a href="aboutUs.php">About Us</a>
             <a href="appointment.php">Appointment</a>
+            <?php if (isset($_SESSION['username'])): ?>
             <a href="viewAppointment.php">View Appointment</a>
+            <?php else: ?>
+                <?php endif; ?>
             <a href="contact.php">Contact Us</a>
         </div>
 
@@ -263,9 +266,7 @@ $current_date = date('Y-m-d');
                 </tbody>
             </table>
 
-            <a href="home.php">
-                <button class="btn btn-done">Done</button>
-            </a>
+
         </div>
     </div>
 

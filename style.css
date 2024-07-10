@@ -30,7 +30,7 @@
         flex-grow: 1;  /* This helps to distribute space more evenly */
         justify-content: center; /* Center all navbar links */
         gap: 20px; /* Adjust the gap to manage space between navigation links */
-        margin-right: 150px; 
+        margin-right: 400px; 
     }
     
     .nav-custom {
