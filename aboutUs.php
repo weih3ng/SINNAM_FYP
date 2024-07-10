@@ -171,7 +171,7 @@ include 'dbfunctions.php';
             <img src="images/doc2.png" alt="Doctor Image"> <!-- Replace with your image source -->
             <div>
                 <h1>Desmond Sin</h1>
-                <p>Desmond Sin is a distinguished<br> Traditional Chinese Medicine (TCM)<br> practitioner known for his expertise<br> in herbal medicine and TCM diagnostics. He is<br> dedicated to helping patients<br> achieve balance and well-being through<br> personalized treatment plans that integrate<br> traditional wisdom with modern insights.</p>
+                <p>Desmond Sin is a distinguished<br> Traditional Chinese Medicine (TCM)<br> practitioner known for his expertise<br> in herbal medicine and TCM diagnostics. He iss dedicated to helping patients<br> achieve balance and well-being through<br> personalized treatment plans that integrate<br> traditional wisdom with modern insights.</p>
             </div>
         </div>
         <div class="why-choose-us-text">
