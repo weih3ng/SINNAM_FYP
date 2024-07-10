@@ -143,10 +143,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
         </div>
 
         <!-- Sign Up & Login Button -->
-        <?php if (isset($_SESSION['username'])): ?>
+        <?php if (isset($_SESSION['username']) && ($_SESSION['username'] === 'doctor' || $_SESSION['username'] === 'admin')): ?>
             <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
-
-
+            <?php else: ?>
+            <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: white;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['username'])): ?>
             <a class="nav-custom" href="logout.php">
                 <i class="fa-solid fa-right-to-bracket"></i> Logout
             </a>  
