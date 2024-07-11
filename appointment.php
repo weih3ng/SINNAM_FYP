@@ -1,9 +1,7 @@
-<?php 
+<?php
 session_start(); // Start the session
 
 include 'dbfunctions.php';
-
-
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['date']) && isset($_POST['timeslot'])) {
@@ -12,36 +10,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $medical_condition = $_POST['medical_conditions']; // Added medical condition (joc)
         $patients_id = $_SESSION['patients_id'];
         $doctor_id = 1; // Assuming a fixed doctor ID for now
-        $queue_number = 1; // Function to get the next queue number for now
 
         // Ensure date format is YYYY-MM-DD
         $formatted_date = date('Y-m-d', strtotime($date));
 
-        // added two columns (joc)
+        // Check if 'family_member_name' included or not (joc)
         $is_for_self = ($_POST['booking_for'] == 'self') ? 1 : 0;
         $relationship_type = ($is_for_self == 0 && isset($_POST['relationship_type'])) ? $_POST['relationship_type'] : NULL;
-
-        // Check if 'family_member_name' included or not (joc)
         $family_name = ($is_for_self == 0 && isset($_POST['family_name'])) ? $_POST['family_name'] : NULL;
 
-        $sql = "INSERT INTO appointments (patients_id, doctor_id, date, time, is_for_self, relationship_type, family_name, medical_condition) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        // Check if the selected date and time are already booked
+        $check_sql = "SELECT * FROM appointments WHERE date = ? AND time = ? AND doctor_id = ?";
+        if ($check_stmt = mysqli_prepare($link, $check_sql)) {
+            mysqli_stmt_bind_param($check_stmt, "ssi", $formatted_date, $time, $doctor_id);
+            mysqli_stmt_execute($check_stmt);
+            mysqli_stmt_store_result($check_stmt);
 
-        if ($stmt = mysqli_prepare($link, $sql)) {
-            mysqli_stmt_bind_param($stmt, "iississs", $patients_id, $doctor_id, $formatted_date, $time, $is_for_self, $relationship_type, $family_name, $medical_condition);
-            if (mysqli_stmt_execute($stmt)) {
-                $newly_created_appointment_id = mysqli_insert_id($link);  // This captures the last inserted ID (joc)
-                $_SESSION['appointment_id'] = $newly_created_appointment_id;  // Store it in session to use later (joc)
-
-                mysqli_stmt_close($stmt);
-                mysqli_close($link);
-                header("Location: appointmentConfirm.php");
-                exit(); // Ensure script stops executing after redirection
+            if (mysqli_stmt_num_rows($check_stmt) > 0) {
+                echo "<script>
+                    alert('The selected date and time are already booked. Please choose another time.');
+                    window.location.href = 'appointment.php';
+                </script>"; 
+                    
+                mysqli_stmt_close($check_stmt);
             } else {
-                echo "ERROR: Could not execute query: $sql. " . mysqli_error($link);
+                mysqli_stmt_close($check_stmt);
+
+                $sql = "INSERT INTO appointments (patients_id, doctor_id, date, time, is_for_self, relationship_type, family_name, medical_condition) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                if ($stmt = mysqli_prepare($link, $sql)) {
+                    mysqli_stmt_bind_param($stmt, "iississs", $patients_id, $doctor_id, $formatted_date, $time, $is_for_self, $relationship_type, $family_name, $medical_condition);
+                    if (mysqli_stmt_execute($stmt)) {
+                        $newly_created_appointment_id = mysqli_insert_id($link);  // This captures the last inserted ID (joc)
+                        $_SESSION['appointment_id'] = $newly_created_appointment_id;  // Store it in session to use later (joc)
+
+                        mysqli_stmt_close($stmt);
+                        mysqli_close($link);
+                        header("Location: appointmentConfirm.php");
+                        exit(); // Ensure script stops executing after redirection
+                    } else {
+                        echo "ERROR: Could not execute query: $sql. " . mysqli_error($link);
+                    }
+                } else {
+                    echo "ERROR: Could not prepare query: $sql. " . mysqli_error($link);
+                }
             }
         } else {
-            echo "ERROR: Could not prepare query: $sql. " . mysqli_error($link);
+            echo "ERROR: Could not prepare query: $check_sql. " . mysqli_error($link);
         }
     } else {
         echo "ERROR: Date, timeslot, and medical condition are required.";
@@ -49,7 +64,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 mysqli_close($link);
-
 ?>
 
 
@@ -449,7 +463,11 @@ $(function() {
             });
         });
 
-
+        function confirmBook() {
+            if (confirm("Are you sure you want to edit your profile?")) {
+                window.location.href = 'doEditProfile.php';
+            }
+        }
 
     </script>
 </body>
