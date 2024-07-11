@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 echo "<script>
                     alert('The selected date and time are already booked. Please choose another time.');
                     window.location.href = 'appointment.php';
-                </script>"; 
+                </script>";
                     
                 mysqli_stmt_close($check_stmt);
             } else {
@@ -436,6 +436,25 @@ $(function() {
                     ];
                     break;
             }
+            if ($.datepicker.formatDate('yy-mm-dd', new Date()) === dateText) {
+        var currentTime = new Date();
+        var currentHour = currentTime.getHours();
+        var currentMinute = currentTime.getMinutes();
+        
+        timeslotOptions = timeslotOptions.filter(function(timeslot) {
+            var [hours, minutes] = timeslot.split(':');
+            var timeslotHour = parseInt(hours);
+            var timeslotMinute = parseInt(minutes);
+            
+            if (timeslotHour > currentHour) {
+                return true;
+            } else if (timeslotHour === currentHour && timeslotMinute >= currentMinute) {
+                return true;
+            } else {
+                return false;
+            }
+        });
+    }
 
             // Update the timeslot dropdown options
             var select = $("#timeslot");
