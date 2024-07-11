@@ -81,12 +81,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
             font-weight: bold;
         }
 
-        .form-container label.required-label::before {
-            content: " *";
-            color: red;
-            margin-left: 5px;
-        }
-
         .form-container input {
             margin-bottom: 10px;
             padding: 10px;
@@ -129,6 +123,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
         .form-container button:hover {
             background-color: #6b2c27;
         }
+
+        .ipsFieldRow_required {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #aa1414;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -163,25 +164,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
 
     <!-- Admin Panel Container -->
     <div class="admin-panel-container">
-        <h1><i class="fas fa-user-plus"></i> Add New User</h1>
+        <h1>Add New User</h1>
         <div class="form-container">
             <form action="AdminAddUser.php" method="POST">
-                <label for="name" class="required-label">Name:</label>
+                <label for="name"><i class="fas fa-user"></i> Name:<span class="ipsFieldRow_required" style="margin-left: 480px;">Required</span></label>
                 <input type="name" id="name" name="name" required>
-                <label for="email" class="required-label">Email:</label>
+                <label for="email"><i class="far fa-envelope"></i> Email:<span class="ipsFieldRow_required" style="margin-left: 478px;">Required</span></label>
                 <input type="email" id="email" name="email" required>
-                <label for="contactnumber" class="required-label">Contact Number:</label>
+                <label for="contactnumber"><i class="fas fa-phone"></i> Contact Number:<span class="ipsFieldRow_required" style="margin-left: 396px;">Required</span></label>
                 <input type="number" id="contactnumber" name="contactnumber" required>
-                <label for="password" class="required-label">Password:</label>
+                <label for="password"><i class="fas fa-lock"></i> Password:<span class="ipsFieldRow_required" style="margin-left: 446px;">Required</span></label>
                 <input type="password" id="password" name="password" required>
-                <label for="dob" class="required-label">Date of Birth:</label>
-                <input type="date" id="dob" name="dob" required>
+                <label for="dob"><i class="far fa-calendar-alt"></i> Date of Birth:<span class="ipsFieldRow_required" style="margin-left: 426px;">Required</span></label>
+                <input type="date" id="dob" name="dob" required max="<?php echo date('Y-m-d'); ?>">
                 <div class="radio-group">
-                    <label for="gender" class="required-label">Gender:</label>
+                    <label for="gender"><i class="fas fa-venus-mars"></i> Gender: <span class="ipsFieldRow_required" style="margin-right: 300px;">Required</span></label>
                     <label><input type="radio" id="male" name="gender" value="male" required> Male</label>
                     <label><input type="radio" id="female" name="gender" value="female" required> Female</label>
                 </div>
-                <label for="username" class="required-label">Username:</label>
+                <label for="username"><i class="far fa-user"></i> Username:<span class="ipsFieldRow_required" style="margin-left: 446px;">Required</span></label>
                 <input type="text" id="username" name="username" required>
                 <div class="button-container">
                     <button type="submit">Add User</button>

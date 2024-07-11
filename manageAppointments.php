@@ -282,6 +282,10 @@ $appointments_result = mysqli_query($link, $appointments_sql);
         td a.edit-link {
             color: green;
         }
+
+        .dataTables_length {
+            margin-bottom: 10px; 
+        }
     </style>
 </head>
 <body>

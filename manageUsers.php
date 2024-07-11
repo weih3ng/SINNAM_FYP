@@ -116,6 +116,11 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
             width: 25%;
+            transition: transform 0.3s ease; /* Added transition for smooth scaling */
+        }
+
+        .stat-box:hover {
+            transform: scale(1.15); /* Enlarge the container slightly on hover */
         }
 
         .stat-box h3 {
@@ -213,6 +218,7 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
             border-collapse: collapse;
             margin-bottom: 20px;
             background-color: #F1EDE2;
+            margin-top: 10px;
         }
         
         th, td {
@@ -278,6 +284,10 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
         td a.edit-link {
             color: green;
         }
+
+        .dataTables_length {
+            margin-bottom: 10px; 
+        }
     </style>
 </head>
 <body>
@@ -313,16 +323,14 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
 
     <!-- Admin Panel Container -->
     <div class="admin-panel-container">
-        <h1>Welcome to Admin Panel</h1>
+        <h1>Welcome to Admin Panel</h1><br>
         <div class="statistics-container">
-            <div class="stat-box">
+            <div class="stat-box" id="activeUsers" data-tippy-content="Booked an appointment">
                 <h3><i class="fas fa-users"></i> Active Users</h3>
-                <p><b>(booked appointment)</b></p>
                 <p><?php echo $active_patients; ?></p>
             </div>
-            <div class="stat-box">
+            <div class="stat-box" id="inactiveUsers" data-tippy-content="Yet to book an appointment / account not used">
                 <h3><i class="fas fa-user-times"></i> Inactive Users</h3>
-                <p><b>(yet to book an appointment)</b></p>
                 <p><?php echo $inactive_patients; ?></p>
             </div>
         </div>
@@ -420,12 +428,23 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
 
     <script>
         $(document).ready(function() {
             $('#patientsTable').DataTable({
                 searching: false // Disable the search bar
             });
+        });
+
+        // Initialize Tippy.js tooltips
+            tippy('#activeUsers', {
+            content: 'Booked appointment'
+        });
+
+            tippy('#inactiveUsers', {
+            content: 'Yet to book an appointment/not used account'
         });
 
         //function for collapsible button leading to forms
