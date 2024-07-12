@@ -376,7 +376,7 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
                             <td>{$row['username']}</td>
                             <td>
                                 <a href='#' class='edit-link' data-id='{$row['patients_id']}' data-name='{$row['name']}' data-email='{$row['email']}' data-dob='{$row['dob']}' data-gender='{$row['gender']}' data-contactnumber='{$row['contactnumber']}' data-username='{$row['username']}'>Edit</a> | 
-                                <a href='manageUsers.php?delete_id={$row['patients_id']}'>Delete</a>
+                                <a href='#' class='delete-link' data-id='{$row['patients_id']}'>Delete</a>
                             </td>
                           </tr>";
                 }
@@ -511,6 +511,24 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
                 }
                 document.getElementById('edit_username').value = this.dataset.username;
                 document.getElementById('editUserForm').style.display = 'block';
+            });
+        });
+
+        // Set the maximum date for the date of birth field to today's date
+        document.addEventListener('DOMContentLoaded', function() {
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById('edit_dob').setAttribute('max', today);
+        });
+
+        // Delete user confirmation
+        document.querySelectorAll('.delete-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                var deleteUserId = this.dataset.id;
+                var confirmation = confirm('Are you sure you want to delete this user?');
+                if (confirmation) {
+                    window.location.href = 'manageUsers.php?delete_id=' + deleteUserId;
+                }
             });
         });
     </script>

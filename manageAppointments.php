@@ -368,7 +368,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
                             // Check if appointment date is in the past
                             if ($row['date'] >= $current_date) {
                                 echo"<a href='#' class='edit-link' data-id='{$row['appointment_id']}' data-patients_id='{$row['patients_id']}' data-name='{$row['name']}' data-date='{$row['date']}' data-time='{$row['time']}' data-medical_condition='{$row['medical_condition']}' data-is_for_self='{$row['is_for_self']}' data-relationship_type='{$row['relationship_type']}' data-family_name='{$row['family_name']}'>Edit</a> |  
-                                <a href='manageAppointments.php?delete_id={$row['appointment_id']}'>Delete</a>";
+                                <a href='#' class='delete-link' data-id='{$row['appointment_id']}'>Delete</a>";
                             } else {
                                 echo "";
                             }
@@ -514,6 +514,12 @@ $appointments_result = mysqli_query($link, $appointments_sql);
             });
         });
 
+        // Disable past dates in the date picker
+        document.addEventListener('DOMContentLoaded', function() {
+            var today = new Date().toISOString().split('T')[0];
+            document.getElementById('edit_date').setAttribute('min', today);
+        });
+
         // Disable Sundays and Mondays in the date picker
         document.getElementById('edit_date').addEventListener('input', function(e) {
             var day = new Date(this.value).getUTCDay();
@@ -521,6 +527,17 @@ $appointments_result = mysqli_query($link, $appointments_sql);
                 alert('Booking on Sunday and Monday is not allowed. Please select another date.');
                 this.value = '';
             }
+        });
+
+        // Delete appointment confirmation
+        document.querySelectorAll('.delete-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const appointmentId = this.dataset.id;
+                if (confirm("Are you sure you want to delete this appointment?")) {
+                    window.location.href = `manageAppointments.php?delete_id=${appointmentId}`;
+                }
+            });
         });
     </script>
 </body>
