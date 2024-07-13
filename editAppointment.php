@@ -157,7 +157,7 @@ mysqli_close($link);
 
         .form-group label {
             width: 150px; /* Ensure all labels have the same width */
-            text-align: rigth;
+            text-align: right;
         }
 
         /* Specific styles for relationship and family name fields for consistency */
@@ -166,8 +166,6 @@ mysqli_close($link);
             width: auto;
             flex-grow: 1; /* Allows the input to fill the space */
         }
-
-
     </style>
 </head>
 <body>
@@ -188,18 +186,15 @@ mysqli_close($link);
         </div>
 
         <!-- Sign Up & Login Button -->
-
-
+        <?php if (isset($_SESSION['username'])): ?>
+            <?php if ($_SESSION['username'] === 'doctor' || $_SESSION['username'] === 'admin'): ?>
+                <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
+            <?php else: ?>
+                <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: white;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
+            <?php endif; ?>
+        <?php endif; ?>
 
         <?php if (isset($_SESSION['username'])): ?>
-    <?php if ($_SESSION['username'] === 'doctor' || $_SESSION['username'] === 'admin'): ?>
-        <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
-    <?php else: ?>
-        <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: white;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
-    <?php endif; ?>
-<?php endif; ?>
-
-            <?php if (isset($_SESSION['username'])): ?>
             <a class="nav-custom" href="logout.php">
                 <i class="fa-solid fa-right-to-bracket"></i> Logout
             </a>  
@@ -224,11 +219,37 @@ mysqli_close($link);
                 </div>
                 <div class="form-group">
                     <label for="date">Date:</label>
-                    <input type="date" id="date" name="date" value="<?php echo $appointmentDate; ?>">
+                    <input type="date" id="date" name="date" value="<?php echo $appointmentDate; ?>" min="<?php echo date('Y-m-d'); ?>">
                 </div>
                 <div class="form-group">
-                    <label for="time">Time:</label>
-                    <input type="time" id="time" name="time" value="<?php echo $appointmentTime; ?>">
+                    <label for="id">Time:</label>
+                    <input type="hidden" name="date" id="selected-date" />
+                        <select id="timeslot" name="timeslot">
+                            <option value="10:30 AM">10:30 AM</option>
+                            <option value="10:45 AM">10:45 AM</option>
+                            <option value="11:00 AM">11:00 AM</option>
+                            <option value="11:15 AM">11:15 AM</option>
+                            <option value="11:30 AM">11:30 AM</option>
+                            <option value="11:45 AM">11:45 AM</option>
+                            <option value="12:00 PM">12:00 PM</option>
+                            <option value="12:15 PM">12:15 PM</option>
+                            <option value="12:30 PM">12:30 PM</option>
+                            <option value="12:45 PM">12:45 PM</option>
+                            <option value="1:00 PM">1:00 PM</option>
+                            <option value="1:15 PM">1:15 PM</option>
+                            <option value="1:30 PM">1:30 PM</option>
+                            <option value="1:45 PM">1:45 PM</option>
+                            <option value="2:00 PM">2:00 PM</option>
+                            <option value="2:15 PM">2:15 PM</option>
+                            <option value="2:30 PM">2:30 PM</option>
+                            <option value="2:45 PM">2:45 PM</option>
+                            <option value="3:00 PM">3:00 PM</option>
+                            <option value="3:15 PM">3:15 PM</option>
+                            <option value="3:30 PM">3:30 PM</option>
+                            <option value="3:45 PM">3:45 PM</option>
+                            <option value="4:00 PM">4:00 PM</option>
+                            <option value="4:15 PM">4:15 PM</option>
+                        </select>
                 </div>
 
                 <!-- Booking for self or family member and medicial condition (joc) -->
@@ -280,22 +301,83 @@ mysqli_close($link);
     </footer>
 
     <script>
-    
-    // Show/hide family member name based on booking type (joc)
-    document.querySelectorAll('input[name="booking_for"]').forEach(input => {
-        input.addEventListener('change', function() {
+
+        // Show/hide family member name based on booking type (joc)
+        document.querySelectorAll('input[name="booking_for"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const isFamily = document.getElementById('for_family').checked;
+                document.getElementById('family_info').style.display = isFamily ? 'block' : 'none';
+                document.getElementById('family_name_group').style.display = isFamily ? 'block' : 'none'; // Add this line
+            });
+        });
+
+        // Initialize the display based on current selection when the page loads (joc)
+        document.addEventListener('DOMContentLoaded', function() {
             const isFamily = document.getElementById('for_family').checked;
             document.getElementById('family_info').style.display = isFamily ? 'block' : 'none';
-            document.getElementById('family_name_group').style.display = isFamily ? 'block' : 'none'; // Add this line
+            document.getElementById('family_name_group').style.display = isFamily ? 'block' : 'none';
         });
-    });
 
-    // Initialize the display based on current selection when the page loads (joc)
-    document.addEventListener('DOMContentLoaded', function() {
-        const isFamily = document.getElementById('for_family').checked;
-        document.getElementById('family_info').style.display = isFamily ? 'block' : 'none';
-        document.getElementById('family_name_group').style.display = isFamily ? 'block' : 'none';
-    });
+
+
+
+        
+
+        // jQuery UI Datepicker (joc)
+        $(function() {
+            $("#calendar-container").datepicker({
+                inline: true,
+                minDate: 0, // Restrict to today and future dates
+                dateFormat: "yy-mm-dd", // Set the date format to YYYY-MM-DD
+                beforeShowDay: function(date) {
+                    var day = date.getDay(); // Get the day of the week (0 - Sunday, 1 - Monday, ...)
+                    // Disable Sundays and Mondays
+                    return [(day !== 0 && day !== 1), "", "No appointments on Sundays and Mondays"];
+                },
+                onSelect: function(dateText) {
+                    $("#selected-date").val(dateText); // Set the formatted date
+                    updateTimeslotDropdown(dateText); // Update timeslot dropdown based on the selected date
+                }
+            });
+
+            function updateTimeslotDropdown(selectedDate) {
+                var currentDate = new Date();
+                var selectedDate = new Date(selectedDate);
+                var isToday = (selectedDate.toDateString() === currentDate.toDateString());
+                var dayOfWeek = selectedDate.getDay();
+
+                var timeslotOptions = [];
+                if (dayOfWeek >= 2 && dayOfWeek <= 5) { // Tuesday to Friday
+                    timeslotOptions = ["11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "1:00 PM", "1:15 PM", "1:30 PM", "1:45 PM", "2:00 PM", "2:15 PM", "2:30 PM", "2:45 PM", "3:00 PM", "3:15 PM", "3:30 PM", "3:45 PM", "4:00 PM", "4:15 PM"];
+                } else if (dayOfWeek === 6) { // Saturday
+                    timeslotOptions = ["10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "1:00 PM", "1:15 PM", "1:30 PM", "1:45 PM", "2:00 PM", "2:15 PM", "2:30 PM", "2:45 PM", "3:00 PM", "3:15 PM", "3:30 PM", "3:45 PM", "4:00 PM", "4:15 PM"];
+                }
+
+                // Filter out timeslots that have passed if the selected date is today (joc)
+                if (isToday) {
+                    var currentHours = currentDate.getHours();
+                    var currentMinutes = currentDate.getMinutes();
+                    timeslotOptions = timeslotOptions.filter(function(timeslot) {
+                        var [hour, minutesPart] = timeslot.split(':');
+                        var minutes = minutesPart.split(' ')[0];
+                        var period = minutesPart.split(' ')[1];
+                        var hour24 = hour % 12 + (period === 'PM' ? 12 : 0);
+                        return hour24 > currentHours || (hour24 === currentHours && minutes > currentMinutes);
+                    });
+                }
+
+                var select = $("#timeslot");
+                select.empty(); // Clear previous options
+                timeslotOptions.forEach(function(time) {
+                    select.append($("<option>", { value: time, text: time }));
+                });
+            }
+        });
+
+
+
+    
+        
 
 
     </script>
