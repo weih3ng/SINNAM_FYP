@@ -222,34 +222,8 @@ mysqli_close($link);
                     <input type="date" id="date" name="date" value="<?php echo $appointmentDate; ?>" min="<?php echo date('Y-m-d'); ?>">
                 </div>
                 <div class="form-group">
-                    <label for="id">Time:</label>
-                    <input type="hidden" name="date" id="selected-date" />
-                        <select id="timeslot" name="timeslot">
-                            <option value="10:30 AM">10:30 AM</option>
-                            <option value="10:45 AM">10:45 AM</option>
-                            <option value="11:00 AM">11:00 AM</option>
-                            <option value="11:15 AM">11:15 AM</option>
-                            <option value="11:30 AM">11:30 AM</option>
-                            <option value="11:45 AM">11:45 AM</option>
-                            <option value="12:00 PM">12:00 PM</option>
-                            <option value="12:15 PM">12:15 PM</option>
-                            <option value="12:30 PM">12:30 PM</option>
-                            <option value="12:45 PM">12:45 PM</option>
-                            <option value="1:00 PM">1:00 PM</option>
-                            <option value="1:15 PM">1:15 PM</option>
-                            <option value="1:30 PM">1:30 PM</option>
-                            <option value="1:45 PM">1:45 PM</option>
-                            <option value="2:00 PM">2:00 PM</option>
-                            <option value="2:15 PM">2:15 PM</option>
-                            <option value="2:30 PM">2:30 PM</option>
-                            <option value="2:45 PM">2:45 PM</option>
-                            <option value="3:00 PM">3:00 PM</option>
-                            <option value="3:15 PM">3:15 PM</option>
-                            <option value="3:30 PM">3:30 PM</option>
-                            <option value="3:45 PM">3:45 PM</option>
-                            <option value="4:00 PM">4:00 PM</option>
-                            <option value="4:15 PM">4:15 PM</option>
-                        </select>
+                    <label for="time">Time:</label>
+                    <input type="time" id="time" name="time" value="<?php echo $appointmentTime; ?>">
                 </div>
 
                 <!-- Booking for self or family member and medicial condition (joc) -->
@@ -323,56 +297,7 @@ mysqli_close($link);
 
         
 
-        // jQuery UI Datepicker (joc)
-        $(function() {
-            $("#calendar-container").datepicker({
-                inline: true,
-                minDate: 0, // Restrict to today and future dates
-                dateFormat: "yy-mm-dd", // Set the date format to YYYY-MM-DD
-                beforeShowDay: function(date) {
-                    var day = date.getDay(); // Get the day of the week (0 - Sunday, 1 - Monday, ...)
-                    // Disable Sundays and Mondays
-                    return [(day !== 0 && day !== 1), "", "No appointments on Sundays and Mondays"];
-                },
-                onSelect: function(dateText) {
-                    $("#selected-date").val(dateText); // Set the formatted date
-                    updateTimeslotDropdown(dateText); // Update timeslot dropdown based on the selected date
-                }
-            });
 
-            function updateTimeslotDropdown(selectedDate) {
-                var currentDate = new Date();
-                var selectedDate = new Date(selectedDate);
-                var isToday = (selectedDate.toDateString() === currentDate.toDateString());
-                var dayOfWeek = selectedDate.getDay();
-
-                var timeslotOptions = [];
-                if (dayOfWeek >= 2 && dayOfWeek <= 5) { // Tuesday to Friday
-                    timeslotOptions = ["11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "1:00 PM", "1:15 PM", "1:30 PM", "1:45 PM", "2:00 PM", "2:15 PM", "2:30 PM", "2:45 PM", "3:00 PM", "3:15 PM", "3:30 PM", "3:45 PM", "4:00 PM", "4:15 PM"];
-                } else if (dayOfWeek === 6) { // Saturday
-                    timeslotOptions = ["10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "1:00 PM", "1:15 PM", "1:30 PM", "1:45 PM", "2:00 PM", "2:15 PM", "2:30 PM", "2:45 PM", "3:00 PM", "3:15 PM", "3:30 PM", "3:45 PM", "4:00 PM", "4:15 PM"];
-                }
-
-                // Filter out timeslots that have passed if the selected date is today (joc)
-                if (isToday) {
-                    var currentHours = currentDate.getHours();
-                    var currentMinutes = currentDate.getMinutes();
-                    timeslotOptions = timeslotOptions.filter(function(timeslot) {
-                        var [hour, minutesPart] = timeslot.split(':');
-                        var minutes = minutesPart.split(' ')[0];
-                        var period = minutesPart.split(' ')[1];
-                        var hour24 = hour % 12 + (period === 'PM' ? 12 : 0);
-                        return hour24 > currentHours || (hour24 === currentHours && minutes > currentMinutes);
-                    });
-                }
-
-                var select = $("#timeslot");
-                select.empty(); // Clear previous options
-                timeslotOptions.forEach(function(time) {
-                    select.append($("<option>", { value: time, text: time }));
-                });
-            }
-        });
 
 
 
