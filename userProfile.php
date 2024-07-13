@@ -253,6 +253,11 @@ function togglePasswordVisibility() {
     }
 }
 
+document.addEventListener('DOMContentLoaded', (event) => {
+    // Set the max attribute for the date input to today's date
+    var today = new Date().toISOString().split('T')[0];
+    document.getElementById('dob').setAttribute('max', today);
+});
 
     </script>
 </body>
