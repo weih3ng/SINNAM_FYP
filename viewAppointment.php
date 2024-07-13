@@ -234,13 +234,22 @@ $current_date = date('Y-m-d');
             <h1>View Appointment</h1>
 
             <div class="table-header">
-                <div></div> <!-- Placeholder for spacing -->
-                <select id="appointmentFilter" name="appointmentFilter">
-                    <option value="all">All Appointments</option>
-                    <option value="self">Only Self Appointments</option>
-                    <option value="family">Only Family Appointments</option>
-                </select>
-            </div>
+    <div></div> <!-- Placeholder for spacing -->
+    <?php if ($user_type === 'patient') : ?>
+        <select id="appointmentFilter" name="appointmentFilter">
+            <option value="all">All Appointments</option>
+            <option value="self">Only Self Appointments</option>
+            <option value="family">Only Family Appointments</option>
+        </select>
+    <?php elseif ($user_type === 'doctor') : ?>
+        <select id="appointmentFilter" name="appointmentFilter">
+            <option value="all">All Appointments</option>
+            <option value="future">Future Appointments</option>
+            <option value="past">Past Appointments</option>
+        </select>
+    <?php endif; ?>
+</div>
+
 
             <table>
             <thead>
@@ -284,7 +293,7 @@ $current_date = date('Y-m-d');
             <?php if ($user_type === 'doctor') : ?>
                 <td class="action-buttons">
                     <?php if ($appointment['date'] >= $current_date) : ?>
-                        <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
+                        <a href="editMedicalCondition.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
                             <i class="fas fa-edit"></i> Edit
                         </a>
                     <?php endif; ?>
