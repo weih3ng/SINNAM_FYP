@@ -157,7 +157,7 @@ mysqli_close($link);
 
         .form-group label {
             width: 150px; /* Ensure all labels have the same width */
-            text-align: rigth;
+            text-align: right;
         }
 
         /* Specific styles for relationship and family name fields for consistency */
@@ -166,8 +166,6 @@ mysqli_close($link);
             width: auto;
             flex-grow: 1; /* Allows the input to fill the space */
         }
-
-
     </style>
 </head>
 <body>
@@ -188,18 +186,15 @@ mysqli_close($link);
         </div>
 
         <!-- Sign Up & Login Button -->
-
-
+        <?php if (isset($_SESSION['username'])): ?>
+            <?php if ($_SESSION['username'] === 'doctor' || $_SESSION['username'] === 'admin'): ?>
+                <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
+            <?php else: ?>
+                <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: white;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
+            <?php endif; ?>
+        <?php endif; ?>
 
         <?php if (isset($_SESSION['username'])): ?>
-    <?php if ($_SESSION['username'] === 'doctor' || $_SESSION['username'] === 'admin'): ?>
-        <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
-    <?php else: ?>
-        <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: white;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
-    <?php endif; ?>
-<?php endif; ?>
-
-            <?php if (isset($_SESSION['username'])): ?>
             <a class="nav-custom" href="logout.php">
                 <i class="fa-solid fa-right-to-bracket"></i> Logout
             </a>  
@@ -224,7 +219,7 @@ mysqli_close($link);
                 </div>
                 <div class="form-group">
                     <label for="date">Date:</label>
-                    <input type="date" id="date" name="date" value="<?php echo $appointmentDate; ?>">
+                    <input type="date" id="date" name="date" value="<?php echo $appointmentDate; ?>" min="<?php echo date('Y-m-d'); ?>">
                 </div>
                 <div class="form-group">
                     <label for="time">Time:</label>
