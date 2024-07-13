@@ -198,13 +198,13 @@ mysqli_close($link);
         }
 
         #medical-conditions {
-    padding: 10px; /* Adjust padding as needed */
-    font-size: 18px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    width: 100%;
-    box-sizing: border-box; /* Include padding and border in width calculation */
-}
+            padding: 10px; /* Adjust padding as needed */
+            font-size: 18px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            width: 100%;
+            box-sizing: border-box; /* Include padding and border in width calculation */
+        }
 
     </style>
 </head>
@@ -388,85 +388,61 @@ mysqli_close($link);
     </footer>
 
     <script>
-$(function() {
-    $("#calendar-container").datepicker({
-        inline: true,
-        minDate: 0, // Restrict to today and future dates
-        dateFormat: "yy-mm-dd", // Set the date format to YYYY-MM-DD
-        beforeShowDay: function(date) {
-            var day = date.getDay(); // Get the day of the week (0 - Sunday, 1 - Monday, ...)
 
-            // Disable Sundays (0) and Mondays (1)
-            if (day === 0 || day === 1) {
-                return [false, "", "No appointments"];
-            }
+        // jQuery UI Datepicker (joc)
+        $(function() {
+            $("#calendar-container").datepicker({
+                inline: true,
+                minDate: 0, // Restrict to today and future dates
+                dateFormat: "yy-mm-dd", // Set the date format to YYYY-MM-DD
+                beforeShowDay: function(date) {
+                    var day = date.getDay(); // Get the day of the week (0 - Sunday, 1 - Monday, ...)
+                    // Disable Sundays and Mondays
+                    return [(day !== 0 && day !== 1), "", "No appointments on Sundays and Mondays"];
+                },
+                onSelect: function(dateText) {
+                    $("#selected-date").val(dateText); // Set the formatted date
+                    updateTimeslotDropdown(dateText); // Update timeslot dropdown based on the selected date
+                }
+            });
 
-            return [true, "", ""]; // Enable all other days
-        },
-        onSelect: function(dateText) {
-            $("#selected-date").val(dateText); // Set the formatted date
+            function updateTimeslotDropdown(selectedDate) {
+                var currentDate = new Date();
+                var selectedDate = new Date(selectedDate);
+                var isToday = (selectedDate.toDateString() === currentDate.toDateString());
+                var dayOfWeek = selectedDate.getDay();
 
-            // Reset the timeslot options based on the selected date
-            var dayOfWeek = new Date(dateText).getDay();
-            var timeslotOptions = [];
+                var timeslotOptions = [];
+                if (dayOfWeek >= 2 && dayOfWeek <= 5) { // Tuesday to Friday
+                    timeslotOptions = ["11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "1:00 PM", "1:15 PM", "1:30 PM", "1:45 PM", "2:00 PM", "2:15 PM", "2:30 PM", "2:45 PM", "3:00 PM", "3:15 PM", "3:30 PM", "3:45 PM", "4:00 PM", "4:15 PM"];
+                } else if (dayOfWeek === 6) { // Saturday
+                    timeslotOptions = ["10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "1:00 PM", "1:15 PM", "1:30 PM", "1:45 PM", "2:00 PM", "2:15 PM", "2:30 PM", "2:45 PM", "3:00 PM", "3:15 PM", "3:30 PM", "3:45 PM", "4:00 PM", "4:15 PM"];
+                }
 
-            // Define timeslots for each day of the week
-            switch (dayOfWeek) {
-                case 2: // Tuesday
-                case 3: // Wednesday
-                case 4: // Thursday
-                case 5: // Friday
-                    timeslotOptions = [
-                        "11:00 AM", "11:15 AM", 
-                        "11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", 
-                        "12:30 PM", "12:45 PM", "1:00 PM", "1:15 PM", 
-                        "1:30 PM", "1:45 PM", "2:00 PM", "2:15 PM", 
-                        "2:30 PM", "2:45 PM", "3:00 PM", "3:15 PM", 
-                        "3:30 PM", "3:45 PM", "4:00 PM", "4:15 PM"
-                    ];
-                    break;
-                case 6: // Saturday
-                    timeslotOptions = [
-                        "10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM", 
-                        "11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", 
-                        "12:30 PM", "12:45 PM", "1:00 PM", "1:15 PM", 
-                        "1:30 PM", "1:45 PM", "2:00 PM", "2:15 PM", 
-                        "2:30 PM", "2:45 PM", "3:00 PM", "3:15 PM", 
-                        "3:30 PM", "3:45 PM", "4:00 PM", "4:15 PM"
-                    ];
-                    break;
-            }
-            if ($.datepicker.formatDate('yy-mm-dd', new Date()) === dateText) {
-        var currentTime = new Date();
-        var currentHour = currentTime.getHours();
-        var currentMinute = currentTime.getMinutes();
-        
-        timeslotOptions = timeslotOptions.filter(function(timeslot) {
-            var [hours, minutes] = timeslot.split(':');
-            var timeslotHour = parseInt(hours);
-            var timeslotMinute = parseInt(minutes);
-            
-            if (timeslotHour > currentHour) {
-                return true;
-            } else if (timeslotHour === currentHour && timeslotMinute >= currentMinute) {
-                return true;
-            } else {
-                return false;
+                if (isToday) {
+                    var currentHours = currentDate.getHours();
+                    var currentMinutes = currentDate.getMinutes();
+                    timeslotOptions = timeslotOptions.filter(function(timeslot) {
+                        var [hour, minutesPart] = timeslot.split(':');
+                        var minutes = minutesPart.split(' ')[0];
+                        var period = minutesPart.split(' ')[1];
+                        var hour24 = hour % 12 + (period === 'PM' ? 12 : 0);
+                        return hour24 > currentHours || (hour24 === currentHours && minutes > currentMinutes);
+                    });
+                }
+
+                var select = $("#timeslot");
+                select.empty(); // Clear previous options
+                timeslotOptions.forEach(function(time) {
+                    select.append($("<option>", { value: time, text: time }));
+                });
             }
         });
-    }
-
-            // Update the timeslot dropdown options
-            var select = $("#timeslot");
-            select.empty();
-            $.each(timeslotOptions, function(index, value) {
-                select.append($("<option></option>").attr("value", value).text(value));
-            });
-        }
-    });
-});
 
 
+
+
+        
         // Add event listener to show family info when booking for family (joc)
         document.querySelectorAll('input[name="booking_for"]').forEach(radio => {
             radio.addEventListener('change', function() {
