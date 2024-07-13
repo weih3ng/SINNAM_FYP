@@ -46,9 +46,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['patients_id'])) {
         $family_name = '';
     } 
 
-        if (isset($_POST['appointment_id'])) {
-            $appointment_id = $_POST['appointment_id'];
-            
+    if (isset($_POST['appointment_id'])) {
+        $appointment_id = $_POST['appointment_id'];
+        
         // Check if the new date and time are already booked
         $check_sql = "SELECT COUNT(*) FROM appointments WHERE date = ? AND time = ? AND appointment_id != ?";
         $stmt = mysqli_prepare($link, $check_sql);
@@ -181,7 +181,6 @@ $appointments_result = mysqli_query($link, $appointments_sql);
         .form-container input[type="text"],
         .form-container input[type="number"],
         .form-container input[type="date"],
-        .form-container input[type="time"],
         .form-container select {
             width: calc(100% - 22px);
             padding: 10px;
@@ -189,7 +188,6 @@ $appointments_result = mysqli_query($link, $appointments_sql);
             border: 1px solid #DC3545;
             border-radius: 20px;
             background-color: #F8D7DA;
-
         }
 
         .form-container .button-container {
@@ -417,7 +415,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
             <label for="edit_date">Date:</label>
             <input type="date" id="edit_date" name="date" required>
             <label for="edit_time">Time:</label>
-            <input type="time" id="edit_time" name="time" required>
+            <select id="edit_time" name="time" required></select>
             <label for="edit_medical_condition">Medical Condition:</label>
             <input type="text" id="edit_medical_condition" name="medical_condition" required>
             <label for="edit_is_for_self">Booking for:</label>
@@ -468,48 +466,48 @@ $appointments_result = mysqli_query($link, $appointments_sql);
         });
 
         function searchTable() {
-        var input, filters, table, tr, td, i, j, txtValue;
-        input = document.getElementById("searchInput"); // get the search input element
-        filters = input.value.toLowerCase().split(" "); // get the search query and split it into an array of terms
-        table = document.getElementById("appointmentsTable"); // get the table by ID
+            var input, filters, table, tr, td, i, j, txtValue;
+            input = document.getElementById("searchInput"); // get the search input element
+            filters = input.value.toLowerCase().split(" "); // get the search query and split it into an array of terms
+            table = document.getElementById("appointmentsTable"); // get the table by ID
 
-        // Search appointments table
-        tr = table.getElementsByTagName("tr"); // get all the tr elements in the table
-        for (i = 1; i < tr.length; i++) {  // start from 1 to skip the header row
-            tr[i].style.display = "none"; // hide the row by default
-            var matches = 0; // counter for matching criteria
+            // Search appointments table
+            tr = table.getElementsByTagName("tr"); // get all the tr elements in the table
+            for (i = 1; i < tr.length; i++) {  // start from 1 to skip the header row
+                tr[i].style.display = "none"; // hide the row by default
+                var matches = 0; // counter for matching criteria
 
-            // get all td elements in the row
-            td = tr[i].getElementsByTagName("td");
-            for (j = 0; j < td.length; j++) {  // loop through all cells in the row
-                if (td[j]) { // if the cell exists
-                    txtValue = td[j].textContent || td[j].innerText; // get the text content of the cell
-                    // check if the cell text contains any of the search terms
-                    for (var k = 0; k < filters.length; k++) {
-                        if (txtValue.toLowerCase().indexOf(filters[k]) > -1) {
-                            matches++;
-                            break; // move to the next cell if a match is found
+                // get all td elements in the row
+                td = tr[i].getElementsByTagName("td");
+                for (j = 0; j < td.length; j++) {  // loop through all cells in the row
+                    if (td[j]) { // if the cell exists
+                        txtValue = td[j].textContent || td[j].innerText; // get the text content of the cell
+                        // check if the cell text contains any of the search terms
+                        for (var k = 0; k < filters.length; k++) {
+                            if (txtValue.toLowerCase().indexOf(filters[k]) > -1) {
+                                matches++;
+                                break; // move to the next cell if a match is found
+                            }
                         }
                     }
                 }
-            }
-            // show the row if it matches all search criteria
-            if (matches >= filters.length) {
-                tr[i].style.display = "";
+                // show the row if it matches all search criteria
+                if (matches >= filters.length) {
+                    tr[i].style.display = "";
+                }
             }
         }
-    }
 
         // Display relationship type field if it is family, or else hide field for edit form
         document.querySelectorAll('input[name="is_for_self"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            const familyInfo = document.getElementById('edit_family_info');
-            if (this.value === '0') {
-                familyInfo.style.display = 'block';
-            } else {
-                familyInfo.style.display = 'none';
-            }
-        })
+            radio.addEventListener('change', function() {
+                const familyInfo = document.getElementById('edit_family_info');
+                if (this.value === '0') {
+                    familyInfo.style.display = 'block';
+                } else {
+                    familyInfo.style.display = 'none';
+                }
+            })
         });
 
         // Edit appointment functionality
@@ -519,6 +517,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
                 document.getElementById('edit_appointment_id').value = this.dataset.id;
                 document.getElementById('edit_patients_id').value = this.dataset.patients_id;
                 document.getElementById('edit_date').value = this.dataset.date;
+                populateTimeSlots(new Date(this.dataset.date));
                 document.getElementById('edit_time').value = this.dataset.time;
                 document.getElementById('edit_medical_condition').value = this.dataset.medical_condition;
                 if (this.dataset.is_for_self === '1') { // "1" indicates self
@@ -546,8 +545,50 @@ $appointments_result = mysqli_query($link, $appointments_sql);
             if (day === 0 || day === 1) {
                 alert('Booking on Sunday and Monday is not allowed. Please select another date.');
                 this.value = '';
+            } else {
+                populateTimeSlots(new Date(this.value));
             }
         });
+
+        // Populate time slots based on the selected date
+        function populateTimeSlots(selectedDate) {
+            var day = selectedDate.getUTCDay();
+            var timeSelect = document.getElementById('edit_time');
+            timeSelect.innerHTML = '';
+
+            var startTime, endTime;
+
+            if (day === 6) { // Saturday
+                startTime = 10.5; // 10:30 AM
+                endTime = 16.25; // 4:15 PM
+            } else { // Tuesday to Friday
+                startTime = 11; // 11:00 AM
+                endTime = 16.25; // 4:15 PM
+            }
+
+            for (var time = startTime; time <= endTime; time += 0.25) {
+                var hour = Math.floor(time);
+                var minutes = (time - hour) * 60;
+                var timeString = ('0' + hour).slice(-2) + ':' + ('0' + minutes).slice(-2) + ':00';
+
+                var option = document.createElement('option');
+                option.value = timeString;
+                option.text = (hour % 12 || 12) + ':' + ('0' + minutes).slice(-2) + ' ' + (hour < 12 ? 'AM' : 'PM');
+                timeSelect.appendChild(option);
+            }
+
+            // If today's date is selected, remove past time slots
+            var today = new Date();
+            if (selectedDate.toDateString() === today.toDateString()) {
+                var currentTime = today.getHours() + ':' + ('0' + today.getMinutes()).slice(-2) + ':00';
+                var options = timeSelect.options;
+                for (var i = options.length - 1; i >= 0; i--) {
+                    if (options[i].value < currentTime) {
+                        timeSelect.remove(i);
+                    }
+                }
+            }
+        }
 
         // Delete appointment confirmation
         document.querySelectorAll('.delete-link').forEach(link => {

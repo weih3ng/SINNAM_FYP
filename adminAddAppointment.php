@@ -126,7 +126,6 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
         .form-container input[type="text"],
         .form-container input[type="number"],
         .form-container input[type="date"],
-        .form-container input[type="time"],
         .form-container select {
             width: calc(100% - 22px);
             padding: 10px;
@@ -211,7 +210,7 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
                 <label for="date"><i class="fas fa-calendar-alt"></i> Date:<span class="ipsFieldRow_required" style="margin-left: 473px;">Required</span></label>
                 <input type="date" id="date" name="date" required>
                 <label for="time"><i class="far fa-clock"></i> Time: <span class="ipsFieldRow_required" style="margin-left: 465px;">Required</span></label>
-                <input type="time" id="time" name="time" required>
+                <select id="time" name="time" required></select>
                 <label for="medical_condition"><i class="fas fa-laptop-medical"></i> Medical Condition: <span class="ipsFieldRow_required" style="margin-left: 360px;">Required</span></label>
                 <input type="text" id="medical_condition" name="medical_condition" required>
                 <label for="is_for_self"><i class="fas fa-users"></i> Booking for: <span class="ipsFieldRow_required" style="margin-left: 20px;">Required</span></label>
@@ -262,7 +261,7 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
                 } else {
                     familyInfo.style.display = 'none';
                 }
-            })
+            });
         });
 
         // Disable Sundays and Mondays in the date picker
@@ -271,6 +270,8 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
             if (day === 0 || day === 1) {
                 alert('Booking on Sunday and Monday is not allowed. Please select another date.');
                 this.value = '';
+            } else {
+                populateTimeSlots(new Date(this.value));
             }
         });
 
@@ -278,6 +279,45 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('date').setAttribute('min', today);
 
+        // Populate time slots based on the selected date
+        function populateTimeSlots(selectedDate) {
+            var day = selectedDate.getUTCDay();
+            var timeSelect = document.getElementById('time');
+            timeSelect.innerHTML = '';
+
+            var startTime, endTime;
+
+            if (day === 6) { // Saturday
+                startTime = 10.5; // 10:30 AM
+                endTime = 16.25; // 4:15 PM
+            } else { // Tuesday to Friday
+                startTime = 11; // 11:00 AM
+                endTime = 16.25; // 4:15 PM
+            }
+
+            for (var time = startTime; time <= endTime; time += 0.25) {
+                var hour = Math.floor(time);
+                var minutes = (time - hour) * 60;
+                var timeString = ('0' + hour).slice(-2) + ':' + ('0' + minutes).slice(-2) + ':00';
+
+                var option = document.createElement('option');
+                option.value = timeString;
+                option.text = (hour % 12 || 12) + ':' + ('0' + minutes).slice(-2) + ' ' + (hour < 12 ? 'AM' : 'PM');
+                timeSelect.appendChild(option);
+            }
+
+            // If today's date is selected, remove past time slots
+            var today = new Date();
+            if (selectedDate.toDateString() === today.toDateString()) {
+                var currentTime = today.getHours() + ':' + ('0' + today.getMinutes()).slice(-2) + ':00';
+                var options = timeSelect.options;
+                for (var i = options.length - 1; i >= 0; i--) {
+                    if (options[i].value < currentTime) {
+                        timeSelect.remove(i);
+                    }
+                }
+            }
+        }
 
         // Display error message as an alert
         <?php if (isset($_SESSION['error_message'])): ?>
