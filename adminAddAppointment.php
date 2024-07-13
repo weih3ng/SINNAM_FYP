@@ -21,6 +21,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['patients_id'])) {
         $family_name = '';
     } 
 
+    // Check if the date and time are already booked
+    $check_sql = "SELECT COUNT(*) FROM appointments WHERE date = ? AND time = ?";
+    $stmt = mysqli_prepare($link, $check_sql);
+    if ($stmt === false) {
+        die('mysqli error: ' . mysqli_error($link));
+    }
+    mysqli_stmt_bind_param($stmt, 'ss', $date, $time);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_bind_result($stmt, $count);
+    mysqli_stmt_fetch($stmt);
+    mysqli_stmt_close($stmt);
+    
+    if ($count > 0) {
+        $_SESSION['error_message'] = "The date and time slot has been booked. Please choose another date and time slot.";
+    } else {
     // Insert the new appointment into the database
     $sql = "INSERT INTO appointments (patients_id, doctor_id, date, time, is_for_self, relationship_type, family_name, medical_condition) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -34,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['patients_id'])) {
         exit();
     } else {
         $error_message = "Error: " . mysqli_error($link);
+        }
     }
 }
 
@@ -207,14 +223,14 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
                 </div>
                 <div id="family_info" style="display: none;">
                     <label for="relationship_type"><i class="fas fa-people-arrows"></i> Relationship Type:<span class="ipsFieldRow_required" style="margin-left: 490px;">Required</span></label>
-                    <select id="relationship_type" name="relationship_type" required>
+                    <select id="relationship_type" name="relationship_type">
                         <option value="spouse">Spouse</option>
                         <option value="child">Child</option>
                         <option value="parent">Parent</option>
                         <option value="other">Other</option>
                     </select>
                     <label for="family_name"><i class="fas fa-user-tag"></i> Family Name: <span class="ipsFieldRow_required" style="margin-left: 532px;">Required</span></label>
-                    <input type="text" id="family_name" name="family_name" required>
+                    <input type="text" id="family_name" name="family_name">
                 </div>
                 <div class="button-container">
                     <button type="submit">Add Appointment</button>
@@ -261,6 +277,12 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
         // Restrict past dates in the date picker
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('date').setAttribute('min', today);
+
+
+        // Display error message as an alert
+        <?php if (isset($_SESSION['error_message'])): ?>
+            alert('<?php echo $_SESSION['error_message']; unset($_SESSION['error_message']); ?>');
+        <?php endif; ?>
     </script>
 </body>
 </html>

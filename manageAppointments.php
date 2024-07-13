@@ -47,22 +47,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['patients_id'])) {
     } 
 
         if (isset($_POST['appointment_id'])) {
-            // Update existing appointment
             $appointment_id = $_POST['appointment_id'];
+            
+        // Check if the new date and time are already booked
+        $check_sql = "SELECT COUNT(*) FROM appointments WHERE date = ? AND time = ? AND appointment_id != ?";
+        $stmt = mysqli_prepare($link, $check_sql);
+        mysqli_stmt_bind_param($stmt, 'ssi', $date, $time, $appointment_id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_bind_result($stmt, $count);
+        mysqli_stmt_fetch($stmt);
+        mysqli_stmt_close($stmt);
+
+        if ($count > 0) {
+            // Set error message if date and time are already booked
+            $error_message_appointment = "Error: The selected date and time are already booked. Please choose another date and time.";
+        } else {
+            // Update existing appointment
             $sql = "UPDATE appointments SET patients_id = ?, doctor_id = ?, date = ?, time = ?, is_for_self = ?, relationship_type = ?, family_name = ?, medical_condition = ? WHERE appointment_id = ?";
             $stmt = mysqli_prepare($link, $sql);
             mysqli_stmt_bind_param($stmt, 'iississsi', $patients_id, $doctor_id, $date, $time, $is_for_self, $relationship_type, $family_name, $medical_condition, $appointment_id);
 
-        if (mysqli_stmt_execute($stmt)) {
-            // Set success message
-            $success_message_appointment = isset($_POST['appointment_id']) ? "Appointment updated successfully!" : "New appointment added!";
-        } else {
-            $success_message_appointment = "Error: " . mysqli_error($link);
+            if (mysqli_stmt_execute($stmt)) {
+                // Set success message
+                $success_message_appointment = "Appointment updated successfully!";
+            } else {
+                $error_message_appointment = "Error: " . mysqli_error($link);
+            }
+
+            // Redirect back to manageAppointments.php
+            header("Location: manageAppointments.php");
+            exit();
         }
-    
-        // Redirect back to manageAppointments.php
-        header("Location: manageAppointments.php");
-        exit();
     }
 }
 
@@ -323,6 +338,11 @@ $appointments_result = mysqli_query($link, $appointments_sql);
     <div class="admin-panel-container">
         <h1>Welcome to Admin Panel</h1><br><br>
 
+        <!-- Display success or error messages -->
+        <?php if (!empty($success_message_appointment)): ?>
+            <div class="success-message"><?php echo $success_message_appointment; ?></div>
+        <?php endif; ?>
+
         <div class="search-container">
             <input type="text" id="searchInput" placeholder="Search for appointment details...">
             <button onclick="searchTable()">Search</button>
@@ -539,6 +559,11 @@ $appointments_result = mysqli_query($link, $appointments_sql);
                 }
             });
         });
+
+        // Display error message as an alert that appointment cannot be rescheduled
+        <?php if (!empty($error_message_appointment)): ?>
+            alert('<?php echo $error_message_appointment; ?>');
+        <?php endif; ?>
     </script>
 </body>
 </html>
