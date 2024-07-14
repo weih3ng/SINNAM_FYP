@@ -299,6 +299,36 @@ $appointments_result = mysqli_query($link, $appointments_sql);
         .dataTables_length {
             margin-bottom: 10px; 
         }
+
+        
+        .navbar-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            padding: 10px;
+            position: relative;
+        }
+
+        .navbar-links a.active {
+            border-bottom: 2px solid white;
+        }
+
+        .navbar-links a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .nav-custom {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-custom:hover {
+            color: #ccc;
+        }
     </style>
 </head>
 <body>
@@ -309,7 +339,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
         </a>
         <div class="navbar-links">
             <a href="manageUsers.php">Manage Users</a>
-            <a href="manageAppointments.php">Manage Appointments</a>
+            <a href="manageAppointments.php" class="active">Manage Appointments</a>
         </div>
 
     <!-- Sign Up & Login Button -->
@@ -405,20 +435,20 @@ $appointments_result = mysqli_query($link, $appointments_sql);
         <h2>Edit Appointment</h2>
         <form action="manageAppointments.php" method="POST">
             <input type="hidden" id="edit_appointment_id" name="appointment_id">
-            <label for="edit_patients_id">Booking Name:</label>
+            <label for="edit_patients_id" ><i class="fas fa-user"></i> Booking Name:</label>
             <select id="edit_patients_id" name="patients_id" required>
             <option value="">Select Patient</option>
             <?php foreach ($patients as $id => $name): ?>
                 <option value="<?php echo $id; ?>"><?php echo $name; ?></option>
             <?php endforeach; ?>
             </select>
-            <label for="edit_date">Date:</label>
+            <label for="edit_date"><i class="fas fa-calendar-alt"></i> Date:</label>
             <input type="date" id="edit_date" name="date" required>
-            <label for="edit_time">Time:</label>
+            <label for="edit_time"><i class="far fa-clock"></i> Time:</label>
             <select id="edit_time" name="time" required></select>
-            <label for="edit_medical_condition">Medical Condition:</label>
+            <label for="edit_medical_condition"><i class="fas fa-laptop-medical"></i> Medical Condition:</label>
             <input type="text" id="edit_medical_condition" name="medical_condition" required>
-            <label for="edit_is_for_self">Booking for:</label>
+            <label for="edit_is_for_self"><i class="fas fa-users"></i> Booking for:</label>
             <div>
                 <input type="radio" id="edit_is_for_self_myself" name="is_for_self" value="1" required>
                 <label for="edit_is_for_self_myself">Myself</label>
@@ -426,14 +456,14 @@ $appointments_result = mysqli_query($link, $appointments_sql);
                 <label for="edit_is_for_self_family">Family</label>
             </div>
             <div id="edit_family_info" style="display: none;">
-                <label for="edit_relationship_type">Relationship Type:</label>
+                <label for="edit_relationship_type"><i class="fas fa-people-arrows"></i> Relationship Type:</label>
                 <select id="edit_relationship_type" name="relationship_type">
                     <option value="spouse">Spouse</option>
                     <option value="child">Child</option>
                     <option value="parent">Parent</option>
                     <option value="other">Other</option>
                 </select>
-                <label for="edit_family_name">Family Name:</label>
+                <label for="edit_family_name"><i class="fas fa-user-tag"></i> Family Name:</label>
                 <input type="text" id="edit_family_name" name="family_name">
             </div>
             <div class="button-container">
@@ -466,37 +496,30 @@ $appointments_result = mysqli_query($link, $appointments_sql);
         });
 
         function searchTable() {
-            var input, filters, table, tr, td, i, j, txtValue;
-            input = document.getElementById("searchInput"); // get the search input element
-            filters = input.value.toLowerCase().split(" "); // get the search query and split it into an array of terms
-            table = document.getElementById("appointmentsTable"); // get the table by ID
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("searchInput"); // get the search input element
+        filter = input.value.toLowerCase(); // get the search query and convert to lower case
+        table = document.getElementById("appointmentsTable"); // get the table by ID
 
-            // Search appointments table
-            tr = table.getElementsByTagName("tr"); // get all the tr elements in the table
-            for (i = 1; i < tr.length; i++) {  // start from 1 to skip the header row
-                tr[i].style.display = "none"; // hide the row by default
-                var matches = 0; // counter for matching criteria
-
-                // get all td elements in the row
-                td = tr[i].getElementsByTagName("td");
-                for (j = 0; j < td.length; j++) {  // loop through all cells in the row
-                    if (td[j]) { // if the cell exists
-                        txtValue = td[j].textContent || td[j].innerText; // get the text content of the cell
-                        // check if the cell text contains any of the search terms
-                        for (var k = 0; k < filters.length; k++) {
-                            if (txtValue.toLowerCase().indexOf(filters[k]) > -1) {
-                                matches++;
-                                break; // move to the next cell if a match is found
-                            }
-                        }
+        // Search appointments table
+        tr = table.getElementsByTagName("tr"); // get all the tr elements in the table
+        for (i = 1; i < tr.length; i++) {  // start from 1 to skip the header row
+            tr[i].style.display = "none"; // hide the row by default
+            for (var j = 0; j < tr[i].getElementsByTagName("td").length; j++) { // loop through all cells in the row
+                td = tr[i].getElementsByTagName("td")[j];
+                if (td) {
+                    txtValue = td.textContent || td.innerText; // get the text content of the cell
+                    if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                        tr[i].style.display = ""; // show the row if a match is found
+                        break; // stop checking further cells once a match is found
                     }
-                }
-                // show the row if it matches all search criteria
-                if (matches >= filters.length) {
-                    tr[i].style.display = "";
                 }
             }
         }
+    }
+
+        // Attach the search function to the search button
+        document.querySelector('.search-container button').addEventListener('click', searchTable);
 
         // Display relationship type field if it is family, or else hide field for edit form
         document.querySelectorAll('input[name="is_for_self"]').forEach(radio => {

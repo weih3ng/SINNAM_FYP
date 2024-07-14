@@ -288,6 +288,64 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
         .dataTables_length {
             margin-bottom: 10px; 
         }
+
+        .collapsible {
+            background-color: #80352F;
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            text-align: center;
+            outline: none;
+            font-size: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .active, .collapsible:hover {
+            background-color: #6b2c27;
+        }
+
+        .content {
+            padding: 0 18px;
+            display: none;
+            overflow: hidden;
+            background-color: #f9f9f9;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        /* additional CSS styling for navigation bar */
+
+        .navbar-links a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            padding: 10px;
+            position: relative;
+        }
+
+        .navbar-links a.active {
+            border-bottom: 2px solid white;
+            background-color: transparent;
+        }
+
+        .navbar-links a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+        }
+
+        .nav-custom {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-custom:hover {
+            color: #ccc;
+        }
     </style>
 </head>
 <body>
@@ -297,7 +355,7 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
             <img src="images/logo.jpeg" alt="logo" class="logo">
         </a>
         <div class="navbar-links">
-            <a href="manageUsers.php">Manage Users</a>
+            <a href="manageUsers.php" class="active">Manage Users</a>
             <a href="manageAppointments.php">Manage Appointments</a>
         </div>
 
@@ -328,12 +386,41 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
             <div class="stat-box" id="activeUsers" data-tippy-content="Booked an appointment">
                 <h3><i class="fas fa-users"></i> Active Users</h3>
                 <p><?php echo $active_patients; ?></p>
+                <button class="collapsible" id="showActiveUsersBtn">Show Users</button>
+                <div class="content" id="activeUsersContent">
+                    <?php
+                        $active_users_sql = "SELECT DISTINCT p.name FROM patients p INNER JOIN appointments a ON p.patients_id = a.patients_id";
+                        $active_users_result = mysqli_query($link, $active_users_sql);
+                        if ($active_users_result && mysqli_num_rows($active_users_result) > 0) {
+                            while ($row = mysqli_fetch_assoc($active_users_result)) {
+                                echo "<p>{$row['name']}</p>";
+                            }
+                        } else {
+                            echo "<p>No active users found</p>";
+                        }
+                    ?>
+                </div>
             </div>
             <div class="stat-box" id="inactiveUsers" data-tippy-content="Yet to book an appointment / account not used">
                 <h3><i class="fas fa-user-times"></i> Inactive Users</h3>
                 <p><?php echo $inactive_patients; ?></p>
+                <button class="collapsible" id="showInactiveUsersBtn">Show Users</button>
+                <div class="content" id="inactiveUsersContent">
+                    <?php
+                        $inactive_users_sql = "SELECT name FROM patients WHERE patients_id NOT IN (SELECT DISTINCT patients_id FROM appointments)";
+                        $inactive_users_result = mysqli_query($link, $inactive_users_sql);
+                        if ($inactive_users_result && mysqli_num_rows($inactive_users_result) > 0) {
+                            while ($row = mysqli_fetch_assoc($inactive_users_result)) {
+                                echo "<p>{$row['name']}</p>";
+                            }
+                        } else {
+                            echo "<p>No inactive users found</p>";
+                        }
+                    ?>
+                </div>
             </div>
         </div>
+
 
         <div class="record-links">
             <h1>Search Records</h1>
@@ -447,53 +534,40 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
             content: 'Yet to book an appointment/not used account'
         });
 
-        //function for collapsible button leading to forms
-        document.querySelectorAll('.collapsible-button').forEach(button => { 
-        //selects all elements that have the class, loop that iterates over each button with the class
-            button.addEventListener('click', () => { //adds a click event listener to each button
-                button.classList.toggle('active');
-                let content = button.nextElementSibling; //select collapsible content
-                if (content.style.display === "block") { //check if display property of the content is set to block
-                    content.style.display = "none"; // hide the content
-                } else {
-                    content.style.display = "block"; // make content visible
-                }
-            });
-        });
-
-        //function for search
+        // Function for search
         function searchTable() {
-        var input, filter, patientsTable, tr, td, i, j, txtValue;
-        input = document.getElementById("searchInput"); // get the search input element
-        filter = input.value.toLowerCase().split(" "); // get the search query and split it into an array of terms
-        patientsTable = document.getElementById("patientsTable"); // get patients table by ID
+            var input, filter, table, tr, td, i, txtValue, allMatched;
+            input = document.getElementById("searchInput"); // Get the search input element
+            filter = input.value.toLowerCase(); // Get the search query and convert to lower case
+            table = document.getElementById("patientsTable"); // Get patients table by ID
+            tr = table.getElementsByTagName("tr"); // Get all the tr elements in the patients table
 
-        // Search patients table
-        tr = patientsTable.getElementsByTagName("tr"); // get all the tr elements in patient table
-        for (i = 1; i < tr.length; i++) {  // start from 1 to skip the header row
-            tr[i].style.display = "none"; // hide the row by default
-            var matches = 0; // counter for matching criteria
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 1; i < tr.length; i++) { // Start from 1 to skip the header row
+                tr[i].style.display = "none"; // Hide the row by default
+                allMatched = false; // Flag to check if any cell matches the search query
 
-            // get all td elements in the row
-            td = tr[i].getElementsByTagName("td"); 
-            for (j = 0; j < td.length; j++) {  // loop through all cells in the row
-                if (td[j]) { // if the cell exists
-                    txtValue = td[j].textContent || td[j].innerText; // get the text content of the cell
-                    // check if the cell text contains any of the search terms
-                    for (var k = 0; k < filter.length; k++) {
-                        if (txtValue.toLowerCase().indexOf(filter[k]) > -1) {
-                            matches++;
-                            break; // move to the next cell if a match is found
+                // Get all td elements in the row
+                td = tr[i].getElementsByTagName("td");
+                for (var j = 0; j < td.length; j++) {
+                    if (td[j]) { // If the cell exists
+                        txtValue = td[j].textContent || td[j].innerText; // Get the text content of the cell
+                        if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                            allMatched = true; // Set flag to true if a match is found
+                            break; // Exit the loop if a match is found
                         }
                     }
                 }
-            }
-            // show the row if it matches both search criteria
-            if (matches >= filter.length) {
-                tr[i].style.display = "";
+
+                // Show the row if any cell matches the search query
+                if (allMatched) {
+                    tr[i].style.display = "";
+                }
             }
         }
-    }
+
+        // Attach the search function to the search button
+        document.querySelector('.search-container button').addEventListener('click', searchTable);
 
         // Edit user functionality
         document.querySelectorAll('.edit-link').forEach(link => {
@@ -531,6 +605,23 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
                 }
             });
         });
+
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function for collapsible button leading to forms
+            document.querySelectorAll('.collapsible').forEach(button => {
+                button.addEventListener('click', () => {
+                    button.classList.toggle('active');
+                    let content = button.nextElementSibling;
+                    if (content.style.display === "block") {
+                        content.style.display = "none";
+                    } else {
+                        content.style.display = "block";
+                    }
+                });
+            });
+        });
+
     </script>
 </body>
 </html>

@@ -195,25 +195,40 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
     <?php } ?>
     </div>
 
-    <!-- Admin Panel Container -->
-    <div class="admin-panel-container">
+        <!-- Admin Panel Container -->
+        <div class="admin-panel-container">
         <h1>Add New Appointment</h1>
         <div class="form-container">
             <form action="adminAddAppointment.php" method="POST">
-                <label for="patients_id"><i class="fas fa-user"></i> Booking Name:<span class="ipsFieldRow_required" style="margin-left: 396px;">Required</span></label>
+                <label for="patients_id">
+                    <i class="fas fa-user"></i> Booking Name:
+                    <span class="ipsFieldRow_required">Required</span>
+                </label>
                 <select id="patients_id" name="patients_id" required>
-                <option value="">Select Patient</option>
-                <?php foreach ($patients as $id => $name): ?>
-                    <option value="<?php echo $id; ?>"><?php echo $name; ?></option>
-                <?php endforeach; ?>
+                    <option value="">Select Patient</option>
+                    <?php foreach ($patients as $id => $name): ?>
+                        <option value="<?php echo $id; ?>"><?php echo $name; ?></option>
+                    <?php endforeach; ?>
                 </select>
-                <label for="date"><i class="fas fa-calendar-alt"></i> Date:<span class="ipsFieldRow_required" style="margin-left: 473px;">Required</span></label>
+                <label for="date">
+                    <i class="fas fa-calendar-alt"></i> Date:
+                    <span class="ipsFieldRow_required">Required</span>
+                </label>
                 <input type="date" id="date" name="date" required>
-                <label for="time"><i class="far fa-clock"></i> Time: <span class="ipsFieldRow_required" style="margin-left: 465px;">Required</span></label>
+                <label for="time">
+                    <i class="far fa-clock"></i> Time:
+                    <span class="ipsFieldRow_required">Required</span>
+                </label>
                 <select id="time" name="time" required></select>
-                <label for="medical_condition"><i class="fas fa-laptop-medical"></i> Medical Condition: <span class="ipsFieldRow_required" style="margin-left: 360px;">Required</span></label>
+                <label for="medical_condition">
+                    <i class="fas fa-laptop-medical"></i> Medical Condition:
+                    <span class="ipsFieldRow_required">Required</span>
+                </label>
                 <input type="text" id="medical_condition" name="medical_condition" required>
-                <label for="is_for_self"><i class="fas fa-users"></i> Booking for: <span class="ipsFieldRow_required" style="margin-left: 20px;">Required</span></label>
+                <label for="is_for_self">
+                    <i class="fas fa-users"></i> Booking for:
+                    <span class="ipsFieldRow_required">Required</span>
+                </label>
                 <div>
                     <input type="radio" id="is_for_self_myself" name="is_for_self" value="1" required>
                     <label for="is_for_self_myself">Myself</label>
@@ -221,14 +236,20 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
                     <label for="is_for_self_family">Family</label>
                 </div>
                 <div id="family_info" style="display: none;">
-                    <label for="relationship_type"><i class="fas fa-people-arrows"></i> Relationship Type:<span class="ipsFieldRow_required" style="margin-left: 490px;">Required</span></label>
+                    <label for="relationship_type">
+                        <i class="fas fa-people-arrows"></i> Relationship Type:
+                        <span class="ipsFieldRow_required">Required</span>
+                    </label>
                     <select id="relationship_type" name="relationship_type">
                         <option value="spouse">Spouse</option>
                         <option value="child">Child</option>
                         <option value="parent">Parent</option>
                         <option value="other">Other</option>
                     </select>
-                    <label for="family_name"><i class="fas fa-user-tag"></i> Family Name: <span class="ipsFieldRow_required" style="margin-left: 532px;">Required</span></label>
+                    <label for="family_name">
+                        <i class="fas fa-user-tag"></i> Family Name:
+                        <span class="ipsFieldRow_required">Required</span>
+                    </label>
                     <input type="text" id="family_name" name="family_name">
                 </div>
                 <div class="button-container">
