@@ -3,15 +3,15 @@ session_start(); // Start the session
 
 include 'dbfunctions.php';
 
-// Check if the user is logged in (joc)
+// Check if the user is logged in
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header('Location: login.php');
     exit;
 }
 
-// Check if appointment ID is provided (joc)
-if (isset($_GET['appointment_id'])) { // Get from viewAppointment.php (joc)
-    $appointment_id = $_GET['appointment_id']; // Get from viewAppointment.php (joc)
+// Check if appointment ID is provided
+if (isset($_GET['appointment_id'])) {
+    $appointment_id = $_GET['appointment_id'];
 
     // Fetch existing appointment data
     $query = "SELECT * FROM appointments WHERE appointment_id = $appointment_id";
@@ -28,27 +28,31 @@ if (isset($_GET['appointment_id'])) { // Get from viewAppointment.php (joc)
     }
 }
 
-// Handle form submission (joc)
+// Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $appointment_id = $_POST['appointment_id'];
-    $date = $_POST['date'];
-    $time = $_POST['time'];
-    $is_for_self = ($_POST['booking_for'] === 'self') ? 1 : 0;
-    $relationship_type = ($is_for_self == 0) ? $_POST['relationship_type'] : null;
-    $family_name = $is_for_self == 0 ? $_POST['family_name'] : null; // Ensure this is handled based on 'is_for_self'
     $medical_condition = $_POST['medical_conditions'];
 
-    // Update the appointment in the database
-    $query = "UPDATE appointments SET date = ?, time = ?, is_for_self = ?, relationship_type = ?, family_name = ?, medical_condition = ? WHERE appointment_id = ?";
-    if ($stmt = mysqli_prepare($link, $query)) {
-        mysqli_stmt_bind_param($stmt, "ssisssi", $date, $time, $is_for_self, $relationship_type, $family_name, $medical_condition, $appointment_id);
-        mysqli_stmt_execute($stmt);
+// Update the appointment in the database
+// Update the appointment in the database
+$query = "UPDATE appointments SET medical_condition = ? WHERE appointment_id = ?";
+if ($stmt = mysqli_prepare($link, $query)) {
+    mysqli_stmt_bind_param($stmt, "si", $medical_condition, $appointment_id);
+    if (mysqli_stmt_execute($stmt)) {
         mysqli_stmt_close($stmt);
-    }
 
-    // Redirect back to viewAppointment.php after update
-    header("Location: viewAppointment.php?user_type=doctor");
-    exit();
+        // Redirect using JavaScript
+        header("Location: http://localhost/SINNAM_FYP/viewAppointment.php?user_type=doctor");
+        exit(); // Ensure script execution stops after redirection
+    } else {
+        echo "Error updating record: " . mysqli_stmt_error($stmt);
+    }
+} else {
+    echo "Error preparing statement: " . mysqli_error($link);
+}
+
+
+
 }
 
 // Close database connection
@@ -66,7 +70,7 @@ mysqli_close($link);
     <title>Edit Appointment Page</title>
     <style>
         .edit-container {
-            display: flex; /*lays out the flex items in a column, vertically from top to bottom */
+            display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -89,7 +93,7 @@ mysqli_close($link);
         }
 
         .form-group {
-            display: flex; /* Makes the container a flex container so that items are well-aligned */
+            display: flex;
             align-items: center;
             margin-bottom: 15px;
         }
@@ -105,16 +109,16 @@ mysqli_close($link);
         .form-group input[type="text"], 
         .form-group input[type="date"], 
         .form-group input[type="time"] {
-            display: block; /*starts on a new line and takes up the full width available */
-            width: 250px; /* Adjust the width to be longer */
+            display: block;
+            width: 250px;
             padding: 10px;
             border-radius: 30px;
             border: 1px solid #ccc;
-            flex: 1; /* take up available space within the .form-group container*/
+            flex: 1; /* take up available space within the .form-group container */
         }
 
         .edit-box .btn {
-            display: inline-block; /*sit inline with any other inline or inline-block elements next to it */
+            display: inline-block;
             padding: 10px 50px;
             margin: 5px;
             background-color: #80352F;
@@ -131,8 +135,7 @@ mysqli_close($link);
             background-color: #6b2c27;
         }
 
-
-        /* Styles for read-only and disabled input fields (joc) */
+        /* Styles for read-only and disabled input fields */
         input[readonly] {
             background-color: #e0e0e0;
             color: #686868; 
@@ -177,8 +180,7 @@ mysqli_close($link);
         <div class="navbar-links">
             <?php if (isset($_SESSION['username'])): ?>
             <a href="viewAppointment.php?user_type=doctor">View Appointment</a>
-            <?php else: ?>
-                <?php endif; ?>
+            <?php endif; ?>
         </div>
 
         <!-- Sign Up & Login Button -->
@@ -209,52 +211,35 @@ mysqli_close($link);
         <div class="edit-box">
             <h1>Edit Medical Conditions</h1>
             <form method="post" action="editAppointment.php?appointment_id=<?php echo $appointment_id; ?>">
-            <div class="form-group">
-    <label for="id">Queue Numbers:</label>
-    <input type="text" id="id" name="appointment_id" value="<?php echo $appointment_id; ?>" readonly>
-</div>
-<div class="form-group">
-    <label for="date">Date:</label>
-    <input type="date" id="date" name="date" value="<?php echo $appointmentDate; ?>" min="<?php echo date('Y-m-d'); ?>" readonly>
-</div>
-<div class="form-group">
-    <label for="id">Time:</label>
-    <input type="text" id="time" name="time" value="<?php echo $appointmentTime; ?>" readonly>
-</div>
-
-<div class="form-group">
-    <label>Booking for:</label>
-    <div>
-        <input type="radio" id="for_self" name="booking_for" value="self" <?php echo $is_for_self ? 'checked' : ''; ?> disabled>
-        <label for="for_self">Myself</label>
-        <input type="radio" id="for_family" name="booking_for" value="family" <?php echo !$is_for_self ? 'checked' : ''; ?> disabled>
-        <label for="for_family">Family Member</label>
-    </div>
-</div>
-<div class="form-group">
-    <label for="medical-conditions">Medical Condition:</label>
-    <textarea id="medical-conditions" name="medical_conditions" rows="4"><?php echo $medical_condition; ?></textarea>
-</div>
-
-                <br>
-                <a href="viewAppointment.php?user_type=doctor" class="btn">Confirm Edit</a>
+                <div class="form-group">
+                    <label for="id">Queue Numbers:</label>
+                    <input type="text" id="id" name="appointment_id" value="<?php echo $appointment_id; ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" value="<?php echo $appointmentDate; ?>" min="<?php echo date('Y-m-d'); ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="id">Time:</label>
+                    <input type="text" id="time" name="time" value="<?php echo $appointmentTime; ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label>Booking for:</label>
+                    <div>
+                        <input type="radio" id="for_self" name="booking_for" value="self" <?php echo $is_for_self ? 'checked' : ''; ?> disabled>
+                        <label for="for_self">Myself</label>
+                        <input type="radio" id="for_family" name="booking_for" value="family" <?php echo !$is_for_self ? 'checked' : ''; ?> disabled>
+                        <label for="for_family">Family Member</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="medical_conditions">Medical Conditions:</label>
+                    <input type="text" id="medical_conditions" name="medical_conditions" value="<?php echo $medical_condition; ?>">
+                </div>
+                <button  type="submit" class="btn" name="submit">Update</button>
+                <a href="viewAppointment.php?user_type=doctor" class="btn">Back</a>
             </form>
         </div>
     </div>
-
-    <!-- Footer -->
-    <footer>
-        <a href="home.php">
-            <img src="images/logo.jpeg" alt="logo" class="logo">
-        </a>
-        <div>
-            @ 2024 Sin Nam Medical Hall All Rights Reserved
-        </div>
-        <div class="social-media">
-            <span style="margin-right: 10px;">Follow us</span> <!-- Added a span to apply margin -->
-            <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook"></i></a>
-        </div>
-    </footer>
-
 </body>
 </html>
