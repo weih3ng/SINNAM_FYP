@@ -302,7 +302,7 @@ mysqli_close($link);
                     <div id="family_info" style="display: none;">
                         <div class="field-container">
                             <label for="family_name"><b>Family Name:</b></label>
-                            <input type="text" id="family_name" name="family_name" placeholder="Enter family member's name"><span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
+                            <input type="text" id="family_name" name="family_name" placeholder="Enter family member name"><span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
                         </div>
 
                         <div class="field-container">
@@ -387,6 +387,7 @@ mysqli_close($link);
         </div>
     </footer>
 
+    
     <script>
 
         // jQuery UI Datepicker (joc)
@@ -413,7 +414,7 @@ mysqli_close($link);
                 var dayOfWeek = selectedDate.getDay();
 
                 var timeslotOptions = [];
-                if (dayOfWeek >= 2 && dayOfWeek <= 5) { // Tuesday to Friday
+                if (dayOfWeek >= 0 && dayOfWeek <= 5) { // Tuesday to Friday
                     timeslotOptions = ["11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "13:00 PM", "13:15 PM", "13:30 PM", "13:45 PM", "14:00 PM", "14:15 PM", "14:30 PM", "14:45 PM", "15:00 PM", "15:15 PM", "15:30 PM", "15:45 PM", "16:00 PM", "16:15 PM"];
                 } else if (dayOfWeek === 6) { // Saturday
                     timeslotOptions = ["10:30 AM", "10:45 AM", "11:00 AM", "11:15 AM", "11:30 AM", "11:45 AM", "12:00 PM", "12:15 PM", "12:30 PM", "12:45 PM", "13:00 PM", "13:15 PM", "13:30 PM", "13:45 PM", "14:00 PM", "14:15 PM", "14:30 PM", "14:45 PM", "15:00 PM", "15:15 PM", "15:30 PM", "15:45 PM", "16:00 PM", "16:15 PM"];

@@ -277,11 +277,10 @@ $current_date = date('Y-m-d');
                 <tbody>
 
                 <?php 
-                $queue_number = 1; // Initialize queue number
                 
                 foreach ($appointments as $appointment) : ?>
                     <tr class="<?= $appointment['is_for_self'] ? 'self-appointment' : 'family-appointment'; ?>">
-                        <td><?php echo $queue_number++; ?></td>
+                    <td><?php echo htmlspecialchars($appointment['appointment_id']); ?></td>
                         <td><?php echo htmlspecialchars($appointment['name']); ?></td>
                         <td><?php echo htmlspecialchars($appointment['date']); ?></td>
                         <td><?php echo htmlspecialchars($appointment['time']); ?></td>
