@@ -168,20 +168,23 @@ include 'dbfunctions.php';
         <div class="container">
             <div class="contact-form-container">
                 <h1>Contact Us</h1>
-                <form id="contactForm">
-                    <div class="input-group">
-                        <input id="name" type="text" name="name" placeholder="Name *" required>
-                        <input id="phone" type="phone" name="phone" placeholder="Phone *" required>
-                    </div>
-                    <label for="email"></label>
-                    <input id="email" type="email" name="email"placeholder="Email *" required>
-                    <label for="message"></label>
-                    <textarea id="message" name="message"placeholder="Message *" required></textarea><span class="ipsFieldRow_required" style="margin-left: 10px;">ALL FIELDS ARE Required</span>
-                    <button type="submit" class="btn">Submit</button> 
-                </form>
-                <div id="successMessage" style="display:none; color: red; margin-top: 20px;">
-                Your contact form has been submitted successfully !
-            </div>
+                <form id="contactForm" action="submit_contact.php" method="POST">
+    <div class="input-group">
+        <input id="name" type="text" name="name" placeholder="Name *" required>
+        <input id="phone" type="phone" name="phone" placeholder="Phone *" required>
+    </div>
+    <label for="email"></label>
+    <input id="email" type="email" name="email" placeholder="Email *" required>
+    <label for="message"></label>
+    <textarea id="message" name="message" placeholder="Message *" required></textarea>
+    <span class="ipsFieldRow_required" style="margin-left: 10px;">ALL FIELDS ARE Required</span>
+    <button type="submit" class="btn">Submit</button> 
+</form>
+<div id="successMessage" style="display:none; color: red; margin-top: 20px;">
+    Your contact form has been submitted successfully!
+</div>
+
+
             </div>
             <div class="contact-details">
                 <div><b><i class="fa-solid fa-phone"></i>&nbsp; +65 6257 0881 </b></div>
@@ -206,12 +209,27 @@ include 'dbfunctions.php';
     </footer>
 
     <!-- Java Script code for submission of contact form -->
-    <script>
-        document.getElementById("contactForm").addEventListener("submit", function(event) {
-            event.preventDefault(); /* stops the form from submitting traditionally(reloading the page,send data to server)*/
-            document.getElementById("successMessage").style.display = "block"; /*Display a success message*/
-            document.getElementById("contactForm").reset();  /* Form fields will be cleared after submission*/
-        });
+
+<script>
+document.getElementById("contactForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent the form from submitting traditionally
+
+    var formData = new FormData(document.getElementById("contactForm"));
+
+    fetch("submit_contact.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById("successMessage").style.display = "block";
+        document.getElementById("successMessage").innerText = data;
+        document.getElementById("contactForm").reset(); // Clear the form fields
+    })
+    .catch(error => console.error("Error:", error));
+});
+</script>
+
     </script>
 </body>
 </html>
