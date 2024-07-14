@@ -266,61 +266,62 @@ $current_date = date('Y-m-d');
                             <th>Self/Family</th>
                             <th>Relationship Type</th>
                             <th>Family Name</th> 
-                        <?php endif; ?>
-
-                        <?php if ($user_type === 'patient') : ?>
                             <th>Action</th>
                         <?php endif; ?>
+
+
                     </tr>
                 </thead>
 
 
                 <tbody>
+    <?php 
+    $queue_number = 1; // Initialize queue number
 
-                <?php 
-                $queue_number = 1; // Initialize queue number
-                
-                foreach ($appointments as $appointment) : ?>
-                    <tr class="<?= $appointment['is_for_self'] ? 'self-appointment' : 'family-appointment'; ?>">
-                        <td><?php echo $queue_number++; ?></td>
-                        <td><?php echo htmlspecialchars($appointment['name']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['date']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['time']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['medical_condition']); ?></td>
+    foreach ($appointments as $appointment) : ?>
+        <tr class="<?= $appointment['is_for_self'] ? 'self-appointment' : 'family-appointment'; ?>">
+            <td><?php echo $queue_number++; ?></td>
+            <td><?php echo htmlspecialchars($appointment['name']); ?></td>
+            <td><?php echo htmlspecialchars($appointment['date']); ?></td>
+            <td><?php echo htmlspecialchars($appointment['time']); ?></td>
+            <td><?php echo htmlspecialchars($appointment['medical_condition']); ?></td>
 
-                        <!-- Action buttons column for doctors beside medical condition -->
-                        <?php if ($user_type === 'doctor') : ?>
-                            <td class="action-buttons">
-                                <?php if ($appointment['date'] >= $current_date) : ?>
-                                    <a href="editMedicalCondition.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </a>
-                                <?php endif; ?>
-                            </td>
-                        <?php endif; ?>
+            <!-- Action buttons column for doctors beside medical condition -->
+            <?php if ($user_type === 'doctor') : ?>
+                <td class="action-buttons">
+                    <?php if ($appointment['date'] >= $current_date) : ?>
+                        <a href="editMedicalCondition.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                    <?php endif; ?>
+                </td>
+            <?php endif; ?>
 
-                        <?php if ($user_type !== 'doctor') : ?>
-                        <td><?php echo $appointment['is_for_self'] ? 'Self' : 'Family'; ?></td>
-                        <td><?php echo htmlspecialchars($appointment['relationship_type']); ?></td>
-                        <td><?php echo $appointment['is_for_self'] ? '' : htmlspecialchars($appointment['family_name']); ?></td>
-                        <?php endif; ?>
+            <?php if ($user_type !== 'doctor') : ?>
+                <td><?php echo $appointment['is_for_self'] ? 'Self' : 'Family'; ?></td>
+                <?php if (!$appointment['is_for_self']) : ?>
+                    <td><?php echo htmlspecialchars($appointment['relationship_type']); ?></td>
+                    <td><?php echo htmlspecialchars($appointment['family_name']); ?></td>
+                <?php endif; ?>
+            <?php endif; ?>
 
-                        <!-- Action buttons column for patients at the last column -->
-                        <?php if ($user_type !== 'doctor') : ?>
-                            <td class="action-buttons">
-                                <?php if ($appointment['date'] >= $current_date) : ?>
-                                    <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a href="deleteAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                <?php endif; ?>
-                            </td>
-                        <?php endif; ?>
-                    </tr>
-                <?php endforeach; ?>
-                </tbody>
+            <!-- Action buttons column for patients at the last column -->
+            <?php if ($user_type !== 'doctor') : ?>
+                <td class="action-buttons">
+                    <?php if ($appointment['date'] >= $current_date) : ?>
+                        <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <a href="deleteAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    <?php endif; ?>
+                </td>
+            <?php endif; ?>
+        </tr>
+    <?php endforeach; ?>
+</tbody>
+
             </table>
         </div>
     </div>
