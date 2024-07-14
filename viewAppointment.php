@@ -21,15 +21,15 @@ if (isset($_GET['user_type'])) {
 if ($user_type === 'doctor') {
     // Fetch all appointments if user is a doctor
     $query = "SELECT a.appointment_id, a.date, a.time, a.is_for_self, a.relationship_type, a.medical_condition, p.name, a.family_name
-              FROM appointments AS a
-              INNER JOIN patients AS p ON a.patients_id = p.patients_id";
+                FROM appointments AS a
+                INNER JOIN patients AS p ON a.patients_id = p.patients_id";
 } else {
     // Fetch appointments only for the logged-in patient
     $patients_id = $_SESSION['patients_id'];
     $query = "SELECT a.appointment_id, a.date, a.time, a.is_for_self, a.relationship_type, a.medical_condition, p.name, a.family_name
-              FROM appointments AS a
-              INNER JOIN patients AS p ON a.patients_id = p.patients_id
-              WHERE a.patients_id = ?";
+                FROM appointments AS a
+                INNER JOIN patients AS p ON a.patients_id = p.patients_id
+                WHERE a.patients_id = ?";
 }
 
 if ($stmt = mysqli_prepare($link, $query)) {

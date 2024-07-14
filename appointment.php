@@ -261,8 +261,8 @@ mysqli_close($link);
 
                 <form action="appointment.php" method="post" class="timeslot-container">
                     <label for="timeslot"><b>Select time slot:<b></label>
-                    <input type="hidden" name="date" id="selected-date" />
-                    <select id="timeslot" name="timeslot">
+                    <input type="hidden" name="date" id="selected-date" required />
+                    <select id="timeslot" name="timeslot" required>
                         <option value="10:30 AM">10:30 AM</option>
                         <option value="10:45 AM">10:45 AM</option>
                         <option value="11:00 AM">11:00 AM</option>
@@ -293,9 +293,9 @@ mysqli_close($link);
                     <label><b>Booking for:</b></label> 
                     <br><br>
                     <div>
-                        <input type="radio" id="for_self" name="booking_for" value="self" checked>
+                        <input type="radio" id="for_self" name="booking_for" value="self" checked required>
                         <label for="for_self" style= "font-size: 17px;">Myself</label>
-                        <input type="radio" id="for_family" name="booking_for" value="family">
+                        <input type="radio" id="for_family" name="booking_for" value="family" required>
                         <label for="for_family" style= "font-size: 17px;">Family Member</label><span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
                     </div>
                     <br>
@@ -321,7 +321,7 @@ mysqli_close($link);
                     <br><br> <!-- Add medical condition (joc) -->
                     <label for="medical-conditions"><b>Reason for consult (Medical Condition): <b></label><span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
                     <br><br>
-                    <textarea id="medical-conditions" name="medical_conditions" rows="4" style="width:100%;"></textarea>
+                    <textarea id="medical-conditions" name="medical_conditions" rows="4" style="width:100%;" required></textarea>
 
                     <button class="btn-book">Book</button>
                 </form>
@@ -464,6 +464,36 @@ mysqli_close($link);
                 window.location.href = 'doEditProfile.php';
             }
         }
+
+
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.querySelector("form.timeslot-container");
+
+            form.addEventListener("submit", function(event) {
+                let isValid = true;
+                const selectedDate = document.getElementById("selected-date").value;
+                const timeslot = document.getElementById("timeslot").value;
+                const bookingFor = document.querySelector('input[name="booking_for"]:checked');
+                const medicalConditions = document.getElementById("medical-conditions").value;
+                const familyName = document.getElementById("family_name").value;
+                const relationshipType = document.getElementById("relationship");
+
+                // Check if all required fields are filled
+                if (!selectedDate || !timeslot || !bookingFor || !medicalConditions || (bookingFor.value === "family" && (!familyName || !relationshipType.value))) {
+                    alert("Please fill in all required fields.");
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    event.preventDefault(); // Prevent form submission
+                    return false;
+                }
+                return true;
+            });
+        });
+
 
     </script>
 </body>
