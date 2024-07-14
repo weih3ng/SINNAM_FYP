@@ -286,36 +286,27 @@ $current_date = date('Y-m-d');
                         <td><?php echo htmlspecialchars($appointment['time']); ?></td>
                         <td><?php echo htmlspecialchars($appointment['medical_condition']); ?></td>
 
-                        <!-- Action buttons column for doctors beside medical condition -->
-                        <?php if ($user_type === 'doctor') : ?>
-                            <td class="action-buttons">
-                                <?php if ($appointment['date'] >= $current_date) : ?>
-                                    <a href="editMedicalCondition.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </a>
-                                <?php endif; ?>
-                            </td>
-                        <?php endif; ?>
-
+                        <!-- If the user is not a doctor the relationship type and family name will be displayed (joc) -->
                         <?php if ($user_type !== 'doctor') : ?>
-                        <td><?php echo $appointment['is_for_self'] ? 'Self' : 'Family'; ?></td>
-                        <td><?php echo htmlspecialchars($appointment['relationship_type']); ?></td>
-                        <td><?php echo $appointment['is_for_self'] ? '' : htmlspecialchars($appointment['family_name']); ?></td>
+                            <td><?php echo $appointment['is_for_self'] ? 'Self' : 'Family'; ?></td>
+                            <td><?php echo htmlspecialchars($appointment['relationship_type']); ?></td>
+                            <td><?php echo $appointment['is_for_self'] ? '' : htmlspecialchars($appointment['family_name']); ?></td>
                         <?php endif; ?>
-
-                        <!-- Action buttons column for patients at the last column -->
-                        <?php if ($user_type !== 'doctor') : ?>
-                            <td class="action-buttons">
-                                <?php if ($appointment['date'] >= $current_date) : ?>
-                                    <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a href="deleteAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                <?php endif; ?>
-                            </td>
-                        <?php endif; ?>
+                        
+                        <!-- Display action buttons based on user type and appointment date (joc) --> 
+                        <td class="action-buttons">
+                            <?php if ($user_type === 'doctor' && $appointment['date'] >= $current_date) : ?>
+                                <a href="editMedicalCondition.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                            <?php elseif ($user_type !== 'doctor' && $appointment['date'] >= $current_date) : ?>
+                                <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="deleteAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            <?php endif; ?>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>
@@ -339,30 +330,23 @@ $current_date = date('Y-m-d');
     </footer>
 
     <script>
-        // Filter appointments based on 'Self' or 'Family'
+        // Filter appointments based on 'Self' or 'Family' (joc)
         document.getElementById('appointmentFilter').addEventListener('change', function() {
             const filterValue = this.value;
-            const rows = document.querySelectorAll('table tbody tr');
-            const ths = document.querySelectorAll('table thead th');
+            const table = document.querySelector('table');
+            const rows = table.querySelectorAll('tbody tr');
+            const relationshipTypeIndex = 6; // Assuming 'Relationship Type' is the seventh column
+            const familyNameIndex = 7; // Assuming 'Family Name' is the eighth column
 
-            // Hide or show the relationship type and family name columns based on the filter
-            if (filterValue === 'self') {
-                ths[6].style.display = 'none'; // Relationship Type column
-                ths[7].style.display = 'none'; // Family Name column
-            } else {
-                ths[6].style.display = ''; // Relationship Type column
-                ths[7].style.display = ''; // Family Name column
-            }
+            // Hide or show headers based on selection
+            table.querySelectorAll('th')[relationshipTypeIndex].style.display = filterValue === 'self' ? 'none' : '';
+            table.querySelectorAll('th')[familyNameIndex].style.display = filterValue === 'self' ? 'none' : '';
 
-            // Reset the display state for all rows
             rows.forEach(row => {
-                row.style.display = '';  // Reset display to default for all rows
-
-                if (filterValue === 'self' && row.classList.contains('family-appointment')) {
-                    row.style.display = 'none';
-                } else if (filterValue === 'family' && row.classList.contains('self-appointment')) {
-                    row.style.display = 'none';
-                }
+                const cells = row.querySelectorAll('td');
+                // Hide or show cells in each row based on selection
+                cells[relationshipTypeIndex].style.display = filterValue === 'self' ? 'none' : '';
+                cells[familyNameIndex].style.display = filterValue === 'self' ? 'none' : '';
             });
         });
 
