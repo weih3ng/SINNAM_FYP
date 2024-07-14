@@ -110,19 +110,17 @@ $current_date = date('Y-m-d');
         }
 
         .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-            padding: 0;
+            padding: 5px;
         }
 
         .btn-edit, .btn-delete {
-            padding: 5px; 
-            text-decoration: none;
+            flex: 1; 
+            margin: 0 2px; 
         }
 
         .btn-edit {
             color: #4CAF50; 
+            text-decoration: none;
         }
 
         .btn-edit:hover {
