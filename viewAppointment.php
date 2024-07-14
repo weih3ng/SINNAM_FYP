@@ -241,7 +241,7 @@ $current_date = date('Y-m-d');
                 <?php elseif ($user_type === 'doctor') : ?>
                     <select id="appointmentFilter" name="appointmentFilter">
                         <option value="all">All Appointments</option>
-                        <option value="future">Future Appointments</option>
+                        <option value="future">Current/Future Appointments</option>
                         <option value="past">Past Appointments</option>
                     </select>
                 <?php endif; ?>
@@ -367,6 +367,29 @@ $current_date = date('Y-m-d');
         });
 
     </script>
+
+<script>
+    if (window.location.href.includes('user_type=doctor')) {
+        document.getElementById('appointmentFilter').addEventListener('change', function() {
+            const filterValue = this.value;
+            const rows = document.querySelectorAll('table tbody tr');
+            const currentDate = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+
+            rows.forEach(row => {
+                const appointmentDate = row.querySelector('td:nth-child(3)').textContent; // Get the appointment date from the 3rd column
+
+                row.style.display = ''; // Reset display to default for all rows
+
+                if (filterValue === 'future' && appointmentDate < currentDate) {
+                    row.style.display = 'none'; // Hide past appointments
+                } else if (filterValue === 'past' && appointmentDate >= currentDate) {
+                    row.style.display = 'none'; // Hide future appointments
+                }
+            });
+        });
+    }
+</script>
+
 
 </body>
 </html>
