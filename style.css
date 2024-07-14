@@ -57,3 +57,33 @@
         text-decoration: none;
         font-size: 24px;
     }
+
+
+    /* Add the underline effect (joc) */
+    .navbar-links a {
+        color: white;
+        text-decoration: none;
+        margin: 0 25px;
+        position: relative; /* Make the position relative to contain the absolute underline */
+        display: inline-block; /* Ensures the anchor behaves correctly with width */
+    }
+
+    .navbar-links a .underline {
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: white;
+        transform: scaleX(0);
+        transform-origin: center;
+        transition: transform 0.3s ease;
+    }
+
+    .navbar-links a:hover .underline {
+        transform: scaleX(1); /* Expand the underline on hover */
+    }
+
+
+
+    

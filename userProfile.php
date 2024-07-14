@@ -129,14 +129,14 @@ mysqli_close($link);
             <img src="images/logo.jpeg" alt="logo" class="logo">
         </a>
         <div class="navbar-links">
-            <a href="home.php">Home</a>
-            <a href="aboutUs.php">About Us</a>
-            <a href="appointment.php">Appointment</a>
+            <a href="home.php">Home<span class="underline"></span></a>
+            <a href="aboutUs.php">About Us<span class="underline"></span></a>
+            <a href="appointment.php">Appointment<span class="underline"></span></a>
             <?php if (isset($_SESSION['username'])): ?>
-            <a href="viewAppointment.php">View Appointment</a>
+            <a href="viewAppointment.php">View Appointment<span class="underline"></span></a>
             <?php else: ?>
                 <?php endif; ?>
-            <a href="contact.php">Contact Us</a>
+            <a href="contact.php">Contact Us<span class="underline"></span></a>
         </div>
 
         <!-- Sign Up & Login Button -->

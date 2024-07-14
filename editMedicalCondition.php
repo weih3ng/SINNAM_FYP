@@ -179,7 +179,7 @@ mysqli_close($link);
         </a>
         <div class="navbar-links">
             <?php if (isset($_SESSION['username'])): ?>
-            <a href="viewAppointment.php?user_type=doctor">View Appointment</a>
+            <a href="viewAppointment.php?user_type=doctor">View Appointment<span class="underline"></span></a>
             <?php endif; ?>
         </div>
 
