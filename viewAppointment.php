@@ -301,7 +301,7 @@ $current_date = date('Y-m-d');
                 
                 foreach ($appointments as $appointment) : ?>
                     <tr class="<?= $appointment['is_for_self'] ? 'self-appointment' : 'family-appointment'; ?>">
-                    <td><?php echo htmlspecialchars($appointment['appointment_id']); ?></td>
+                        <td><?php echo htmlspecialchars($appointment['appointment_id']); ?></td>
                         <td><?php echo htmlspecialchars($appointment['name']); ?></td>
                         <td><?php echo htmlspecialchars($appointment['date']); ?></td>
                         <td><?php echo htmlspecialchars($appointment['time']); ?></td>
@@ -354,46 +354,76 @@ $current_date = date('Y-m-d');
         // Filter appointments based on 'Self' or 'Family' (joc)
         document.getElementById('appointmentFilter').addEventListener('change', function() {
             const filterValue = this.value;
-            const table = document.querySelector('table');
-            const rows = table.querySelectorAll('tbody tr');
-            const relationshipTypeIndex = 6; // Assuming 'Relationship Type' is the seventh column
-            const familyNameIndex = 7; // Assuming 'Family Name' is the eighth column
-
-            // Hide or show headers based on selection
-            table.querySelectorAll('th')[relationshipTypeIndex].style.display = filterValue === 'self' ? 'none' : '';
-            table.querySelectorAll('th')[familyNameIndex].style.display = filterValue === 'self' ? 'none' : '';
+            const rows = document.querySelectorAll('table tbody tr');
 
             rows.forEach(row => {
-                const cells = row.querySelectorAll('td');
-                // Hide or show cells in each row based on selection
-                cells[relationshipTypeIndex].style.display = filterValue === 'self' ? 'none' : '';
-                cells[familyNameIndex].style.display = filterValue === 'self' ? 'none' : '';
+                const isForSelf = row.querySelector('td:nth-child(6)').textContent.trim(); // 'Self/Family' is in the 6th column
+
+                // Reset display to default for all rows first
+                row.style.display = '';
+                
+                if (filterValue === 'self' && isForSelf !== 'Self') {
+                    row.style.display = 'none'; // Hide rows that are not for self
+                } else if (filterValue === 'family' && isForSelf !== 'Family') {
+                    row.style.display = 'none'; // Hide rows that are not for family
+                }
+
+                // Additionally, manage the visibility of Relationship Type and Family Name
+                const selfFamilyCell = row.querySelector('td:nth-child(6)'); // Self/Family
+                const relationshipTypeCell = row.querySelector('td:nth-child(7)'); // Relationship Type
+                const familyNameCell = row.querySelector('td:nth-child(8)'); // Family Name
+
+                if (filterValue === 'self') {
+                    // Hide Relationship Type and Family Name columns when 'Self' is selected
+                    selfFamilyCell.style.display = 'none';
+                    relationshipTypeCell.style.display = 'none';
+                    familyNameCell.style.display = 'none';
+                } else {
+                    // Show these columns otherwise
+                    selfFamilyCell.style.display = '';
+                    relationshipTypeCell.style.display = '';
+                    familyNameCell.style.display = '';
+                }
             });
+
+            // Also manage header visibility for Relationship Type and Family Name
+            const headers = document.querySelectorAll('table thead th');
+            if (filterValue === 'self') {
+                headers[5].style.display = 'none'; // Hide Self/Family header
+                headers[6].style.display = 'none'; // Hide Relationship Type header
+                headers[7].style.display = 'none'; // Hide Family Name header
+            } else {
+                headers[5].style.display = ''; // Show Self/Family header
+                headers[6].style.display = ''; // Show Relationship Type header
+                headers[7].style.display = ''; // Show Family Name header
+            }
         });
 
     </script>
 
-<script>
-    if (window.location.href.includes('user_type=doctor')) {
-        document.getElementById('appointmentFilter').addEventListener('change', function() {
-            const filterValue = this.value;
-            const rows = document.querySelectorAll('table tbody tr');
-            const currentDate = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
 
-            rows.forEach(row => {
-                const appointmentDate = row.querySelector('td:nth-child(3)').textContent; // Get the appointment date from the 3rd column
 
-                row.style.display = ''; // Reset display to default for all rows
+    <script>
+        if (window.location.href.includes('user_type=doctor')) {
+            document.getElementById('appointmentFilter').addEventListener('change', function() {
+                const filterValue = this.value;
+                const rows = document.querySelectorAll('table tbody tr');
+                const currentDate = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
 
-                if (filterValue === 'future' && appointmentDate < currentDate) {
-                    row.style.display = 'none'; // Hide past appointments
-                } else if (filterValue === 'past' && appointmentDate >= currentDate) {
-                    row.style.display = 'none'; // Hide future appointments
-                }
+                rows.forEach(row => {
+                    const appointmentDate = row.querySelector('td:nth-child(3)').textContent; // Get the appointment date from the 3rd column
+
+                    row.style.display = ''; // Reset display to default for all rows
+
+                    if (filterValue === 'future' && appointmentDate < currentDate) {
+                        row.style.display = 'none'; // Hide past appointments
+                    } else if (filterValue === 'past' && appointmentDate >= currentDate) {
+                        row.style.display = 'none'; // Hide future appointments
+                    }
+                });
             });
-        });
-    }
-</script>
+        }
+    </script>
 
 
 </body>
