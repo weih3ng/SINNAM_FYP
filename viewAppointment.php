@@ -247,10 +247,14 @@ $current_date = date('Y-m-d');
 
 
 
-    <!-- View Appointment Container -->
-    <div class="view-appointment-container">
-        <div class="content-box">
-            <h1>View Appointment</h1>
+<!-- View Appointment Container -->
+<div class="view-appointment-container">
+    <div class="content-box">
+        <h1>View Appointment</h1>
+
+        <?php if ($user_type === 'patient' && empty($appointments)) : ?>
+            <p>There are no appointments made yet. Please click on <a href="appointment.php">Appointment</a> to book.</p>
+        <?php else : ?>
             <div class="table-header">
                 <div></div> <!-- Placeholder for spacing -->
                 <?php if ($user_type === 'patient') : ?>
@@ -267,7 +271,6 @@ $current_date = date('Y-m-d');
                     </select>
                 <?php endif; ?>
             </div>
-
 
             <table>
                 <thead>
@@ -289,51 +292,48 @@ $current_date = date('Y-m-d');
                             <th>Family Name</th> 
                             <th>Action</th>
                         <?php endif; ?>
-
-
                     </tr>
                 </thead>
 
-
                 <tbody>
+                    <?php foreach ($appointments as $appointment) : ?>
+                        <tr class="<?= $appointment['is_for_self'] ? 'self-appointment' : 'family-appointment'; ?>">
+                            <td><?php echo htmlspecialchars($appointment['appointment_id']); ?></td>
+                            <td><?php echo htmlspecialchars($appointment['name']); ?></td>
+                            <td><?php echo htmlspecialchars($appointment['date']); ?></td>
+                            <td><?php echo htmlspecialchars($appointment['time']); ?></td>
+                            <td><?php echo htmlspecialchars($appointment['medical_condition']); ?></td>
 
-                <?php 
-                
-                foreach ($appointments as $appointment) : ?>
-                    <tr class="<?= $appointment['is_for_self'] ? 'self-appointment' : 'family-appointment'; ?>">
-                        <td><?php echo htmlspecialchars($appointment['appointment_id']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['name']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['date']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['time']); ?></td>
-                        <td><?php echo htmlspecialchars($appointment['medical_condition']); ?></td>
-
-                        <!-- If the user is not a doctor the relationship type and family name will be displayed (joc) -->
-                        <?php if ($user_type !== 'doctor') : ?>
-                            <td><?php echo $appointment['is_for_self'] ? 'Self' : 'Family'; ?></td>
-                            <td><?php echo htmlspecialchars($appointment['relationship_type']); ?></td>
-                            <td><?php echo $appointment['is_for_self'] ? '' : htmlspecialchars($appointment['family_name']); ?></td>
-                        <?php endif; ?>
-                        
-                        <!-- Display action buttons based on user type and appointment date (joc) --> 
-                        <td class="action-buttons">
-                            <?php if ($user_type === 'doctor' && $appointment['date'] >= $current_date) : ?>
-                                <a href="editMedicalCondition.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
-                                    <i class="fas fa-edit"></i> Edit
-                                </a>
-                            <?php elseif ($user_type !== 'doctor' && $appointment['date'] >= $current_date) : ?>
-                                <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <a href="deleteAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">
-                                    <i class="fas fa-trash"></i>
-                                </a>
+                            <!-- If the user is not a doctor, display relationship type and family name -->
+                            <?php if ($user_type !== 'doctor') : ?>
+                                <td><?php echo $appointment['is_for_self'] ? 'Self' : 'Family'; ?></td>
+                                <td><?php echo htmlspecialchars($appointment['relationship_type']); ?></td>
+                                <td><?php echo $appointment['is_for_self'] ? '' : htmlspecialchars($appointment['family_name']); ?></td>
                             <?php endif; ?>
-                    </tr>
-                <?php endforeach; ?>
+
+                            <!-- Display action buttons based on user type and appointment date -->
+                            <td class="action-buttons">
+                                <?php if ($user_type === 'doctor' && $appointment['date'] >= $current_date) : ?>
+                                    <a href="editMedicalCondition.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
+                                        <i class="fas fa-edit"></i> Edit
+                                    </a>
+                                <?php elseif ($user_type !== 'doctor' && $appointment['date'] >= $current_date) : ?>
+                                    <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="deleteAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
-        </div>
+        <?php endif; ?>
     </div>
+</div>
+
 
 
     <!-- Footer -->
