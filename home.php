@@ -139,10 +139,10 @@ if (mysqli_num_rows($result) > 0) {
         }
 
         .testimonial-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
         }
 
         .testimonial-patient_username {
@@ -151,16 +151,17 @@ if (mysqli_num_rows($result) > 0) {
         }
 
         .testimonial-rating {
-            font-size: 16px; 
-            color: #FFD700; /* Color for both star icon and rating (dep) */ 
-            position: absolute;
+            font-size: 16px;
+            color: #FFD700; /* Color for both star icon and rating */
             font-weight: bold;
             right: 0;
         }
 
         .testimonial-rating .fa-star {
-            margin-left: 3px; 
+            margin-left: -10px;
+            margin-right: 10px;
         }
+
 
         #carouselIndicators2 {
             position: absolute;
@@ -306,6 +307,7 @@ if (mysqli_num_rows($result) > 0) {
                 </div>
             </div>
         </div>
+
 <!-- Testimonial Section -->
 <div class="testimonial-section container mt-5">
     <div class="title-wrapper text-center">
@@ -333,8 +335,9 @@ if (mysqli_num_rows($result) > 0) {
                                 <div class="testimonial-header">
                                     <h5 class="testimonial-patient_username"><?php echo htmlspecialchars($testimonial['patient_username']); ?></h5>
                                     <span class="testimonial-rating">
-                                        <?php echo htmlspecialchars($testimonial['ratings']); ?> 
-                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <?php for ($i = 0; $i < $testimonial['ratings']; $i++): ?>
+                                            <i class="fa fa-star" aria-hidden="true"></i>
+                                        <?php endfor; ?>
                                     </span>
                                 </div>
                                 <p class="testimonial-comments"><?php echo htmlspecialchars($testimonial['comments']); ?></p>
@@ -346,6 +349,7 @@ if (mysqli_num_rows($result) > 0) {
         </div>
     </div>
 </div>
+
 
     <!-- Footer -->
     <footer>
