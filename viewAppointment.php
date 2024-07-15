@@ -362,19 +362,20 @@ $current_date = date('Y-m-d');
                 // Reset display to default for all rows first
                 row.style.display = '';
                 
+                //isForSelf is !== to 'Self' meaning the table row is showing family rows same for isForSelf !== 'Family'
                 if (filterValue === 'self' && isForSelf !== 'Self') {
-                    row.style.display = 'none'; // Hide rows that are not for self
+                    row.style.display = 'none'; // Hide rows that are not for self meaning family rows
                 } else if (filterValue === 'family' && isForSelf !== 'Family') {
-                    row.style.display = 'none'; // Hide rows that are not for family
+                    row.style.display = 'none'; // Hide rows that are not for family meaning self rows
                 }
 
-                // Additionally, manage the visibility of Relationship Type and Family Name
+                // Manage the visibility of Relationship Type and Family Name
                 const selfFamilyCell = row.querySelector('td:nth-child(6)'); // Self/Family
                 const relationshipTypeCell = row.querySelector('td:nth-child(7)'); // Relationship Type
                 const familyNameCell = row.querySelector('td:nth-child(8)'); // Family Name
 
                 if (filterValue === 'self') {
-                    // Hide Relationship Type and Family Name columns when 'Self' is selected
+                    // Hide Self/Family, Relationship Type, and Family Name columns when 'Self' is selected
                     selfFamilyCell.style.display = 'none';
                     relationshipTypeCell.style.display = 'none';
                     familyNameCell.style.display = 'none';
