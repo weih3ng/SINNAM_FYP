@@ -34,7 +34,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $medical_condition = $_POST['medical_conditions'];
 
 // Update the appointment in the database
-// Update the appointment in the database
 $query = "UPDATE appointments SET medical_condition = ? WHERE appointment_id = ?";
 if ($stmt = mysqli_prepare($link, $query)) {
     mysqli_stmt_bind_param($stmt, "si", $medical_condition, $appointment_id);
@@ -50,9 +49,6 @@ if ($stmt = mysqli_prepare($link, $query)) {
 } else {
     echo "Error preparing statement: " . mysqli_error($link);
 }
-
-
-
 }
 
 // Close database connection
@@ -76,7 +72,7 @@ mysqli_close($link);
             justify-content: center;
             background-color: #F1EDE2;
             padding: 50px 20px;
-            height: calc(100vh - 100px); /* Adjust height to fit within the viewport */
+            height: calc(100vh - 100px); 
         }
 
         .edit-box {
@@ -103,7 +99,7 @@ mysqli_close($link);
             font-weight: bold;
             width: 80px; 
             text-align: right;
-            padding-right: 30px; /* Added padding for spacing */
+            padding-right: 30px; 
         }
 
         .form-group input[type="text"], 
@@ -116,6 +112,16 @@ mysqli_close($link);
             border: 1px solid #ccc;
             flex: 1; /* take up available space within the .form-group container */
         }
+
+        .form-group textarea {
+            display: block;
+            width: 100%; 
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            resize: vertical; /* Allow vertical resizing */
+        }
+
 
         .edit-box .btn {
             display: inline-block;
@@ -135,14 +141,14 @@ mysqli_close($link);
             background-color: #6b2c27;
         }
 
-        /* Styles for read-only and disabled input fields */
+        /* Read-only and Disabled Input Fields */
         input[readonly] {
             background-color: #e0e0e0;
             color: #686868; 
             cursor: not-allowed; 
         }
 
-        /* Styles for editable fields */
+        /* Editable Fields */
         input[type="date"]:not([readonly]), 
         input[type="time"]:not([readonly]), 
         input[type="text"]:not([readonly]),
@@ -159,7 +165,7 @@ mysqli_close($link);
         }
 
         .form-group label {
-            width: 150px; /* Ensure all labels have the same width */
+            width: 150px; 
             text-align: right;
         }
 
@@ -167,7 +173,7 @@ mysqli_close($link);
         #relationship_type, #family_name {
             display: inline-block;
             width: auto;
-            flex-grow: 1; /* Allows the input to fill the space */
+            flex-grow: 1; 
         }
     </style>
 </head>
@@ -234,7 +240,7 @@ mysqli_close($link);
                 </div>
                 <div class="form-group">
                     <label for="medical_conditions">Medical Conditions:</label>
-                    <input type="text" id="medical_conditions" name="medical_conditions" value="<?php echo $medical_condition; ?>">
+                    <textarea id="medical_conditions" name="medical_conditions" rows="4"><?php echo $medical_condition; ?></textarea>
                 </div>
                 <button  type="submit" class="btn" name="submit">Update</button>
                 <a href="viewAppointment.php?user_type=doctor" class="btn">Back</a>
