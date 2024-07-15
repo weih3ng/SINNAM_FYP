@@ -115,9 +115,9 @@ mysqli_close($link);
 
         .form-group textarea {
             display: block;
-            width: 100%; 
+            width: 250px;
             padding: 10px;
-            border-radius: 8px;
+            border-radius: 10px;
             border: 1px solid #ccc;
             resize: vertical; /* Allow vertical resizing */
         }
