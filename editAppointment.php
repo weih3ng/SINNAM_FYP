@@ -178,6 +178,15 @@ mysqli_close($link);
             width: auto;
             flex-grow: 1; /* Allows the input to fill the space */
         }
+        .form-group select {
+    display: block;
+    width: 250px;
+    padding: 10px;
+    border-radius: 30px; /* Rounded corners */
+    border: 1px solid #ccc;
+    flex: 1;
+}
+
     </style>
 </head>
 <body>
@@ -235,7 +244,9 @@ mysqli_close($link);
                 </div>
                 <div class="form-group">
     <label for="time">Time:</label>
-    <input type="time" id="time" name="time" value="<?php echo $appointmentTime; ?>" min="11:00" max="16:15" step="900">
+    <select id="time" name="time">
+        <!-- Options will be dynamically populated using JavaScript -->
+    </select>
 </div>
 
 
@@ -310,9 +321,7 @@ mysqli_close($link);
 
         
 
-// JavaScript for disabling past times on the current day
-// JavaScript for dynamically setting time constraints based on date selection
-document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function() {
     const currentDate = new Date();
     const currentDateString = currentDate.toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
     const currentTime = currentDate.toTimeString().slice(0, 5); // Get current time in HH:mm format
@@ -322,7 +331,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to update time options based on selected date
     function updateAvailableTimes() {
-        const selectedDate = document.getElementById('date').valueAsDate;
+        const selectedDate = new Date(document.getElementById('date').valueAsDate);
+        const selectedDay = selectedDate.getDay(); // 0 (Sunday) to 6 (Saturday)
         const selectedDateString = selectedDate.toISOString().slice(0, 10); // Selected date in YYYY-MM-DD format
         const selectedTimeInput = document.getElementById('time');
 
@@ -330,8 +340,13 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedTimeInput.innerHTML = '';
 
         // Set default range (11:00 AM to 4:30 PM with 15-minute intervals)
-        const startTime = new Date(selectedDateString + 'T11:00:00');
-        const endTime = new Date(selectedDateString + 'T16:30:00');
+        let startTime;
+        if (selectedDay === 6) { // Saturday
+            startTime = new Date(selectedDateString + 'T10:30:00');
+        } else {
+            startTime = new Date(selectedDateString + 'T11:00:00');
+        }
+        const endTime = new Date(selectedDateString + 'T16:15:00');
 
         // Populate time options with 15-minute intervals
         const interval = 15; // 15 minutes interval
@@ -353,6 +368,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Event listener for date change to update time options
     document.getElementById('date').addEventListener('change', updateAvailableTimes);
 });
+
 
 
 
