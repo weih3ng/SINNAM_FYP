@@ -1,13 +1,13 @@
 <?php
-session_start(); // Start the session
+session_start(); // Start the session (dep)
 
 include 'dbfunctions.php';
 
-// Fetch testimonials from the database
-$sql = "SELECT * FROM testimonials";
+// Fetching testimonials from db (dep)
+$sql = "SELECT patient_username, comments, ratings FROM testimonials";
 $result = mysqli_query($link, $sql);
 
-// Check if there are any testimonials
+// Checking of testimonials (dep)
 if (mysqli_num_rows($result) > 0) {
     $testimonials = mysqli_fetch_all($result, MYSQLI_ASSOC);
 }
@@ -16,14 +16,15 @@ if (mysqli_num_rows($result) > 0) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> <!-- Slideshow--> 
+
     <!-- jQuery and Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">  <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome --> 
     <link rel="stylesheet" href="style.css"> <!-- External stylesheet for navigation bar and footer -->
@@ -35,7 +36,7 @@ if (mysqli_num_rows($result) > 0) {
             background-color: #F1EDE2;
         }
 
-        /* Styles for Carousel */
+        /* Carousel Style */
         .carousel-item img {
             width: 100%; 
             max-height: 500px; 
@@ -106,7 +107,6 @@ if (mysqli_num_rows($result) > 0) {
             border-radius: 50px; 
         }
 
-        /* Styles for Testimonials */
         .testimonial-section {
             padding-top: 10px;  
             padding-bottom: 80px;
@@ -138,10 +138,28 @@ if (mysqli_num_rows($result) > 0) {
             margin-bottom: 10px; 
         }
 
+        .testimonial-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        }
+
         .testimonial-patient_username {
-            font-size: 18px;
-            color: #333;
+            flex-grow: 1;
             font-weight: bold;
+        }
+
+        .testimonial-rating {
+            font-size: 16px; 
+            color: #FFD700; /* Color for both star icon and rating (dep) */ 
+            position: absolute;
+            font-weight: bold;
+            right: 0;
+        }
+
+        .testimonial-rating .fa-star {
+            margin-left: 3px; 
         }
 
         #carouselIndicators2 {
@@ -177,7 +195,6 @@ if (mysqli_num_rows($result) > 0) {
             color: inherit; /* Ensures the links do not change color on hover */
             text-decoration: none; 
         }
-
 
         /* Navigation Bar Styling (joc) */ 
         .navbar-links a.current {
@@ -289,42 +306,46 @@ if (mysqli_num_rows($result) > 0) {
                 </div>
             </div>
         </div>
-
-        <!-- Testimonial Section -->
-        <div class="testimonial-section container mt-5">
-            <div class="title-wrapper text-center">
-                <hr class="line">
-                <h2>Testimonials</h2>
-                <hr class="line">
-            </div>
-            <div class="row">
-                <div class="col-lg-12 position-relative">
-                    <img src="images/5.jpg" alt="Testimonial Background" class="img-fluid">
-                    <div class="testimonial-content">
-                        <div id="testimonialCarousel" class="carousel slide" data-ride="carousel">
-                            <!-- Indicators -->
-                            <ul class="carousel-indicators" id="carouselIndicators2">
-                                <!-- Dynamically generate indicators based on testimonials count -->
-                                <?php foreach ($testimonials as $key => $testimonial): ?>
-                                    <li data-target="#testimonialCarousel" data-slide-to="<?php echo $key; ?>" <?php echo $key === 0 ? 'class="active"' : ''; ?>></li>
-                                <?php endforeach; ?>
-                            </ul>
-                            <!-- Wrapper for slides -->
-                            <div class="carousel-inner">
-                                <!-- Dynamically generate carousel items based on testimonials -->
-                                <?php foreach ($testimonials as $key => $testimonial): ?>
-                                    <div class="carousel-item <?php echo $key === 0 ? 'active' : ''; ?>">
-                                        <h5 class="testimonial-patient_username"><?php echo htmlspecialchars($testimonial['patient_username']); ?></h5>
-                                        <p class="testimonial-comments"><?php echo htmlspecialchars($testimonial['comments']); ?></p>
-                                    </div>
-                                <?php endforeach; ?>
+<!-- Testimonial Section -->
+<div class="testimonial-section container mt-5">
+    <div class="title-wrapper text-center">
+        <hr class="line">
+        <h2>Testimonials</h2>
+        <hr class="line">
+    </div>
+    <div class="row">
+        <div class="col-lg-12 position-relative">
+            <img src="images/5.jpg" alt="Testimonial Background" class="img-fluid">
+            <div class="testimonial-content">
+                <div id="testimonialCarousel" class="carousel slide" data-ride="carousel">
+                    <!-- Indicators -->
+                    <ul class="carousel-indicators" id="carouselIndicators2">
+                        <!-- Dynamically generate indicators based on testimonials count -->
+                        <?php foreach ($testimonials as $key => $testimonial): ?>
+                            <li data-target="#testimonialCarousel" data-slide-to="<?php echo $key; ?>" <?php echo $key === 0 ? 'class="active"' : ''; ?>></li>
+                        <?php endforeach; ?>
+                    </ul>
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                        <!-- Dynamically generate carousel items based on testimonials -->
+                        <?php foreach ($testimonials as $key => $testimonial): ?>
+                            <div class="carousel-item <?php echo $key === 0 ? 'active' : ''; ?>">
+                                <div class="testimonial-header">
+                                    <h5 class="testimonial-patient_username"><?php echo htmlspecialchars($testimonial['patient_username']); ?></h5>
+                                    <span class="testimonial-rating">
+                                        <?php echo htmlspecialchars($testimonial['ratings']); ?> 
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <p class="testimonial-comments"><?php echo htmlspecialchars($testimonial['comments']); ?></p>
                             </div>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
     <!-- Footer -->
     <footer>
