@@ -163,6 +163,23 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
             color: #aa1414;
             font-weight: 500;
         }
+
+        /* additional CSS styling for navigation bar */
+        .navbar-links a.current {
+            position: relative;
+            color: white; 
+        }
+        
+        .navbar-links a.current:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -10px; 
+            height: 3px; 
+            background-color: white; 
+            border-radius: 2px; 
+        }
     </style>
 </head>
 <body>
@@ -172,8 +189,8 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
             <img src="images/logo.jpeg" alt="logo" class="logo">
         </a>
         <div class="navbar-links">
-            <a href="manageUsers.php">Manage Users</a>
-            <a href="manageAppointments.php">Manage Appointments</a>
+            <a href="manageUsers.php">Manage Users<span class="underline"></span></a>
+            <a href="manageAppointments.php">Manage Appointments<span class="underline"></span></a>
         </div>
 
     <!-- Sign Up & Login Button -->

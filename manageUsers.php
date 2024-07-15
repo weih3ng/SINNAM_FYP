@@ -316,35 +316,20 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
             border-radius: 5px;
         }
         /* additional CSS styling for navigation bar */
-
-        .navbar-links a {
-            color: white;
-            text-decoration: none;
-            margin: 0 10px;
-            padding: 10px;
+        .navbar-links a.current {
             position: relative;
+            color: white; 
         }
-
-        .navbar-links a.active {
-            border-bottom: 2px solid white;
-            background-color: transparent;
-        }
-
-        .navbar-links a:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
-        }
-
-        .nav-custom {
-            color: white;
-            text-decoration: none;
-            margin: 0 10px;
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-custom:hover {
-            color: #ccc;
+        
+        .navbar-links a.current:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -10px; 
+            height: 3px; 
+            background-color: white; 
+            border-radius: 2px; 
         }
     </style>
 </head>
@@ -355,8 +340,8 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
             <img src="images/logo.jpeg" alt="logo" class="logo">
         </a>
         <div class="navbar-links">
-            <a href="manageUsers.php" class="active">Manage Users</a>
-            <a href="manageAppointments.php">Manage Appointments</a>
+            <a href="manageUsers.php" class="current">Manage Users</a>
+            <a href="manageAppointments.php">Manage Appointments<span class="underline"></span></a>
         </div>
 
     <!-- Sign Up & Login Button -->

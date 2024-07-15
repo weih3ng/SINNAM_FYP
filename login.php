@@ -48,7 +48,7 @@ include 'dbfunctions.php';
         }
 
         .login-form h1 {
-            color: #80352F;
+            color: black;
             text-align: center;
             margin-bottom: 20px;
         }
