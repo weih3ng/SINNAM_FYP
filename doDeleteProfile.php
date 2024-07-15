@@ -9,25 +9,31 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     exit;
 }
 
-// Get the user's patient ID from the session
+
+// Get the user patient ID from the session
 $patients_id = $_SESSION['patients_id'];
 
-// Prepare query to delete user from patients table
-$query = "DELETE FROM patients WHERE patients_id = $patients_id";
+// Delete any testimonials associated with the patient before deleting the patient
+$deleteTestimonials = "DELETE FROM testimonials WHERE patients_id = $patients_id";
+if (mysqli_query($link, $deleteTestimonials)) {
 
-if (mysqli_query($link, $query)) {
-    // If user was successfully deleted
-    // Log the user out
-    session_destroy();
-
-    // Redirect to homepage or login page
-    header('Location: signUp.php'); 
-    exit;
+    // If testimonials were successfully deleted or none existed, delete the patient
+    $deletePatient = "DELETE FROM patients WHERE patients_id = $patients_id";
+    
+    if (mysqli_query($link, $deletePatient)) {
+        session_destroy();
+        header('Location: signUp.php'); 
+        exit;
+    } else {
+        // Error deleting the patient
+        echo "Error deleting patient: " . mysqli_error($link);
+    }
 } else {
-    // Error deleting the user
-    echo "Error: " . mysqli_error($link);
+    // Error deleting testimonials
+    echo "Error deleting testimonials: " . mysqli_error($link);
 }
 
 // Close connection
 mysqli_close($link);
+
 ?>
