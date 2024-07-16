@@ -140,7 +140,20 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
             border: 1px solid #DC3545;
             border-radius: 20px;
             background-color: white;
+        }
 
+        .form-container textarea {
+            width: 610px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #DC3545;
+            border-radius: 20px;
+            background-color: white;
+            box-sizing: border-box; /* ensure padding is included in the element's total width and height */
+        }
+
+        .form-container select {
+            width: 610px;
         }
 
         .form-container .button-container {
@@ -233,7 +246,7 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
                 <select id="time" name="time" required></select>
                 <label for="medical_condition" class="required-label">
                     <i class="fas fa-laptop-medical"></i> Medical Condition:</label>
-                <input type="text" id="medical_condition" name="medical_condition" required>
+                <textarea id="medical_condition" name="medical_condition" required rows="4" style="resize: none;"></textarea>
                 <label for="is_for_self" class="required-label">
                     <i class="fas fa-users"></i> Booking for:</label>
                 <div>

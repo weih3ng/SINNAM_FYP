@@ -190,6 +190,20 @@ $appointments_result = mysqli_query($link, $appointments_sql);
             background-color: white;
         }
 
+        .form-container textarea {
+            width: 610px;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #DC3545;
+            border-radius: 20px;
+            background-color: white;
+            box-sizing: border-box; /* ensure padding is included in the element's total width and height */
+        }
+
+        .form-container select {
+            width: 610px;
+        }
+
         .form-container .button-container {
             text-align: center; 
         }
@@ -371,14 +385,14 @@ $appointments_result = mysqli_query($link, $appointments_sql);
         <table id="appointmentsTable" class="display">
             <thead>
             <tr>
-                <th>Queue Number</th>
+                <th>Queue No.</th>
                 <th>Booking Name</th>
                 <th>Date</th>
                 <th>Time</th>
                 <th>Medical Condition</th>
                 <th>Self/Family</th>
                 <th>Relationship</th>
-                <th>Family Name</th>
+                <th>Family Member's Name</th>
                 <th>Actions</th>
             </tr>
             </thead>
@@ -434,7 +448,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
             <label for="edit_time"><i class="far fa-clock"></i> Time:</label>
             <select id="edit_time" name="time" required></select>
             <label for="edit_medical_condition"><i class="fas fa-laptop-medical"></i> Medical Condition:</label>
-            <input type="text" id="edit_medical_condition" name="medical_condition" required>
+            <textarea id="edit_medical_condition" name="edit_medical_condition" required rows="4" style="resize: none;"></textarea>
             <label for="edit_is_for_self"><i class="fas fa-users"></i> Booking for:</label>
             <div>
                 <input type="radio" id="edit_is_for_self_myself" name="is_for_self" value="1" required>
@@ -450,7 +464,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
                     <option value="parent">Parent</option>
                     <option value="other">Other</option>
                 </select>
-                <label for="edit_family_name"><i class="fas fa-user-tag"></i> Family Name:</label>
+                <label for="edit_family_name"><i class="fas fa-user-tag"></i> Family Member's Name:</label>
                 <input type="text" id="edit_family_name" name="family_name">
             </div>
             <div class="button-container">
