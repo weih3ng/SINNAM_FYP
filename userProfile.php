@@ -98,7 +98,8 @@ mysqli_close($link);
             width: 250px;
             padding: 10px;
             border-radius: 30px;
-            border: 1px solid #ccc;
+            background-color: #ffffff; 
+            border: 2px solid #80352F;
             flex: 1;
         }
 
@@ -119,6 +120,32 @@ mysqli_close($link);
         .edit-box .btn:hover {
             background-color: #6b2c27;
         }
+
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 330px; 
+        }
+
+        #password {
+            width: 100%;
+            padding: 10px;
+            padding-right: 40px; 
+            border-radius: 30px;
+            border: 2px solid #80352F;
+            background-color: #ffffff;
+            flex-grow: 1;
+        }
+
+        .eye-toggle {
+            position: absolute;
+            right: 10px; /* Position icon within the right padding area of the input */
+            cursor: pointer;
+            color: #686868; 
+        }
+
+
         
     </style>
 </head>
@@ -202,7 +229,10 @@ mysqli_close($link);
                 </div>
                 <div class="form-group">
                     <label for="password">Password:</label>
-                    <input type="text" id="password" name="password" value="<?php echo htmlspecialchars($password); ?>"> <span class="eye-toggle fa fa-eye" onclick="togglePasswordVisibility()"></span>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" name="password" value="<?php echo htmlspecialchars($password); ?>">
+                        <span class="eye-toggle fa fa-eye" onclick="togglePasswordVisibility()"></span>
+                    </div>
                 </div>
 
                 <br>
@@ -227,6 +257,8 @@ mysqli_close($link);
     </footer>
 
     <script>
+
+        // Function to confirm edit profile
         function confirmEdit() {
             if (confirm("Are you sure you want to edit your profile?")) {
                 window.location.href = 'doEditProfile.php';
@@ -238,26 +270,23 @@ mysqli_close($link);
             }
         }
         
-function togglePasswordVisibility() {
-    var passwordInput = document.getElementById("password");
-    var eyeIcon = document.querySelector(".eye-toggle");
 
-    if (passwordInput.type === "password") {
-        passwordInput.type = "text";
-        eyeIcon.classList.remove("fa-eye");
-        eyeIcon.classList.add("fa-eye-slash");
-    } else {
-        passwordInput.type = "password";
-        eyeIcon.classList.remove("fa-eye-slash");
-        eyeIcon.classList.add("fa-eye");
-    }
-}
+        // Function to toggle password visibility
+        function togglePasswordVisibility() {
+            var passwordInput = document.getElementById("password");
+            var eyeIcon = document.querySelector(".eye-toggle");
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    // Set the max attribute for the date input to today's date
-    var today = new Date().toISOString().split('T')[0];
-    document.getElementById('dob').setAttribute('max', today);
-});
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                eyeIcon.classList.remove("fa-eye");
+                eyeIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                eyeIcon.classList.remove("fa-eye-slash");
+                eyeIcon.classList.add("fa-eye");
+            }
+        }
+
 
     </script>
 </body>

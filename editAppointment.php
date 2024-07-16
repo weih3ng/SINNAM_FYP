@@ -21,6 +21,8 @@ if (isset($_GET['appointment_id'])) {
     if (!empty($row)) {
         $appointmentDate = $row['date'];
         $appointmentTime = $row['time'];
+        $dateTime = new DateTime($appointmentTime);
+        $formattedTime = $dateTime->format('h:i A'); // Formats to 12-hour time with AM/PM
         $is_for_self = $row['is_for_self'];
         $relationship_type = $row['relationship_type'];
         $medical_condition = $row['medical_condition'];
@@ -171,10 +173,7 @@ mysqli_close($link);
         /* Styles for editable fields */
         input[type="date"]:not([readonly]), 
         input[type="time"]:not([readonly]), 
-        input[type="text"]:not([readonly]),
-        textarea:not([readonly]),
-        select:not([disabled]),
-        input[type="radio"]:not([disabled]) {
+        input[type="text"]:not([readonly]) {
             background-color: #ffffff; 
             border: 2px solid #80352F; 
         }
@@ -190,19 +189,28 @@ mysqli_close($link);
         }
 
         /* Specific styles for relationship and family name fields for consistency */
-        #relationship_type, #family_name {
+        #relationship_type, #family_name, #medical-conditions, #time {
             display: inline-block;
-            width: auto;
+            width: 180px;
             flex-grow: 1; /* Allows the input to fill the space */
+            background-color: #ffffff; 
+            border: 2px solid #80352F; 
+            padding: 8px;
         }
+
+        #relationship_type {
+            width: 200px; /* Adjust the width to be longer */
+            margin-left: 35px; /* Add margin to separate the fields */
+        }
+
         .form-group select {
-    display: block;
-    width: 250px;
-    padding: 10px;
-    border-radius: 30px; /* Rounded corners */
-    border: 1px solid #ccc;
-    flex: 1;
-}
+            display: block;
+            width: 250px;
+            padding: 10px;
+            border-radius: 30px; /* Rounded corners */
+            border: 1px solid #ccc;
+            flex: 1;
+        }
 
     </style>
 </head>
@@ -260,11 +268,11 @@ mysqli_close($link);
                     <input type="date" id="date" name="date" value="<?php echo $appointmentDate; ?>" min="<?php echo date('Y-m-d'); ?>">
                 </div>
                 <div class="form-group">
-    <label for="time">Time:</label>
-    <select id="time" name="time">
-        <!-- Options will be dynamically populated using JavaScript -->
-    </select>
-</div>
+                    <label for="time">Time:</label>
+                    <select id="time" name="time">
+                        <!-- Options will be dynamically populated using JavaScript -->
+                    </select>
+                </div>
 
 
                 <!-- Booking for self or family member and medicial condition (joc) -->
@@ -280,19 +288,27 @@ mysqli_close($link);
                 <div class="form-group" id="family_info" style="display: none;">
                     <label for="relationship_type">Relationship Type:</label>
                     <select id="relationship_type" name="relationship_type">
-                        <option value="spouse" <?php echo ($relationship_type == 'spouse') ? 'selected' : ''; ?>>Spouse</option>
-                        <option value="child" <?php echo ($relationship_type == 'child') ? 'selected' : ''; ?>>Child</option>
-                        <option value="parent" <?php echo ($relationship_type == 'parent') ? 'selected' : ''; ?>>Parent</option>
-                        <option value="other" <?php echo ($relationship_type == 'other') ? 'selected' : ''; ?>>Other</option>
+                        <option value="Spouse" <?php echo ($relationship_type == 'Spouse') ? 'selected' : ''; ?>>Spouse</option>
+                        <option value="Child" <?php echo ($relationship_type == 'Child') ? 'selected' : ''; ?>>Child</option>
+                        <option value="Parent" <?php echo ($relationship_type == 'Parent') ? 'selected' : ''; ?>>Parent</option>
+                        <option value="Other" <?php echo ($relationship_type == 'Other') ? 'selected' : ''; ?>>Other</option>
                     </select>
                 </div>
                 <div class="form-group" id="family_name_group" style="display: none;"> <!-- This will be shown/hidden based on booking type (joc) -->
-                    <label for="family_name">Family Member Name:</label>
-                    <input type="text" id="family_name" name="family_name" value="<?php echo htmlspecialchars($family_name); ?>">
+                    <label for="family_name">Family Member's Name:</label>
+                    <input type="text" id="family_name" name="family_name" placeholder="Enter family member's name" value="<?php echo htmlspecialchars($family_name); ?>">
                 </div>
                 <div class="form-group">
                     <label for="medical-conditions">Medical Condition:</label>
-                    <textarea id="medical-conditions" name="medical_conditions" rows="4"><?php echo $medical_condition; ?></textarea>
+                    <select id="medical-conditions" name="medical_conditions" required>
+                    <option value="Cold/Flu" <?php echo ($medical_condition == 'Cold/Flu') ? 'selected' : ''; ?>>Cold/Flu</option>
+                    <option value="Digestive Issues" <?php echo ($medical_condition == 'Digestive Issues') ? 'selected' : ''; ?>>Digestive Issues</option>
+                    <option value="Pain Management" <?php echo ($medical_condition == 'Pain Management') ? 'selected' : ''; ?>>Pain Management</option>
+                    <option value="Stress/Anxiety" <?php echo ($medical_condition == 'Stress/Anxiety') ? 'selected' : ''; ?>>Stress/Anxiety</option>
+                    <option value="Sleep Disorders" <?php echo ($medical_condition == 'Sleep Disorders') ? 'selected' : ''; ?>>Sleep Disorders</option>
+                    <option value="Allergies" <?php echo ($medical_condition == 'Allergies') ? 'selected' : ''; ?>>Allergies</option>
+                    <option value="Others" <?php echo ($medical_condition == 'Others') ? 'selected' : ''; ?>>Others</option>
+                    </select>
                 </div>
 
                 <br>
@@ -336,81 +352,56 @@ mysqli_close($link);
 
 
 
-        
-
         document.addEventListener('DOMContentLoaded', function() {
-    const currentDate = new Date();
-    const currentDateString = currentDate.toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
+            const currentDate = new Date();
+            const currentDateString = currentDate.toISOString().slice(0, 10); // Today's date in YYYY-MM-DD format
 
-    // Set min attribute for date input to prevent selecting past dates
-    document.getElementById('date').min = currentDateString;
+            // Set the minimum date attribute for the date input to prevent selecting past dates
+            document.getElementById('date').min = currentDateString;
 
-    // Function to update time options based on selected date
-    function updateAvailableTimes() {
-        const selectedDate = new Date(document.getElementById('date').valueAsDate);
-        const selectedDay = selectedDate.getDay(); // 0 (Sunday) to 6 (Saturday)
-        const selectedDateString = selectedDate.toISOString().slice(0, 10); // Selected date in YYYY-MM-DD format
-        const selectedTimeInput = document.getElementById('time');
+            // Function to update available times based on the selected date
+            function updateAvailableTimes() {
+                const selectedDate = document.getElementById('date').valueAsDate;
+                const selectedDay = selectedDate.getDay(); // Day of the week: 0 (Sunday) to 6 (Saturday)
+                const selectedDateString = selectedDate.toISOString().slice(0, 10); // Selected date in YYYY-MM-DD format
+                const selectedTimeInput = document.getElementById('time');
 
-        // Check if selected date is Sunday (0) or Monday (1) and prevent selection
-        if (selectedDay === 0 || selectedDay === 1) {
-            // Handle invalid date selection (e.g., display message, disable form submission)
-            alert('Appointments cannot be scheduled on Sundays or Mondays. Please choose another date.');
-            return;
-        }
+                // Remove current options
+                selectedTimeInput.innerHTML = '';
 
-        // Clear existing options
-        selectedTimeInput.innerHTML = '';
+                // Appointment cannot be scheduled on Sundays (0) or Mondays (1)
+                if (selectedDay === 0 || selectedDay === 1) {
+                    alert('Appointments cannot be scheduled on Sundays or Mondays. Please choose another date.');
+                    return;
+                }
 
-        // Set default range (11:00 AM to 4:15 PM with 15-minute intervals)
-        let startTime;
-        if (selectedDay === 6) { // Saturday
-            startTime = new Date(selectedDateString + 'T10:30:00');
-        } else {
-            startTime = new Date(selectedDateString + 'T11:00:00');
-        }
-        const endTime = new Date(selectedDateString + 'T16:15:00');
+                // Define start and end times based on the day
+                let startTime = selectedDay === 6 ? '10:30' : '11:00'; // Saturday starts at 10:30 AM
+                let endTime = '16:30'; // Ends at 4:30 PM
 
-        // Populate time options with 15-minute intervals
-        const interval = 15; // 15 minutes interval
-        let currentTime = new Date(startTime);
+                let time = new Date(`${selectedDateString}T${startTime}`);
+                const end = new Date(`${selectedDateString}T${endTime}`);
 
-        while (currentTime <= endTime) {
-            const option = document.createElement('option');
-            option.value = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            option.textContent = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            selectedTimeInput.appendChild(option);
-
-            currentTime.setMinutes(currentTime.getMinutes() + interval);
-        }
-
-        // Filter out times that have already passed if selected date is today
-        const today = new Date();
-        if (selectedDate.toDateString() === today.toDateString()) {
-            const currentTimeString = today.getHours() + ':' + ('0' + today.getMinutes()).slice(-2) + ':00';
-            const options = selectedTimeInput.options;
-            for (let i = options.length - 1; i >= 0; i--) {
-                if (options[i].value < currentTimeString) {
-                    selectedTimeInput.remove(i);
+                // Add time options at 15-minute intervals
+                while (time <= end) {
+                    if (currentDate < time || selectedDateString !== currentDateString) {
+                        const timeValue = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+                        const timeDisplay = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+                        selectedTimeInput.options.add(new Option(timeDisplay, timeValue));
+                    }
+                    time.setMinutes(time.getMinutes() + 15); // Increment by 15 minutes
                 }
             }
-        }
-    }
 
-    // Initial setup on page load
-    updateAvailableTimes();
+            // Initialize available times
+            updateAvailableTimes();
 
-    // Event listener for date change to update time options
-    document.getElementById('date').addEventListener('change', updateAvailableTimes);
-});
+            // Update times when the date changes
+            document.getElementById('date').addEventListener('change', updateAvailableTimes);
+        });
 
 
-
-
-
-
-
-    
+        
         
 
 

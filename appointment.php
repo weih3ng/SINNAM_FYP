@@ -84,6 +84,16 @@ mysqli_close($link);
             font-weight: normal; /* Ensure normal font weight */
         }
 
+        h1 {
+            text-align: center;
+            margin: 20px 0 80px 0;
+        }
+
+        .required {
+            color: red;
+            margin-left: 5px; /* Adjust space between label text and asterisk */
+        }
+
         .container {
             display: flex; /* Makes the container a flex container so that items are well-aligned */
             flex-direction: column;
@@ -91,32 +101,7 @@ mysqli_close($link);
             justify-content: center;
             background-color: #F1EDE2;
             padding: 50px 20px;
-            height: calc(110vh - 100px); /* Adjust height to fit within the viewport */
-        }
-
-        #datepicker {
-            margin: 20px 0;
-        }
-
-        #timeslot {
-            padding: 18px;
-            font-size: 18px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            width: 150px;
-        }
-
-        /* Add custom styles for the textarea (joc) */
-        #medical-conditions {
-            padding: 0px 50px;
-            font-size: 18px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-        }
-
-        .calendar {
-            width: 100%;
-            max-width: 500px;
+            height: calc(130vh - 100px); /* Adjust height to fit within the viewport */
         }
 
         .content-wrapper {
@@ -126,12 +111,72 @@ mysqli_close($link);
             gap: 30px;
         }
 
+        .calendar {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        /* Custom styles to make the calendar larger */
+        .ui-datepicker {
+            font-size: 1.5em; 
+        }
+
+        #timeslot {
+            padding: 18px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            width: 150px;
+            background-color: #ffffff; 
+            border: 2px solid #80352F;
+        }
+
         .timeslot-container {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             gap: 20px;
-            font-size: 20px; /* Increase font-size for better readability */
+            font-size: 20px; 
+        }
+
+        /* Custom styles for the family info (joc) */
+        .field-container {
+            display: flex;
+            flex-wrap: wrap; /* Allows wrapping into the next line */
+            align-items: center;
+            margin-bottom: 20px;
+            justify-content: space-between; /* Distributes space between and around content items */
+        }
+
+        .field-container label {
+            flex-basis: 100%; /* Takes full width of its parent on its own line */
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 5px; /* Space between label and input */
+        }
+
+        .field-container input[type="text"],
+        .field-container select {
+            flex-grow: 1; /* Allows the input field to fill the available space */
+            padding: 8px;
+            border-radius: 8px;
+            background-color: #ffffff; 
+            border: 2px solid #80352F; 
+            font-size: 15px;
+            width: 100%; /* Forces the input to take full width of the line */
+            box-sizing: border-box; /* Border and padding included in the width */
+        }
+
+        /* Add custom styles for the textarea (joc) */
+        #medical-conditions {
+            padding: 10px; /* Adjust padding as needed */
+            font-size: 17px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            width: 100%;
+            box-sizing: border-box; /* Include padding and border in width calculation */
+            background-color: #ffffff; 
+            border: 2px solid #80352F;
         }
 
         .btn-book {
@@ -143,7 +188,7 @@ mysqli_close($link);
             font-weight: bold;
             cursor: pointer;
             border-radius: 30px;
-            margin-top: 20px; /* Adjust margin-top to create space */
+            margin-top: 50px; 
             transition: background-color 0.1s ease;
         }
 
@@ -158,54 +203,6 @@ mysqli_close($link);
             cursor: not-allowed; 
             box-shadow: 5px 5px 15px grey;
         }
-
-        h1 {
-            text-align: center;
-            margin: 20px 0 80px 0;
-        }
-
-        /* Custom styles to make the calendar larger */
-        .ui-datepicker {
-            font-size: 1.5em; 
-        }
-        .ipsFieldRow_required {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #aa1414;
-            font-weight: 500
-        }
-
-        /* Custom styles for the family info (joc) */
-        .field-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px; 
-        }
-
-        .field-container label {
-            margin-right: 10px;
-            font-size: 17px; 
-            font-weight: bold; 
-        }
-
-        .field-container input[type="text"], 
-        .field-container select {
-            flex-grow: 1; /* Allows the input field to fill the space */
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            width: auto; 
-        }
-
-        #medical-conditions {
-            padding: 10px; /* Adjust padding as needed */
-            font-size: 18px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            width: 100%;
-            box-sizing: border-box; /* Include padding and border in width calculation */
-        }
-
 
         /* Navigation Bar Styling (joc) */ 
         .navbar-links a.current {
@@ -275,10 +272,13 @@ mysqli_close($link);
             <h1>Schedule Doctor Appointment</h1>
             <div class="content-wrapper">
 
+                <!-- jQuery UI Datepicker -->
                 <div id="calendar-container" class="calendar"></div>
 
                 <form action="appointment.php" method="post" class="timeslot-container">
-                    <label for="timeslot"><b>Select time slot:<b></label>
+
+                    <!-- Timeslot dropdown -->
+                    <label for="timeslot"><b>Select time slot:<span class="required">*</span><b></label>
                     <input type="hidden" name="date" id="selected-date" required />
                     <select id="timeslot" name="timeslot" required>
                         <option value="10:30 AM">10:30 AM</option>
@@ -305,42 +305,56 @@ mysqli_close($link);
                         <option value="3:45 PM">15:45 PM</option>
                         <option value="4:00 PM">16:00 PM</option>
                         <option value="4:15 PM">16:15 PM</option>
-                    </select><span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
+                    </select>
 
                     <br><br><br> <!-- Add booking for myself/family member (joc) -->
-                    <label><b>Booking for:</b></label> 
+
+                    <!-- Self/Family member radio button -->
+                    <label id="booking_label"><b>Booking for:<span class="required">*</span></b></label> 
                     <br><br>
                     <div>
                         <input type="radio" id="for_self" name="booking_for" value="self" checked required>
                         <label for="for_self" style= "font-size: 17px;">Myself</label>
                         <input type="radio" id="for_family" name="booking_for" value="family" required>
-                        <label for="for_family" style= "font-size: 17px;">Family Member</label><span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
+                        <label for="for_family" style= "font-size: 17px;">Family Member</label>
                     </div>
                     <br>
+
+                    <!-- Textfields family member name & dropdown list relationship type-->
                     <div id="family_info" style="display: none;">
                         <div class="field-container">
-                            <label for="family_name"><b>Family Name:</b></label>
-                            <input type="text" id="family_name" name="family_name" placeholder="Enter family member name"><span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
+                            <label for="family_name"><b>Family Member's Name:<span class="required">*</span></b></label>
+                            <input type="text" id="family_name" name="family_name" placeholder="Enter family member's name">
                         </div>
 
                         <div class="field-container">
-                            <label for="relationship"><b>Relationship:</b></label>
+                            <label for="relationship"><b>Relationship:<span class="required">*</span></b></label>
                             <select id="relationship" name="relationship_type">
-                                <option value="spouse">Spouse</option>
-                                <option value="child">Child</option>
-                                <option value="parent">Parent</option>
-                                <option value="other">Other</option>
+                                <option value="Spouse">Spouse</option>
+                                <option value="Child">Child</option>
+                                <option value="Parent">Parent</option>
+                                <option value="Other">Other</option>
                             </select> 
-                            <span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
                         </div>
                     </div>
 
-                    
-                    <br><br> <!-- Add medical condition (joc) -->
-                    <label for="medical-conditions"><b>Reason for consult (Medical Condition): <b></label><span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
                     <br><br>
-                    <textarea id="medical-conditions" name="medical_conditions" rows="4" style="width:100%;" required></textarea>
 
+                    <!-- Dropdown list medical condition (joc) -->
+                    <label for="medical-conditions" id="medical_conditions_label"><b>Reason for consult (Medical Condition):<span class="required">*</span><b></label>
+                    <br><br>
+                    <select id="medical-conditions" name="medical_conditions" required>
+                        <option value="">Select Condition</option>
+                        <option value="Cold Flu">Cold/Flu</option>
+                        <option value="Digestive Issues">Digestive Issues</option>
+                        <option value="Pain Management">Pain Management</option>
+                        <option value="Stress Anxiety">Stress/Anxiety</option>
+                        <option value="Sleep Disorders">Sleep Disorders</option>
+                        <option value="Allergies">Allergies</option>
+                        <option value="Others">Others</option>
+                    </select>
+
+                    <!-- Book button -->
                     <button class="btn-book">Book</button>
                 </form>
             </div>
