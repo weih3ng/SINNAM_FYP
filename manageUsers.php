@@ -129,7 +129,7 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
         }
 
         .form-container {
-            background-color: #ffffff;
+            background-color: #DECFBC;
             padding: 20px;
             border-radius: 30px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -150,12 +150,6 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
             font-weight: bold;
         }
 
-        .form-container label.required-label::before {
-            content: " *";
-            color: red;
-            margin-left: 5px;
-        }
-
         .form-container input {
             margin-bottom: 10px;
             padding: 10px;
@@ -174,7 +168,7 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
             margin-bottom: 15px;
             border: 1px solid #DC3545;
             border-radius: 20px;
-            background-color: #F8D7DA;
+            background-color: white;
 
         }
 
@@ -386,7 +380,7 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
                     ?>
                 </div>
             </div>
-            <div class="stat-box" id="inactiveUsers" data-tippy-content="Yet to book an appointment / account not used">
+            <div class="stat-box" id="inactiveUsers" data-tippy-content="Have not booked an appointment / account not in use">
                 <h3><i class="fas fa-user-times"></i> Inactive Users</h3>
                 <p><?php echo $inactive_patients; ?></p>
                 <button class="collapsible" id="showInactiveUsersBtn">Show Users</button>
@@ -464,20 +458,20 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
         <h2>Edit User</h2>
             <form action="manageUsers.php" method="POST">
                 <input type="hidden" id="edit_patients_id" name="patients_id">
-                <label for="edit_name" class="required-label">Name:</label>
+                <label for="edit_name" >Name:</label>
                 <input type="text" id="edit_name" name="name" required>
-                <label for="edit_email" class="required-label">Email:</label>
+                <label for="edit_email">Email:</label>
                 <input type="email" id="edit_email" name="email" required>
-                <label for="edit_contactnumber" class="required-label">Contact Number:</label>
+                <label for="edit_contactnumber">Contact Number:</label>
                 <input type="text" id="edit_contactnumber" name="contactnumber" required>
-                <label for="edit_dob" class="required-label">Date of Birth:</label>
+                <label for="edit_dob">Date of Birth:</label>
                 <input type="date" id="edit_dob" name="dob" required>
                 <div class="radio-group">
-                    <label for="edit_gender" class="required-label">Gender:</label>
+                    <label for="edit_gender">Gender:</label>
                     <label><input type="radio" id="edit_male" name="gender" value="male" required> Male</label>
                     <label><input type="radio" id="edit_female" name="gender" value="female" required> Female</label>
                 </div>
-                <label for="edit_username" class="required-label">Username:</label>
+                <label for="edit_username">Username:</label>
                 <input type="text" id="edit_username" name="username" required>
                 <div class="button-container">
                     <button type="submit">Update User</button>

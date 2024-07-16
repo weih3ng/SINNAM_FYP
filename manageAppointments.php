@@ -149,7 +149,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
         }
 
         .form-container {
-            background-color: #ffffff;
+            background-color: #DECFBC;
             padding: 20px;
             border-radius: 30px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -187,7 +187,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
             margin-bottom: 15px;
             border: 1px solid #DC3545;
             border-radius: 20px;
-            background-color: #F8D7DA;
+            background-color: white;
         }
 
         .form-container .button-container {
@@ -420,10 +420,10 @@ $appointments_result = mysqli_query($link, $appointments_sql);
        <!-- Edit Appointment Form -->
        <div class="form-container" id="editAppointmentForm" style="display:none;">
         <h2>Edit Appointment</h2>
-        <form action="manageAppointments.php" method="POST">
+        <form action="manageAppointments.php" method="POST" onsubmit="enablePatientsId()">
             <input type="hidden" id="edit_appointment_id" name="appointment_id">
             <label for="edit_patients_id" ><i class="fas fa-user"></i> Booking Name:</label>
-            <select id="edit_patients_id" name="patients_id" required>
+            <select id="edit_patients_id" name="patients_id" required disabled>
             <option value="">Select Patient</option>
             <?php foreach ($patients as $id => $name): ?>
                 <option value="<?php echo $id; ?>"><?php echo $name; ?></option>
@@ -615,6 +615,11 @@ $appointments_result = mysqli_query($link, $appointments_sql);
         <?php if (!empty($error_message_appointment)): ?>
             alert('<?php echo $error_message_appointment; ?>');
         <?php endif; ?>
+
+        // script to remove the disable attribute before the form is submitted
+        function enablePatientsId() {
+            document.getElementById('edit_patients_id').disabled = false;
+        }
     </script>
 </body>
 </html>

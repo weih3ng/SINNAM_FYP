@@ -14,6 +14,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
+
+    // Check if the username already exists
+    $checkUsernameSql = "SELECT * FROM patients WHERE username = ?";
+    $checkStmt = mysqli_prepare($link, $checkUsernameSql);
+    mysqli_stmt_bind_param($checkStmt, 's', $username);
+    mysqli_stmt_execute($checkStmt);
+    mysqli_stmt_store_result($checkStmt);
+    
+    if (mysqli_stmt_num_rows($checkStmt) > 0) {
+        // Username already exists
+        $error_message = "Username already exists. Please choose a different username.";
+    } else {
     // Insert the new user into the database
     $sql = "INSERT INTO patients (name, email, contactnumber, password, dob, gender, username) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($link, $sql);
@@ -26,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
         exit();
     } else {
         $error_message = "Error: " . mysqli_error($link);
+        }
     }
 }
 ?>
@@ -60,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
         }
 
         .form-container {
-            background-color: #ffffff;
+            background-color: #DECFBC;
             padding: 20px;
             border-radius: 30px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -74,6 +87,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
             display: flex;
             flex-direction: column;
             width: 100%;
+        }
+        
+        .form-container label.required-label::before {
+            content: " *";
+            color: red;
+            margin-left: 5px;
+            padding-right: 5px;
         }
 
         .form-container label {
@@ -99,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
             margin-bottom: 15px;
             border: 1px solid #DC3545;
             border-radius: 20px;
-            background-color: #F8D7DA;
+            background-color: white;
 
         }
 
@@ -122,13 +142,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
  
         .form-container button:hover {
             background-color: #6b2c27;
-        }
-
-        .ipsFieldRow_required {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #aa1414;
-            font-weight: 500;
         }
 
         /* additional CSS styling for navigation bar */
@@ -183,23 +196,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
     <div class="admin-panel-container">
         <h1>Add New User</h1>
         <div class="form-container">
+        <?php
+            if (isset($error_message)) {
+                echo "<div style='color: red; text-align: center;'>$error_message</div>";
+            }
+            ?>
             <form action="AdminAddUser.php" method="POST">
-                <label for="name"><i class="fas fa-user"></i> Name:<span class="ipsFieldRow_required" style="margin-left: 480px;">Required</span></label>
+                <label for="name" class="required-label"><i class="fas fa-user"></i> Name:</label>
                 <input type="name" id="name" name="name" required>
-                <label for="email"><i class="far fa-envelope"></i> Email:<span class="ipsFieldRow_required" style="margin-left: 478px;">Required</span></label>
+                <label for="email" class="required-label"><i class="far fa-envelope"></i> Email:</label>
                 <input type="email" id="email" name="email" required>
-                <label for="contactnumber"><i class="fas fa-phone"></i> Contact Number:<span class="ipsFieldRow_required" style="margin-left: 396px;">Required</span></label>
+                <label for="contactnumber" class="required-label"><i class="fas fa-phone"></i> Contact Number:</label>
                 <input type="number" id="contactnumber" name="contactnumber" required>
-                <label for="password"><i class="fas fa-lock"></i> Password:<span class="ipsFieldRow_required" style="margin-left: 446px;">Required</span></label>
+                <label for="password" class="required-label"><i class="fas fa-lock"></i> Password:</label>
                 <input type="password" id="password" name="password" required>
-                <label for="dob"><i class="far fa-calendar-alt"></i> Date of Birth:<span class="ipsFieldRow_required" style="margin-left: 426px;">Required</span></label>
+                <label for="dob" class="required-label"><i class="far fa-calendar-alt"></i> Date of Birth:</label>
                 <input type="date" id="dob" name="dob" required max="<?php echo date('Y-m-d'); ?>">
                 <div class="radio-group">
-                    <label for="gender"><i class="fas fa-venus-mars"></i> Gender: <span class="ipsFieldRow_required" style="margin-right: 300px;">Required</span></label>
+                    <label for="gender" class="required-label"><i class="fas fa-venus-mars"></i> Gender:</label>
                     <label><input type="radio" id="male" name="gender" value="male" required> Male</label>
                     <label><input type="radio" id="female" name="gender" value="female" required> Female</label>
                 </div>
-                <label for="username"><i class="far fa-user"></i> Username:<span class="ipsFieldRow_required" style="margin-left: 446px;">Required</span></label>
+                <label for="username" class="required-label"><i class="far fa-user"></i> Username:</label>
                 <input type="text" id="username" name="username" required>
                 <div class="button-container">
                     <button type="submit">Add User</button>

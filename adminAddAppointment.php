@@ -94,7 +94,7 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
         }
 
         .form-container {
-            background-color: #ffffff;
+            background-color: #DECFBC;
             padding: 20px;
             border-radius: 30px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -115,6 +115,13 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
             font-weight: bold;
         }
 
+        .form-container label.required-label::before {
+            content: " *";
+            color: red;
+            margin-left: 5px;
+            padding-right: 10px;
+        }
+
         .form-container input,
         .form-container select {
             margin-bottom: 10px;
@@ -132,7 +139,7 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
             margin-bottom: 15px;
             border: 1px solid #DC3545;
             border-radius: 20px;
-            background-color: #F8D7DA;
+            background-color: white;
 
         }
 
@@ -155,13 +162,6 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
  
         .form-container button:hover {
             background-color: #6b2c27;
-        }
-
-        .ipsFieldRow_required {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #aa1414;
-            font-weight: 500;
         }
 
         /* additional CSS styling for navigation bar */
@@ -217,35 +217,25 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
         <h1>Add New Appointment</h1>
         <div class="form-container">
             <form action="adminAddAppointment.php" method="POST">
-                <label for="patients_id">
-                    <i class="fas fa-user"></i> Booking Name:
-                    <span class="ipsFieldRow_required">Required</span>
-                </label>
+                <label for="patients_id" class="required-label">
+                    <i class="fas fa-user"></i> Booking Name:</label>
                 <select id="patients_id" name="patients_id" required>
                     <option value="">Select Patient</option>
                     <?php foreach ($patients as $id => $name): ?>
                         <option value="<?php echo $id; ?>"><?php echo $name; ?></option>
                     <?php endforeach; ?>
                 </select>
-                <label for="date">
-                    <i class="fas fa-calendar-alt"></i> Date:
-                    <span class="ipsFieldRow_required">Required</span>
-                </label>
+                <label for="date" class="required-label">
+                    <i class="fas fa-calendar-alt"></i> Date:</label>
                 <input type="date" id="date" name="date" required>
-                <label for="time">
-                    <i class="far fa-clock"></i> Time:
-                    <span class="ipsFieldRow_required">Required</span>
-                </label>
+                <label for="time" class="required-label">
+                    <i class="far fa-clock"></i> Time:</label>
                 <select id="time" name="time" required></select>
-                <label for="medical_condition">
-                    <i class="fas fa-laptop-medical"></i> Medical Condition:
-                    <span class="ipsFieldRow_required">Required</span>
-                </label>
+                <label for="medical_condition" class="required-label">
+                    <i class="fas fa-laptop-medical"></i> Medical Condition:</label>
                 <input type="text" id="medical_condition" name="medical_condition" required>
-                <label for="is_for_self">
-                    <i class="fas fa-users"></i> Booking for:
-                    <span class="ipsFieldRow_required">Required</span>
-                </label>
+                <label for="is_for_self" class="required-label">
+                    <i class="fas fa-users"></i> Booking for:</label>
                 <div>
                     <input type="radio" id="is_for_self_myself" name="is_for_self" value="1" required>
                     <label for="is_for_self_myself">Myself</label>
@@ -253,20 +243,16 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
                     <label for="is_for_self_family">Family</label>
                 </div>
                 <div id="family_info" style="display: none;">
-                    <label for="relationship_type">
-                        <i class="fas fa-people-arrows"></i> Relationship Type:
-                        <span class="ipsFieldRow_required">Required</span>
-                    </label>
+                    <label for="relationship_type" class="required-label">
+                        <i class="fas fa-people-arrows"></i> Relationship Type:</label>
                     <select id="relationship_type" name="relationship_type">
                         <option value="spouse">Spouse</option>
                         <option value="child">Child</option>
                         <option value="parent">Parent</option>
                         <option value="other">Other</option>
                     </select>
-                    <label for="family_name">
-                        <i class="fas fa-user-tag"></i> Family Name:
-                        <span class="ipsFieldRow_required">Required</span>
-                    </label>
+                    <label for="family_name" class="required-label">
+                        <i class="fas fa-user-tag"></i> Family name:</label>
                     <input type="text" id="family_name" name="family_name">
                 </div>
                 <div class="button-container">
