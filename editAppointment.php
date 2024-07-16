@@ -29,14 +29,25 @@ if (isset($_GET['appointment_id'])) { // Get from viewAppointment.php (joc)
 }
 
 // Handle form submission (joc)
+// Handle form submission (joc)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $appointment_id = $_POST['appointment_id'];
     $date = $_POST['date'];
     $time = $_POST['time'];
     $is_for_self = ($_POST['booking_for'] === 'self') ? 1 : 0;
     $relationship_type = ($is_for_self == 0) ? $_POST['relationship_type'] : null;
-    $family_name = $is_for_self == 0 ? $_POST['family_name'] : null; // Ensure this is handled based on 'is_for_self'
+    $family_name = $is_for_self == 0 ? $_POST['family_name'] : null;
     $medical_condition = $_POST['medical_conditions'];
+
+    // Validate date and time
+    $currentDateTime = new DateTime();
+    $selectedDateTime = new DateTime("$date $time");
+
+    if ($selectedDateTime < $currentDateTime) {
+        // Redirect with an error message if trying to set past time
+        header("Location: editAppointment.php?appointment_id=$appointment_id&error=past_time");
+        exit();
+    }
 
     // Update the appointment in the database
     $query = "UPDATE appointments SET date = ?, time = ?, is_for_self = ?, relationship_type = ?, family_name = ?, medical_condition = ? WHERE appointment_id = ?";
@@ -50,6 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     header("Location: viewAppointment.php");
     exit();
 }
+
 
 // Close database connection
 mysqli_close($link);
@@ -222,9 +234,10 @@ mysqli_close($link);
                     <input type="date" id="date" name="date" value="<?php echo $appointmentDate; ?>" min="<?php echo date('Y-m-d'); ?>">
                 </div>
                 <div class="form-group">
-                    <label for="time">Time:</label>
-                    <input type="time" id="time" name="time" value="<?php echo $appointmentTime; ?>">
-                </div>
+    <label for="time">Time:</label>
+    <input type="time" id="time" name="time" value="<?php echo $appointmentTime; ?>" min="11:00" max="16:15" step="900">
+</div>
+
 
                 <!-- Booking for self or family member and medicial condition (joc) -->
                 <div class="form-group">
@@ -296,6 +309,50 @@ mysqli_close($link);
 
 
         
+
+// JavaScript for disabling past times on the current day
+// JavaScript for dynamically setting time constraints based on date selection
+document.addEventListener('DOMContentLoaded', function() {
+    const currentDate = new Date();
+    const currentDateString = currentDate.toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
+    const currentTime = currentDate.toTimeString().slice(0, 5); // Get current time in HH:mm format
+
+    // Set min attribute for date input to prevent selecting past dates
+    document.getElementById('date').min = currentDateString;
+
+    // Function to update time options based on selected date
+    function updateAvailableTimes() {
+        const selectedDate = document.getElementById('date').valueAsDate;
+        const selectedDateString = selectedDate.toISOString().slice(0, 10); // Selected date in YYYY-MM-DD format
+        const selectedTimeInput = document.getElementById('time');
+
+        // Clear existing options
+        selectedTimeInput.innerHTML = '';
+
+        // Set default range (11:00 AM to 4:30 PM with 15-minute intervals)
+        const startTime = new Date(selectedDateString + 'T11:00:00');
+        const endTime = new Date(selectedDateString + 'T16:30:00');
+
+        // Populate time options with 15-minute intervals
+        const interval = 15; // 15 minutes interval
+        let currentTime = startTime;
+
+        while (currentTime <= endTime) {
+            const option = document.createElement('option');
+            option.value = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            option.textContent = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            selectedTimeInput.appendChild(option);
+
+            currentTime.setMinutes(currentTime.getMinutes() + interval);
+        }
+    }
+
+    // Initial setup on page load
+    updateAvailableTimes();
+
+    // Event listener for date change to update time options
+    document.getElementById('date').addEventListener('change', updateAvailableTimes);
+});
 
 
 
