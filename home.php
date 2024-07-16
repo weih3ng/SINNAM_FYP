@@ -162,6 +162,26 @@ if (mysqli_num_rows($result) > 0) {
             margin-right: 10px;
         }
 
+        .add-testimonial-btn { 
+            background-color: #80352F;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background-color 0.1s ease;
+            text-decoration: none; 
+            margin-top: -200px;
+            margin-left: 1120px;
+        }
+
+        .add-testimonial-btn:hover {
+            background-color: #6b2c27; 
+            color: white;
+        }
+
 
         #carouselIndicators2 {
             position: absolute;
@@ -349,6 +369,7 @@ if (mysqli_num_rows($result) > 0) {
         </div>
     </div>
 </div>
+<a href="addTestimonial.php" class="add-testimonial-btn btn">Add Testimonial</a>
 
 
     <!-- Footer -->
