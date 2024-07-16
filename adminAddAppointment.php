@@ -265,7 +265,7 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
                         <option value="other">Other</option>
                     </select>
                     <label for="family_name" class="required-label">
-                        <i class="fas fa-user-tag"></i> Family name:</label>
+                        <i class="fas fa-user-tag"></i> Family member's name:</label>
                     <input type="text" id="family_name" name="family_name">
                 </div>
                 <div class="button-container">

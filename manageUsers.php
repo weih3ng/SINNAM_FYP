@@ -37,7 +37,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
     $dob = $_POST['dob'];
     $gender = $_POST['gender'];
     $username = $_POST['username'];
+    $patients_id = $_POST['patients_id'];
 
+        // Check for duplicate username
+        $duplicate_check_sql = "SELECT COUNT(*) as count FROM patients WHERE username = ? AND patients_id != ?";
+        $stmt = mysqli_prepare($link, $duplicate_check_sql);
+        mysqli_stmt_bind_param($stmt, 'si', $username, $patients_id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_bind_result($stmt, $count);
+        mysqli_stmt_fetch($stmt);
+        mysqli_stmt_close($stmt);
+    
+        if ($count > 0) {
+            // Set JavaScript alert for duplicate username
+            echo "<script>
+                alert('Error: The same username has been used. Please enter a different username.');
+                window.location.href='manageUsers.php';
+                </script>";
+            exit();
+        } else {
         // Update existing user
         $patients_id = $_POST['patients_id'];
         $sql = "UPDATE patients SET name = ?, email = ?, contactnumber = ?, dob = ?, gender = ?, username = ? WHERE patients_id = ?";
@@ -54,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
     // Redirect back to manageUsers.php to reflect changes
     header("Location: manageUsers.php");
     exit();  
+    }   
 }
 
 // Fetch patients data
@@ -115,7 +134,7 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
             border-radius: 30px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
-            width: 25%;
+            width: 30%;
             transition: transform 0.3s ease; /* Added transition for smooth scaling */
         }
 
