@@ -3,15 +3,15 @@ session_start(); // Start the session
 
 include 'dbfunctions.php';
 
-// Check if the user is logged in (joc)
+// Check if the user is logged in
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header('Location: login.php');
     exit;
 }
 
-// Check if appointment ID is provided (joc)
-if (isset($_GET['appointment_id'])) { // Get from viewAppointment.php (joc)
-    $appointment_id = $_GET['appointment_id']; // Get from viewAppointment.php (joc)
+// Check if appointment ID is provided
+if (isset($_GET['appointment_id'])) {
+    $appointment_id = $_GET['appointment_id'];
 
     // Fetch existing appointment data
     $query = "SELECT * FROM appointments WHERE appointment_id = $appointment_id";
@@ -28,8 +28,7 @@ if (isset($_GET['appointment_id'])) { // Get from viewAppointment.php (joc)
     }
 }
 
-// Handle form submission (joc)
-// Handle form submission (joc)
+// Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $appointment_id = $_POST['appointment_id'];
     $date = $_POST['date'];
@@ -49,6 +48,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
+    // Check if the new date and time slot are available
+    $query = "SELECT * FROM appointments WHERE date = ? AND time = ? AND appointment_id != ?";
+    if ($stmt = mysqli_prepare($link, $query)) {
+        mysqli_stmt_bind_param($stmt, "ssi", $date, $time, $appointment_id);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+
+        if (mysqli_stmt_num_rows($stmt) > 0) {
+            // Redirect with an error message if the time slot is already booked
+            echo "<script>
+                    alert('The selected date and time are already booked. Please choose another time.');
+                    window.location.href = 'editAppointment.php?appointment_id=$appointment_id';
+                </script>";
+            exit();
+        }
+        mysqli_stmt_close($stmt);
+    }
+
     // Update the appointment in the database
     $query = "UPDATE appointments SET date = ?, time = ?, is_for_self = ?, relationship_type = ?, family_name = ?, medical_condition = ? WHERE appointment_id = ?";
     if ($stmt = mysqli_prepare($link, $query)) {
@@ -62,10 +79,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     exit();
 }
 
-
 // Close database connection
 mysqli_close($link);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -324,7 +341,6 @@ mysqli_close($link);
         document.addEventListener('DOMContentLoaded', function() {
     const currentDate = new Date();
     const currentDateString = currentDate.toISOString().slice(0, 10); // Get current date in YYYY-MM-DD format
-    const currentTime = currentDate.toTimeString().slice(0, 5); // Get current time in HH:mm format
 
     // Set min attribute for date input to prevent selecting past dates
     document.getElementById('date').min = currentDateString;
@@ -336,10 +352,17 @@ mysqli_close($link);
         const selectedDateString = selectedDate.toISOString().slice(0, 10); // Selected date in YYYY-MM-DD format
         const selectedTimeInput = document.getElementById('time');
 
+        // Check if selected date is Sunday (0) or Monday (1) and prevent selection
+        if (selectedDay === 0 || selectedDay === 1) {
+            // Handle invalid date selection (e.g., display message, disable form submission)
+            alert('Appointments cannot be scheduled on Sundays or Mondays. Please choose another date.');
+            return;
+        }
+
         // Clear existing options
         selectedTimeInput.innerHTML = '';
 
-        // Set default range (11:00 AM to 4:30 PM with 15-minute intervals)
+        // Set default range (11:00 AM to 4:15 PM with 15-minute intervals)
         let startTime;
         if (selectedDay === 6) { // Saturday
             startTime = new Date(selectedDateString + 'T10:30:00');
@@ -350,7 +373,7 @@ mysqli_close($link);
 
         // Populate time options with 15-minute intervals
         const interval = 15; // 15 minutes interval
-        let currentTime = startTime;
+        let currentTime = new Date(startTime);
 
         while (currentTime <= endTime) {
             const option = document.createElement('option');
@@ -360,6 +383,18 @@ mysqli_close($link);
 
             currentTime.setMinutes(currentTime.getMinutes() + interval);
         }
+
+        // Filter out times that have already passed if selected date is today
+        const today = new Date();
+        if (selectedDate.toDateString() === today.toDateString()) {
+            const currentTimeString = today.getHours() + ':' + ('0' + today.getMinutes()).slice(-2) + ':00';
+            const options = selectedTimeInput.options;
+            for (let i = options.length - 1; i >= 0; i--) {
+                if (options[i].value < currentTimeString) {
+                    selectedTimeInput.remove(i);
+                }
+            }
+        }
     }
 
     // Initial setup on page load
@@ -368,6 +403,7 @@ mysqli_close($link);
     // Event listener for date change to update time options
     document.getElementById('date').addEventListener('change', updateAvailableTimes);
 });
+
 
 
 
