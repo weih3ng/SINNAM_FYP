@@ -416,8 +416,8 @@ $appointments_result = mysqli_query($link, $appointments_sql);
                             <td>";
                             // Check if appointment date is in the past
                             if ($row['date'] >= $current_date) {
-                                echo"<a href='#' class='edit-link' data-id='{$row['appointment_id']}' data-patients_id='{$row['patients_id']}' data-name='{$row['name']}' data-date='{$row['date']}' data-time='{$row['time']}' data-medical_condition='{$row['medical_condition']}' data-is_for_self='{$row['is_for_self']}' data-relationship_type='{$row['relationship_type']}' data-family_name='{$row['family_name']}'>Edit</a> |  
-                                <a href='#' class='delete-link' data-id='{$row['appointment_id']}'>Delete</a>";
+                                echo"<a href='#' class='edit-link' data-id='{$row['appointment_id']}' data-patients_id='{$row['patients_id']}' data-name='{$row['name']}' data-date='{$row['date']}' data-time='{$row['time']}' data-medical_condition='{$row['medical_condition']}' data-is_for_self='{$row['is_for_self']}' data-relationship_type='{$row['relationship_type']}' data-family_name='{$row['family_name']}'><i class='fas fa-edit' style='color:#4CAF50;'></i></a> |  
+                                <a href='#' class='delete-link' data-id='{$row['appointment_id']}'><i class='fas fa-trash' style='color: #f44336;'></i></a>";
                             } else {
                                 echo "";
                             }
@@ -448,7 +448,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
             <label for="edit_time"><i class="far fa-clock"></i> Time:</label>
             <select id="edit_time" name="time" required></select>
             <label for="edit_medical_condition"><i class="fas fa-laptop-medical"></i> Medical Condition:</label>
-            <textarea id="edit_medical_condition" name="edit_medical_condition" required rows="4" style="resize: none;"></textarea>
+            <textarea id="edit_medical_condition" name="medical_condition" required rows="4" style="resize: none;"></textarea>
             <label for="edit_is_for_self"><i class="fas fa-users"></i> Booking for:</label>
             <div>
                 <input type="radio" id="edit_is_for_self_myself" name="is_for_self" value="1" required>
@@ -521,6 +521,15 @@ $appointments_result = mysqli_query($link, $appointments_sql);
 
         // Attach the search function to the search button
         document.querySelector('.search-container button').addEventListener('click', searchTable);
+
+        // Add event listener to handle real-time search and Enter key press
+        document.getElementById("searchInput").addEventListener("input", searchTable);
+        document.getElementById("searchInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                searchTable();
+            }
+        });
 
         // Display relationship type field if it is family, or else hide field for edit form
         document.querySelectorAll('input[name="is_for_self"]').forEach(radio => {

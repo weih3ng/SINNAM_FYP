@@ -237,5 +237,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
             <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook"></i></a>
         </div>
     </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+    //script to allow input field only up to 8 digits
+    document.getElementById('contactnumber').addEventListener('input', function (e) {
+        var value = e.target.value;
+        if (value.length > 8) {
+            e.target.value = value.slice(0, 8);
+        }
+    });
+</script>
 </body>
 </html>

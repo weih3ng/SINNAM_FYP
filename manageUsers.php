@@ -79,17 +79,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
 $patients_sql = "SELECT patients_id, name, dob, gender, email, contactnumber, username FROM patients";
 $patients_result = mysqli_query($link, $patients_sql);
 
-// Count total active users (patients who have booked an appointment)
-$active_patients_sql = "SELECT COUNT(DISTINCT patients_id) as active_patients FROM appointments";
-$active_patients_result = mysqli_query($link, $active_patients_sql);
-$active_patients_row = mysqli_fetch_assoc($active_patients_result);
-$active_patients = $active_patients_row['active_patients'];
+// Fetch active users data
+$active_users_sql = "SELECT DISTINCT p.patients_id, p.name FROM patients p INNER JOIN appointments a ON p.patients_id = a.patients_id";
+$active_users_result = mysqli_query($link, $active_users_sql);
 
-// Count total inactive users (patients who have not booked an appointment)
-$inactive_patients_sql = "SELECT COUNT(*) as inactive_patients FROM patients WHERE patients_id NOT IN (SELECT DISTINCT patients_id FROM appointments)";
-$inactive_patients_result = mysqli_query($link, $inactive_patients_sql);
-$inactive_patients_row = mysqli_fetch_assoc($inactive_patients_result);
-$inactive_patients = $inactive_patients_row['inactive_patients'];
+// Fetch inactive users data
+$inactive_users_sql = "SELECT patients_id, name FROM patients WHERE patients_id NOT IN (SELECT DISTINCT patients_id FROM appointments)";
+$inactive_users_result = mysqli_query($link, $inactive_users_sql);
+
+// Count total active users
+$active_patients = mysqli_num_rows($active_users_result);
+
+// Count total inactive users
+$inactive_patients = mysqli_num_rows($inactive_users_result);
 ?>
 
 <!DOCTYPE html>
@@ -134,12 +136,12 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
             border-radius: 30px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
-            width: 30%;
+            width: 38%;
             transition: transform 0.3s ease; /* Added transition for smooth scaling */
         }
 
         .stat-box:hover {
-            transform: scale(1.15); /* Enlarge the container slightly on hover */
+            transform: scale(1.10); /* Enlarge the container slightly on hover */
         }
 
         .stat-box h3 {
@@ -307,13 +309,14 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
             color: white;
             cursor: pointer;
             padding: 10px;
-            width: 100%;
+            width: 50%;
             border: none;
             text-align: center;
             outline: none;
             font-size: 15px;
-            border-radius: 5px;
+            border-radius: 30px;
             margin-top: 10px;
+            font-weight: bold;
         }
 
         .active, .collapsible:hover {
@@ -386,17 +389,24 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
                 <p><?php echo $active_patients; ?></p>
                 <button class="collapsible" id="showActiveUsersBtn">Show Users</button>
                 <div class="content" id="activeUsersContent">
-                    <?php
-                        $active_users_sql = "SELECT DISTINCT p.name FROM patients p INNER JOIN appointments a ON p.patients_id = a.patients_id";
-                        $active_users_result = mysqli_query($link, $active_users_sql);
-                        if ($active_users_result && mysqli_num_rows($active_users_result) > 0) {
-                            while ($row = mysqli_fetch_assoc($active_users_result)) {
-                                echo "<p>{$row['name']}</p>";
+                <table id="activeAccs" class="display">
+                <thead>
+                    <tr>
+                        <th>Users</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <?php
+                            if ($active_users_result && mysqli_num_rows($active_users_result) > 0) {
+                                while ($row = mysqli_fetch_assoc($active_users_result)) {
+                                    echo "<tr><td>{$row['name']}</td></tr>";
+                                }
+                            } else {
+                                echo "<tr><td>No active users found</td></tr>";
                             }
-                        } else {
-                            echo "<p>No active users found</p>";
-                        }
-                    ?>
+                            ?>
+                    </tbody>
+                    </table>
                 </div>
             </div>
             <div class="stat-box" id="inactiveUsers" data-tippy-content="Have not booked an appointment / account not in use">
@@ -404,17 +414,24 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
                 <p><?php echo $inactive_patients; ?></p>
                 <button class="collapsible" id="showInactiveUsersBtn">Show Users</button>
                 <div class="content" id="inactiveUsersContent">
+                <table id="inactiveAccs" class="display">
+                <thead>
+                    <tr>
+                        <th>Users</th>
+                    </tr>
+                </thead>
+                <tbody>
                     <?php
-                        $inactive_users_sql = "SELECT name FROM patients WHERE patients_id NOT IN (SELECT DISTINCT patients_id FROM appointments)";
-                        $inactive_users_result = mysqli_query($link, $inactive_users_sql);
                         if ($inactive_users_result && mysqli_num_rows($inactive_users_result) > 0) {
                             while ($row = mysqli_fetch_assoc($inactive_users_result)) {
-                                echo "<p>{$row['name']}</p>";
+                                echo "<tr><td>{$row['name']}</td></tr>";
                             }
                         } else {
-                            echo "<p>No inactive users found</p>";
+                            echo "<tr><td>No inactive users found</td></tr>";
                         }
-                    ?>
+                        ?>
+                    </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -460,8 +477,8 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
                             <td>{$row['contactnumber']}</td>
                             <td>{$row['username']}</td>
                             <td>
-                                <a href='#' class='edit-link' data-id='{$row['patients_id']}' data-name='{$row['name']}' data-email='{$row['email']}' data-dob='{$row['dob']}' data-gender='{$row['gender']}' data-contactnumber='{$row['contactnumber']}' data-username='{$row['username']}'>Edit</a> | 
-                                <a href='#' class='delete-link' data-id='{$row['patients_id']}'>Delete</a>
+                                <a href='#' class='edit-link' data-id='{$row['patients_id']}' data-name='{$row['name']}' data-email='{$row['email']}' data-dob='{$row['dob']}' data-gender='{$row['gender']}' data-contactnumber='{$row['contactnumber']}' data-username='{$row['username']}'><i class='fas fa-edit' style='color:#4CAF50;'></i></a> | 
+                                <a href='#' class='delete-link' data-id='{$row['patients_id']}'><i class='fas fa-trash' style='color: #f44336;'></i></a>
                             </td>
                           </tr>";
                 }
@@ -482,7 +499,7 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
                 <label for="edit_email">Email:</label>
                 <input type="email" id="edit_email" name="email" required>
                 <label for="edit_contactnumber">Contact Number:</label>
-                <input type="text" id="edit_contactnumber" name="contactnumber" required>
+                <input type="text" id="edit_contactnumber" name="contactnumber" maxlength="8" pattern="\d{8}" required>
                 <label for="edit_dob">Date of Birth:</label>
                 <input type="date" id="edit_dob" name="dob" required>
                 <div class="radio-group">
@@ -519,6 +536,18 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
     <script>
         $(document).ready(function() {
             $('#patientsTable').DataTable({
+                searching: false // Disable the search bar
+            });
+        });
+
+        $(document).ready(function() {
+            $('#activeAccs').DataTable({
+                searching: false // Disable the search bar
+            });
+        });
+
+        $(document).ready(function() {
+            $('#inactiveAccs').DataTable({
                 searching: false // Disable the search bar
             });
         });
@@ -566,6 +595,15 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
 
         // Attach the search function to the search button
         document.querySelector('.search-container button').addEventListener('click', searchTable);
+
+        // Add event listener to handle real-time search and Enter key press
+        document.getElementById("searchInput").addEventListener("input", searchTable);
+        document.getElementById("searchInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                searchTable();
+            }
+        });
 
         // Edit user functionality
         document.querySelectorAll('.edit-link').forEach(link => {
@@ -619,7 +657,6 @@ $inactive_patients = $inactive_patients_row['inactive_patients'];
                 });
             });
         });
-
     </script>
 </body>
 </html>
