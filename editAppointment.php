@@ -377,7 +377,7 @@ mysqli_close($link);
 
                 // Define start and end times based on the day
                 let startTime = selectedDay === 6 ? '10:30' : '11:00'; // Saturday starts at 10:30 AM
-                let endTime = '16:30'; // Ends at 4:30 PM
+                let endTime = '16:15'; // Ends at 4:15 PM
 
                 let time = new Date(`${selectedDateString}T${startTime}`);
                 const end = new Date(`${selectedDateString}T${endTime}`);
