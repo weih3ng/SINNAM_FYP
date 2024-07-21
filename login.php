@@ -35,7 +35,7 @@ include 'dbfunctions.php';
         }
 
         .login-form {
-            background: white;
+            background: #DECFBC;
             padding: 20px;
             border-radius: 20px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -76,7 +76,7 @@ include 'dbfunctions.php';
             width: 70%;
             height: 30px;
             border: 1px solid #DC3545;
-            background-color: #F8D7DA;
+            background-color: white;
             margin-bottom: 15px;
             padding: 5px 5px;
         }
@@ -97,11 +97,10 @@ include 'dbfunctions.php';
             background-color: #6b2c27; 
         }
 
-        .ipsFieldRow_required {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #aa1414;
-            font-weight: 500
+        .login-form label.required-label::before {
+            content: " *";
+            color: red;
+            margin-left: 5px;
         }
 
         /* Modal styles */
@@ -194,13 +193,13 @@ include 'dbfunctions.php';
         <div class="login-form">
             <h1>Welcome Back</h1>
             <form method="post" action="doLogin.php">
-                <label for="idEmail">
-                    <i class="fa-solid fa-envelope" style="color: #949494;"></i> Email<span class="ipsFieldRow_required" style="margin-left: 260px;">Required</span>
+                <label for="idEmail" class="required-label">
+                    <i class="fa-solid fa-envelope" style="color: #949494;"></i> Email
                 </label>
                 <input id="idEmail" type="text" name="email" required/>
                 
-                <label for="idPassword">
-                    <i class="fa-solid fa-lock"  style="color: #949494;"></i> Password<span class="ipsFieldRow_required" style="margin-left: 230px;">Required</span>
+                <label for="idPassword" class="required-label">
+                    <i class="fa-solid fa-lock"  style="color: #949494;"></i> Password
                 </label>
                 <input id="idPassword" type="password" name="password" required/>
                 

@@ -29,7 +29,7 @@ include 'dbfunctions.php';
         }
 
         .register-form-container {
-            background-color: white;
+            background-color: #DECFBC;
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 30px 40px;
@@ -63,7 +63,7 @@ include 'dbfunctions.php';
             margin-bottom: 15px;
             border: 1px solid #DC3545;
             border-radius: 20px;
-            background-color: #F8D7DA;
+            background-color: white;
 
         }
 
@@ -115,14 +115,14 @@ include 'dbfunctions.php';
             margin-top: 10px;
         }
 
-        .ipsFieldRow_required {
-            font-size: 10px;
-            text-transform: uppercase;
-            color: #aa1414;
-            font-weight: 500
+        .register-form-container label.required-label::before {
+            content: " *";
+            color: red;
+            margin-left: 5px;
         }
-                /* Modal styles */
-                .modal {
+
+        /* Modal styles */
+        .modal {
             display: none; 
             position: fixed; 
             z-index: 1; 
@@ -212,38 +212,38 @@ include 'dbfunctions.php';
             <h1>Create New Account</h1>
             <p>Already a member? <a href="login.php">Log in</a></p>
             <form action="doSignUp.php" method="POST">
-                <label for="idName">
-                    <i class="fa-solid fa-user" style="color: #949494;"></i> Name<span class="ipsFieldRow_required" style="margin-left: 270px;">Required</span>
+                <label for="idName" class="required-label">
+                    <i class="fa-solid fa-user" style="color: #949494;"></i> Name
                 </label>
                 <input id="idName" type="text" name="name" required>
-                <label for="idUsername">
-                    <i class="far fa-user" style="color: #949494;"></i> Username<span class="ipsFieldRow_required" style="margin-left: 240px;">Required</span>
+                <label for="idUsername" class="required-label">
+                    <i class="far fa-user" style="color: #949494;"></i> Username
                 </label>
                 <input id="idUsername" type="text" name="username" required>
 
-                <label for="idEmail">
-                    <i class="fa-solid fa-envelope" style="color: #949494;"></i> Email<span class="ipsFieldRow_required" style="margin-left: 270px;">Required</span>
+                <label for="idEmail" class="required-label">
+                    <i class="fa-solid fa-envelope" style="color: #949494;"></i> Email
                 </label>
                 <input id="idEmail" type="email" name="email" required>
-                <i class="fa-solid fa-phone" style="color: #949494;"></i> Contact Number<span class="ipsFieldRow_required" style="margin-left: 195px;">Required</span>
+
+                <label for="idcontactnumber" class="required-label">
+                    <i class="fa-solid fa-phone" style="color: #949494;"></i> Contact Number
                 </label>
-                
                 <input id="idcontactnumber" type="contactnumber" name="contactnumber" required>
-                <label for="idDob">
-                    <i class="fa-solid fa-calendar-alt" style="color: #949494;"></i> Date of Birth<span class="ipsFieldRow_required" style="margin-left: 220px;">Required</span>
+
+                <label for="idDob" class="required-label">
+                    <i class="fa-solid fa-calendar-alt" style="color: #949494;"></i> Date of Birth
                 </label>
                 <input id="idDob" type="date" name="dob" required>
-                <label for="idPassword">
-                    <i class="fa-solid fa-lock" style="color: #949494;"></i> Password<span class="ipsFieldRow_required" style="margin-left: 240px;">Required</span>
-                </label>
-                
-                <input id="idPassword" type="password" name="password" required>
-                <label for="idcontactnumber">
 
+                <label for="idPassword" class="required-label">
+                    <i class="fa-solid fa-lock" style="color: #949494;"></i> Password
+                </label>
+                <input id="idPassword" type="password" name="password" required>
 
                 <div class="gender-container">
-                    <label class="gender-label">
-                        <i class="fa-solid fa-venus-mars" style="color: #949494;"></i> Gender<span class="ipsFieldRow_required" style="margin-left: 10px;">Required</span>
+                    <label class="gender-label required-label">
+                        <i class="fa-solid fa-venus-mars" style="color: #949494;"></i> Gender
                     </label>
                     <div class="gender-radio-buttons">
                     <label class="radio-label">
