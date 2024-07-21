@@ -265,8 +265,8 @@ $current_date = date('Y-m-d');
                     </select>
                 <?php elseif ($user_type === 'doctor') : ?>
                     <select id="appointmentFilter" name="appointmentFilter">
-                        <option value="all">All Appointments</option>
-                        <option value="future">Current/Future Appointments</option>
+                        <option value="today">Today's Appointments</option>
+                        <option value="future">Future Appointments</option>
                         <option value="past">Past Appointments</option>
                     </select>
                 <?php endif; ?>
@@ -403,11 +403,13 @@ $current_date = date('Y-m-d');
     </script>
 
 
-
-    <script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
         if (window.location.href.includes('user_type=doctor')) {
-            document.getElementById('appointmentFilter').addEventListener('change', function() {
-                const filterValue = this.value;
+            const filterSelect = document.getElementById('appointmentFilter');
+
+            // Function to apply filter based on the selected value
+            function applyFilter(filterValue) {
                 const rows = document.querySelectorAll('table tbody tr');
                 const currentDate = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
 
@@ -416,15 +418,28 @@ $current_date = date('Y-m-d');
 
                     row.style.display = ''; // Reset display to default for all rows
 
-                    if (filterValue === 'future' && appointmentDate < currentDate) {
-                        row.style.display = 'none'; // Hide past appointments
+                    if (filterValue === 'future' && appointmentDate <= currentDate) {
+                        row.style.display = 'none'; // Hide past and today's appointments
                     } else if (filterValue === 'past' && appointmentDate >= currentDate) {
-                        row.style.display = 'none'; // Hide future appointments
+                        row.style.display = 'none'; // Hide future and today's appointments
+                    } else if (filterValue === 'today' && appointmentDate !== currentDate) {
+                        row.style.display = 'none'; // Hide non-today appointments
                     }
                 });
+            }
+
+            // Apply 'today' filter by default for doctors
+            applyFilter('today');
+
+            // Add event listener to filter dropdown
+            filterSelect.addEventListener('change', function() {
+                applyFilter(this.value);
             });
         }
-    </script>
+    });
+</script>
+
+
 
 
 </body>

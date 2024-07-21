@@ -369,7 +369,7 @@ if (mysqli_num_rows($result) > 0) {
         </div>
     </div>
 </div>
-<a href="addTestimonial.php" class="add-testimonial-btn btn">Add Testimonial</a>
+
 
 
     <!-- Footer -->
