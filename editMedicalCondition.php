@@ -216,7 +216,7 @@ mysqli_close($link);
     <div class="edit-container">
         <div class="edit-box">
             <h1>Edit Medical Conditions</h1>
-            <form method="post" action="editAppointment.php?appointment_id=<?php echo $appointment_id; ?>">
+            <form method="post" action="editMedicalCondition.php?appointment_id=<?php echo $appointment_id; ?>">
                 <div class="form-group">
                     <label for="id">Queue Numbers:</label>
                     <input type="text" id="id" name="appointment_id" value="<?php echo $appointment_id; ?>" readonly>
