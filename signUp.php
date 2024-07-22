@@ -157,6 +157,21 @@ include 'dbfunctions.php';
             text-decoration: none;
             cursor: pointer;
         }
+
+        .username-status {
+            margin-left: 10px; /* Adjust this value to move the message to the right */
+            margin-top: -50px; /* Adjust this value to move the message up */
+            color: red; /* You can change the color as needed */
+            font-size: 14px; /* Adjust font size if necessary */
+        }
+
+        .available {
+            color: green;
+        }
+
+        .taken {
+            color: red;
+        }
     </style>
 </head>
 <body>
@@ -209,17 +224,24 @@ include 'dbfunctions.php';
             <img src="images/2.png" alt="Decoration">
         </div>
         <div class="register-form-container">
-            <h1>Create New Account</h1>
+        <h1>Create New Account</h1>
             <p>Already a member? <a href="login.php">Log in</a></p>
+            <?php if (isset($_SESSION['error'])): ?>
+                <div class="error-message">
+                    <?php echo $_SESSION['error']; unset($_SESSION['error']); ?>
+                </div>
+            <?php endif; ?>
             <form action="doSignUp.php" method="POST">
                 <label for="idName" class="required-label">
                     <i class="fa-solid fa-user" style="color: #949494;"></i> Name
                 </label>
-                <input id="idName" type="text" name="name" required>
+                    <input id="idName" type="text" name="name" required>
                 <label for="idUsername" class="required-label">
                     <i class="far fa-user" style="color: #949494;"></i> Username
+                    <input id="idUsername" type="text" name="username" required>
+                    <span id="username-status" class="username-status"></span>
                 </label>
-                <input id="idUsername" type="text" name="username" required>
+
 
                 <label for="idEmail" class="required-label">
                     <i class="fa-solid fa-envelope" style="color: #949494;"></i> Email
@@ -360,6 +382,31 @@ include 'dbfunctions.php';
                 if (selectedDate > today) {
                     alert("Please select a date that is not in the future.");
                     this.value = ""; // Clear the input value
+                }
+            });
+        });
+    </script>
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#idUsername').on('keyup', function() {
+                var username = $(this).val();
+                if (username.length > 0) {
+                    $.ajax({
+                        url: 'checkUsername.php',
+                        type: 'POST',
+                        data: { username: username },
+                        success: function(response) {
+                            if (response == 'taken') {
+                                $('#username-status').text('Username is already taken').removeClass('available').addClass('taken');
+                            } else {
+                                $('#username-status').text('Username is available').removeClass('taken').addClass('available');
+                            }
+                        }
+                    });
+                } else {
+                    $('#username-status').text('');
                 }
             });
         });

@@ -1,34 +1,59 @@
 <?php
-session_start();
+session_start(); // Start the session
 
 include 'dbfunctions.php';
 
-$name = $_POST['name'];
-$username = $_POST['username'];
-$email = $_POST['email'];
-$password = $_POST['password'];
-$dob = $_POST['dob'];
-$gender = $_POST['gender'];
-$contactnumber = $_POST['contactnumber'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Get form data
+    $name = $_POST['name'];
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $contactnumber = $_POST['contactnumber'];
+    $dob = $_POST['dob'];
+    $password = $_POST['password'];
+    $gender = $_POST['gender'];
 
-// build sql query
-$query = "INSERT INTO patients(name, username, email, password, dob, gender, contactnumber)
-            VALUES ('$name', '$username', '$email', '$password', '$dob', '$gender', '$contactnumber')";
+    // Check if the username already exists
+    $query = "SELECT * FROM patients WHERE username = ?";
+    $stmt = mysqli_prepare($link, $query);
+    mysqli_stmt_bind_param($stmt, "s", $username);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_store_result($stmt);
 
-// execute sql query
-$result = mysqli_query($link, $query) or die ('Error querying database');
+    if (mysqli_stmt_num_rows($stmt) > 0) {
+        // Username already exists
+        $_SESSION['error'] = "Username already exists. Please choose a different username.";
+        header("Location: signUp.php");
+        exit();
+    }
 
-// process the result
-if ($result) {
-    $message = "Account Created Successfully";
+    // Hash the password
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+    // Insert the new user into the database
+    $query = "INSERT INTO users (name, username, email, contactnumber, dob, password, gender) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $stmt = mysqli_prepare($link, $query);
+    mysqli_stmt_bind_param($stmt, "sssssss", $name, $username, $email, $contactnumber, $dob, $hashed_password, $gender);
+
+    if (mysqli_stmt_execute($stmt)) {
+        // Registration successful
+        $_SESSION['success'] = "Registration successful! You can now log in.";
+        header("Location: login.php");
+    } else {
+        // Error inserting user
+        $_SESSION['error'] = "An error occurred during registration. Please try again.";
+        header("Location: signUp.php");
+    }
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($link);
+} else {
+    // If the request method is not POST, redirect to the sign-up page
+    header("Location: signUp.php");
+    exit();
 }
-else {
-    $message = "record insertion failed";
-}
-
-mysqli_close($link);
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
