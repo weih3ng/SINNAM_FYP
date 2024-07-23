@@ -214,7 +214,7 @@ mysqli_close($link);
 
                 <div class="form-group">
                     <label for="dob">Date of Birth:</label>
-                    <input type="date" id="dob" name="dob" value="<?php echo htmlspecialchars($dob); ?>">
+                    <input type="date" id="dob" name="dob" value="<?php echo htmlspecialchars($dob); ?>" max="">
                 </div>
 
                 <div class="form-group">
@@ -301,6 +301,20 @@ mysqli_close($link);
                 alert('Username is already taken.');
             }
             if(urlParams.has('success') && urlParams.get('success') === 'profile_updated') {
+                alert('Profile updated successfully.');
+            }
+        }
+
+        // Set the max attribute for the date of birth field to today's date
+        window.onload = function() {
+            const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+            document.getElementById('dob').setAttribute('max', today);
+
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('error') && urlParams.get('error') === 'username_taken') {
+                alert('Username is already taken.');
+            }
+            if (urlParams.has('success') && urlParams.get('success') === 'profile_updated') {
                 alert('Profile updated successfully.');
             }
         }
