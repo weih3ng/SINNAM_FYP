@@ -410,6 +410,14 @@ include 'dbfunctions.php';
                 }
             });
         });
+
+                    // Script to enforce 8-digit limit on contact number input
+                    document.getElementById("idcontactnumber").addEventListener("input", function (e) {
+                let input = e.target.value;
+                if (input.length > 8) {
+                    e.target.value = input.slice(0, 8);
+                }
+            });
     </script>
 </body>
 </html>

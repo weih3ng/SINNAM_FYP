@@ -247,5 +247,18 @@ mysqli_close($link);
             </form>
         </div>
     </div>
+            <!-- Footer -->
+            <footer>
+        <a href="home.php">
+            <img src="images/logo.jpeg" alt="logo" class="logo">
+        </a>
+            <div>
+                @ 2024 Sin Nam Medical Hall All Rights Reserved
+            </div>
+            <div class="social-media">
+                <span style="margin-right: 10px;">Follow us</span> <!-- Added a span to apply margin -->
+                <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook"></i></a>
+            </div>
+        </footer>
 </body>
 </html>
