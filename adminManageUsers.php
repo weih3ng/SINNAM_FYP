@@ -10,6 +10,20 @@ $success_message_user = "";
 if (isset($_GET['delete_id'])) {
     $patients_id = $_GET['delete_id'];
 
+    // Delete the related appointments first
+    $delete_appointments_sql = "DELETE FROM appointments WHERE patients_id = ?";
+    $stmt = mysqli_prepare($link, $delete_appointments_sql);
+    mysqli_stmt_bind_param($stmt, 'i', $patients_id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
+    // Delete the related testimonials next
+    $delete_testimonials_sql = "DELETE FROM testimonials WHERE patients_id = ?";
+    $stmt = mysqli_prepare($link, $delete_testimonials_sql);
+    mysqli_stmt_bind_param($stmt, 'i', $patients_id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
     // Delete the user from the database
     $sql = "DELETE FROM patients WHERE patients_id = ?";
     $stmt = mysqli_prepare($link, $sql);
