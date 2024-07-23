@@ -171,14 +171,14 @@ mysqli_close($link);
         <!-- Sign Up & Login Button -->
 
         <?php if (isset($_SESSION['username'])): ?>
-    <?php if ($_SESSION['username'] === 'doctor' || $_SESSION['username'] === 'admin'): ?>
-        <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
-    <?php else: ?>
-        <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: white;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
-    <?php endif; ?>
-<?php endif; ?>
+            <?php if ($_SESSION['username'] === 'doctor' || $_SESSION['username'] === 'admin'): ?>
+                <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
+            <?php else: ?>
+                <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: white;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
+            <?php endif; ?>
+        <?php endif; ?>
 
-            <?php if (isset($_SESSION['username'])): ?>
+        <?php if (isset($_SESSION['username'])): ?>
             <a class="nav-custom" href="logout.php">
                 <i class="fa-solid fa-right-to-bracket"></i> Logout
             </a>  
@@ -201,34 +201,39 @@ mysqli_close($link);
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($username); ?>">
                 </div>
+                
                 <div class="form-group">
                     <label for="name">Name:</label>
                     <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($name); ?>">
                 </div>
+
                 <div class="form-group">
                     <label for="email">Email:</label>
                     <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>">
                 </div>
+
                 <div class="form-group">
                     <label for="dob">Date of Birth:</label>
                     <input type="date" id="dob" name="dob" value="<?php echo htmlspecialchars($dob); ?>">
                 </div>
+
                 <div class="form-group">
-    <label for="gender">Gender:</label>
-    <div class="gender-options">
-        <input type="radio" id="male" name="gender" value="Male" <?php if ($gender == 'Male') echo 'checked'; ?>>
-        <label for="male">Male</label>
+                    <label for="gender">Gender:</label>
+                    <div class="gender-options">
+                        <input type="radio" id="male" name="gender" value="Male" <?php if ($gender == 'Male') echo 'checked'; ?>>
+                        <label for="male">Male</label>
 
-        <input type="radio" id="female" name="gender" value="Female" <?php if ($gender == 'Female') echo 'checked'; ?>>
-        <label for="female">Female</label>
+                        <input type="radio" id="female" name="gender" value="Female" <?php if ($gender == 'Female') echo 'checked'; ?>>
+                        <label for="female">Female</label>
 
-    </div>
-</div>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <label for="contactnumber">Contact Number:</label>
                     <input type="contactnumber" id="contactnumber" name="contactnumber" maxlength="8" pattern="\d{8}" value="<?php echo htmlspecialchars($contactnumber); ?>">
                 </div>
+                
                 <div class="form-group">
                     <label for="password">Password:</label>
                     <div class="password-wrapper">
@@ -289,7 +294,17 @@ mysqli_close($link);
             }
         }
 
-
+        // Checked whether username is already taken or not
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if(urlParams.has('error') && urlParams.get('error') === 'username_taken') {
+                alert('Username is already taken.');
+            }
+            if(urlParams.has('success') && urlParams.get('success') === 'profile_updated') {
+                alert('Profile updated successfully.');
+            }
+        }
     </script>
+
 </body>
 </html>
