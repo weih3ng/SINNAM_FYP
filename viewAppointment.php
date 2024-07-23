@@ -321,6 +321,7 @@ $current_date = date('Y-m-d');
                                     <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
+                                    |
                                     <a href="deleteAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">
                                         <i class="fas fa-trash"></i>
                                     </a>

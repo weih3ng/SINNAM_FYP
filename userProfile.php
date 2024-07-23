@@ -90,7 +90,8 @@ mysqli_close($link);
             padding-right: 30px;
         }
 
-        .form-group input[type="text"], 
+        .form-group input[type="text"],
+        .form-group input[type="contactnumber"], 
         .form-group input[type="email"], 
         .form-group input[type="date"], 
         .form-group input[type="number"] {
@@ -194,7 +195,7 @@ mysqli_close($link);
     <div class="edit-container">
         <div class="edit-box">
             <h1>Edit/Delete Profile</h1>
-            <form method="post" action="doEditProfile.php">
+            <form method="post" action="doEditUserProfile.php">
                 <div class="form-group">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" value="<?php echo htmlspecialchars($username); ?>">
@@ -225,7 +226,7 @@ mysqli_close($link);
 
                 <div class="form-group">
                     <label for="contactnumber">Contact Number:</label>
-                    <input type="text" id="contactnumber" name="contactnumber" value="<?php echo htmlspecialchars($contactnumber); ?>">
+                    <input type="contactnumber" id="contactnumber" name="contactnumber" maxlength="8" pattern="\d{8}" value="<?php echo htmlspecialchars($contactnumber); ?>">
                 </div>
                 <div class="form-group">
                     <label for="password">Password:</label>
@@ -261,12 +262,12 @@ mysqli_close($link);
         // Function to confirm edit profile
         function confirmEdit() {
             if (confirm("Are you sure you want to edit your profile?")) {
-                window.location.href = 'doEditProfile.php';
+                window.location.href = 'doEditUserProfile.php';
             }
         }
         function confirmDelete() {
             if (confirm("Are you sure you want to delete your profile? This action cannot be undone.")) {
-                window.location.href = 'doDeleteProfile.php';
+                window.location.href = 'doDeleteUserProfile.php';
             }
         }
         
