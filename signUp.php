@@ -233,39 +233,39 @@ include 'dbfunctions.php';
             <?php endif; ?>
             <form action="doSignUp.php" method="POST">
                 <label for="idName" class="required-label">
-                    <i class="fa-solid fa-user" style="color: #949494;"></i> Name
+                    <i class="fa-solid fa-user" style="color: #403d39;"></i> Name
                 </label>
                     <input id="idName" type="text" name="name" required>
                 <label for="idUsername" class="required-label">
-                    <i class="far fa-user" style="color: #949494;"></i> Username
+                    <i class="far fa-user" style="color: #403d39;"></i> Username
                     <input id="idUsername" type="text" name="username" required>
                     <span id="username-status" class="username-status"></span>
                 </label>
 
 
                 <label for="idEmail" class="required-label">
-                    <i class="fa-solid fa-envelope" style="color: #949494;"></i> Email
+                    <i class="fa-solid fa-envelope" style="color: #403d39;"></i> Email
                 </label>
                 <input id="idEmail" type="email" name="email" required>
 
                 <label for="idcontactnumber" class="required-label">
-                    <i class="fa-solid fa-phone" style="color: #949494;"></i> Contact Number
+                    <i class="fa-solid fa-phone" style="color: #403d39;"></i> Contact Number
                 </label>
                 <input id="idcontactnumber" type="contactnumber" name="contactnumber" required>
 
                 <label for="idDob" class="required-label">
-                    <i class="fa-solid fa-calendar-alt" style="color: #949494;"></i> Date of Birth
+                    <i class="fa-solid fa-calendar-alt" style="color: #403d39;"></i> Date of Birth
                 </label>
                 <input id="idDob" type="date" name="dob" required>
 
                 <label for="idPassword" class="required-label">
-                    <i class="fa-solid fa-lock" style="color: #949494;"></i> Password
+                    <i class="fa-solid fa-lock" style="color: #403d39;"></i> Password
                 </label>
                 <input id="idPassword" type="password" name="password" required>
 
                 <div class="gender-container">
                     <label class="gender-label required-label">
-                        <i class="fa-solid fa-venus-mars" style="color: #949494;"></i> Gender
+                        <i class="fa-solid fa-venus-mars" style="color: #403d39;"></i> Gender
                     </label>
                     <div class="gender-radio-buttons">
                     <label class="radio-label">

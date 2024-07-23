@@ -194,12 +194,12 @@ include 'dbfunctions.php';
             <h1>Welcome Back</h1>
             <form method="post" action="doLogin.php">
                 <label for="idEmail" class="required-label">
-                    <i class="fa-solid fa-envelope" style="color: #949494;"></i> Email
+                    <i class="fa-solid fa-envelope" style="color: #403d39;"></i> Email
                 </label>
                 <input id="idEmail" type="text" name="email" required/>
                 
                 <label for="idPassword" class="required-label">
-                    <i class="fa-solid fa-lock"  style="color: #949494;"></i> Password
+                    <i class="fa-solid fa-lock"  style="color: #403d39;"></i> Password
                 </label>
                 <input id="idPassword" type="password" name="password" required/>
                 
