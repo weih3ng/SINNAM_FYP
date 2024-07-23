@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
     if (mysqli_stmt_execute($stmt)) {
         // Set success message
         $_SESSION['success_message_user'] = "New user added!";
-        header("Location: manageUsers.php");
+        header("Location: adminManageUsers.php");
         exit();
     } else {
         $error_message = "Error: " . mysqli_error($link);
@@ -169,8 +169,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
             <img src="images/logo.jpeg" alt="logo" class="logo">
         </a>
         <div class="navbar-links">
-            <a href="manageUsers.php">Manage Users<span class="underline"></span></a>
-            <a href="manageAppointments.php">Manage Appointments<span class="underline"></span></a>
+            <a href="adminManageUsers.php">Manage Users<span class="underline"></span></a>
+            <a href="adminManageAppointments.php">Manage Appointments<span class="underline"></span></a>
         </div>
 
     <!-- Sign Up & Login Button -->
@@ -201,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
                 echo "<div style='color: red; text-align: center;'>$error_message</div>";
             }
             ?>
-            <form action="AdminAddUser.php" method="POST">
+            <form action="adminAddUser.php" method="POST">
                 <label for="name" class="required-label"><i class="fas fa-user"></i> Name:</label>
                 <input type="name" id="name" name="name" required>
                 <label for="email" class="required-label"><i class="far fa-envelope"></i> Email:</label>

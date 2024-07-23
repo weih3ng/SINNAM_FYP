@@ -23,8 +23,8 @@ if (isset($_GET['delete_id'])) {
         $_SESSION['error_message_appointment'] = "Error: " . mysqli_error($link);
     }
 
-    // Redirect back to manageAppointments.php
-    header("Location: manageAppointments.php");
+    // Redirect back to adminManageAppointments.php
+    header("Location: adminManageAppointments.php");
     exit();
 }
 
@@ -74,8 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['patients_id'])) {
                 $error_message_appointment = "Error: " . mysqli_error($link);
             }
 
-            // Redirect back to manageAppointments.php
-            header("Location: manageAppointments.php");
+            // Redirect back to adminManageAppointments.php
+            header("Location: adminManageAppointments.php");
             exit();
         }
     }
@@ -339,8 +339,8 @@ $appointments_result = mysqli_query($link, $appointments_sql);
             <img src="images/logo.jpeg" alt="logo" class="logo">
         </a>
         <div class="navbar-links">
-            <a href="manageUsers.php">Manage Users<span class="underline"></span></a>
-            <a href="manageAppointments.php" class="current">Manage Appointments</a>
+            <a href="adminManageUsers.php">Manage Users<span class="underline"></span></a>
+            <a href="adminManageAppointments.php" class="current">Manage Appointments</a>
         </div>
 
     <!-- Sign Up & Login Button -->
@@ -434,7 +434,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
        <!-- Edit Appointment Form -->
        <div class="form-container" id="editAppointmentForm" style="display:none;">
         <h2>Edit Appointment</h2>
-        <form action="manageAppointments.php" method="POST" onsubmit="enablePatientsId()">
+        <form action="adminManageAppointments.php" method="POST" onsubmit="enablePatientsId()">
             <input type="hidden" id="edit_appointment_id" name="appointment_id">
             <label for="edit_patients_id" ><i class="fas fa-user"></i> Booking Name:</label>
             <select id="edit_patients_id" name="patients_id" required disabled>
@@ -629,7 +629,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
                 e.preventDefault();
                 const appointmentId = this.dataset.id;
                 if (confirm("Are you sure you want to delete this appointment?")) {
-                    window.location.href = `manageAppointments.php?delete_id=${appointmentId}`;
+                    window.location.href = `adminManageAppointments.php?delete_id=${appointmentId}`;
                 }
             });
         });

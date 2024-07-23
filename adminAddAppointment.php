@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['patients_id'])) {
     if (mysqli_stmt_execute($stmt)) {
         // Set success message
         $_SESSION['success_message_appointment'] = "New appointment added!";
-        header("Location: manageAppointments.php");
+        header("Location: adminManageAppointments.php");
         exit();
     } else {
         $error_message = "Error: " . mysqli_error($link);
@@ -202,8 +202,8 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
             <img src="images/logo.jpeg" alt="logo" class="logo">
         </a>
         <div class="navbar-links">
-            <a href="manageUsers.php">Manage Users<span class="underline"></span></a>
-            <a href="manageAppointments.php">Manage Appointments<span class="underline"></span></a>
+            <a href="adminManageUsers.php">Manage Users<span class="underline"></span></a>
+            <a href="adminManageAppointments.php">Manage Appointments<span class="underline"></span></a>
         </div>
 
     <!-- Sign Up & Login Button -->

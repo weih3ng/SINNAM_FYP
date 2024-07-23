@@ -24,7 +24,7 @@ if (isset($_GET['delete_id'])) {
     }
 
     // Redirect back to manageUsers.php
-    header("Location: manageUsers.php");
+    header("Location: adminManageUsers.php");
     exit();
 }
 
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
             // Set JavaScript alert for duplicate username
             echo "<script>
                 alert('Error: The same username has been used. Please enter a different username.');
-                window.location.href='manageUsers.php';
+                window.location.href='adminManageUsers.php';
                 </script>";
             exit();
         } else {
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
     }
 
     // Redirect back to manageUsers.php to reflect changes
-    header("Location: manageUsers.php");
+    header("Location: adminManageUsers.php");
     exit();  
     }   
 }
@@ -356,8 +356,8 @@ $inactive_patients = mysqli_num_rows($inactive_users_result);
             <img src="images/logo.jpeg" alt="logo" class="logo">
         </a>
         <div class="navbar-links">
-            <a href="manageUsers.php" class="current">Manage Users</a>
-            <a href="manageAppointments.php">Manage Appointments<span class="underline"></span></a>
+            <a href="adminManageUsers.php" class="current">Manage Users</a>
+            <a href="adminManageAppointments.php">Manage Appointments<span class="underline"></span></a>
         </div>
 
     <!-- Sign Up & Login Button -->
@@ -492,7 +492,7 @@ $inactive_patients = mysqli_num_rows($inactive_users_result);
     <!--Edit User Form -->
         <div class="form-container" id="editUserForm" style="display:none;">
         <h2>Edit User</h2>
-            <form action="manageUsers.php" method="POST">
+            <form action="adminManageUsers.php" method="POST">
                 <input type="hidden" id="edit_patients_id" name="patients_id">
                 <label for="edit_name" >Name:</label>
                 <input type="text" id="edit_name" name="name" required>
@@ -637,7 +637,7 @@ $inactive_patients = mysqli_num_rows($inactive_users_result);
                 var deleteUserId = this.dataset.id;
                 var confirmation = confirm('Are you sure you want to delete this user?');
                 if (confirmation) {
-                    window.location.href = 'manageUsers.php?delete_id=' + deleteUserId;
+                    window.location.href = 'adminManageUsers.php?delete_id=' + deleteUserId;
                 }
             });
         });
