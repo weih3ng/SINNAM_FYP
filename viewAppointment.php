@@ -49,7 +49,20 @@ if ($stmt = mysqli_prepare($link, $query)) {
 mysqli_close($link);
 
 $current_date = date('Y-m-d');
+
+// Flag to check if there are any appointments for today
+$has_today_appointments = false;
+if ($user_type === 'doctor') {
+    foreach ($appointments as $appointment) {
+        if ($appointment['date'] === $current_date) {
+            $has_today_appointments = true;
+            break;
+        }
+    }
+}
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -208,7 +221,7 @@ $current_date = date('Y-m-d');
         </a>
         <div class="navbar-links">
             <?php if (isset($_SESSION['username']) && $_SESSION['username'] === 'doctor'): ?>
-                <a href="viewAppointment.php?user_type=doctor">View Appointment</a>
+                <a href="viewAppointment.php?user_type=doctor" class="current">View Appointment</a>
             <?php else: ?>
                 <a href="home.php">Home<span class="underline"></span></a>
                 <a href="aboutUs.php">About Us<span class="underline"></span></a>
@@ -247,94 +260,98 @@ $current_date = date('Y-m-d');
 
 
 
-<!-- View Appointment Container -->
-<div class="view-appointment-container">
-    <div class="content-box">
-        <h1>View Appointment</h1>
+    <!-- View Appointment Container -->
+    <div class="view-appointment-container">
+        <div class="content-box">
+            <h1>View Appointment</h1>
 
-        <?php if ($user_type === 'patient' && empty($appointments)) : ?>
-            <p>There are no appointments made yet. Please click on <a href="appointment.php">Appointment</a> to book.</p>
-        <?php else : ?>
-            <div class="table-header">
-                <div></div> <!-- Placeholder for spacing -->
-                <?php if ($user_type === 'patient') : ?>
-                    <select id="appointmentFilter" name="appointmentFilter">
-                        <option value="all">All Appointments</option>
-                        <option value="self">Only Self Appointments</option>
-                        <option value="family">Only Family Appointments</option>
-                    </select>
-                <?php elseif ($user_type === 'doctor') : ?>
-                    <select id="appointmentFilter" name="appointmentFilter">
-                        <option value="today">Today's Appointments</option>
-                        <option value="future">Future Appointments</option>
-                        <option value="past">Past Appointments</option>
-                    </select>
-                <?php endif; ?>
-            </div>
+            <?php if ($user_type === 'patient' && empty($appointments)) : ?>
+                <p>There are no appointments made yet. Please click on <a href="appointment.php">Appointment</a> to book.</p>
+            <?php else : ?>
+                <div class="table-header">
+                    <div></div> <!-- Placeholder for spacing -->
+                    <?php if ($user_type === 'patient') : ?>
+                        <select id="appointmentFilter" name="appointmentFilter">
+                            <option value="all">All Appointments</option>
+                            <option value="self">Only Self Appointments</option>
+                            <option value="family">Only Family Appointments</option>
+                        </select>
+                    <?php elseif ($user_type === 'doctor') : ?>
+                        <select id="appointmentFilter" name="appointmentFilter">
+                            <option value="today">Today's Appointments</option>
+                            <option value="future">Future Appointments</option>
+                            <option value="past">Past Appointments</option>
+                        </select>
+                    <?php endif; ?>
+                </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Queue Number</th>
-                        <th>Booking Name</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Medical Condition</th>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Queue Number</th>
+                            <th>Booking Name</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Medical Condition</th>
 
-                        <!-- Action column for doctors only -->
-                        <?php if ($user_type === 'doctor') : ?>
-                            <th>Action</th>
-                        <?php endif; ?>
-
-                        <?php if ($user_type ==='patient') : ?>
-                            <th>Self/Family</th>
-                            <th>Relationship Type</th>
-                            <th>Family Name</th> 
-                            <th>Action</th>
-                        <?php endif; ?>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <?php foreach ($appointments as $appointment) : ?>
-                        <tr class="<?= $appointment['is_for_self'] ? 'self-appointment' : 'family-appointment'; ?>">
-                            <td><?php echo htmlspecialchars($appointment['appointment_id']); ?></td>
-                            <td><?php echo htmlspecialchars($appointment['name']); ?></td>
-                            <td><?php echo htmlspecialchars($appointment['date']); ?></td>
-                            <td><?php echo htmlspecialchars($appointment['time']); ?></td>
-                            <td><?php echo htmlspecialchars($appointment['medical_condition']); ?></td>
-
-                            <!-- If the user is not a doctor, display relationship type and family name -->
-                            <?php if ($user_type !== 'doctor') : ?>
-                                <td><?php echo $appointment['is_for_self'] ? 'Self' : 'Family'; ?></td>
-                                <td><?php echo htmlspecialchars($appointment['relationship_type']); ?></td>
-                                <td><?php echo $appointment['is_for_self'] ? '' : htmlspecialchars($appointment['family_name']); ?></td>
+                            <!-- Action column for doctors only -->
+                            <?php if ($user_type === 'doctor') : ?>
+                                <th>Action</th>
                             <?php endif; ?>
 
-                            <!-- Display action buttons based on user type and appointment date -->
-                            <td class="action-buttons">
-                                <?php if ($user_type === 'doctor' && $appointment['date'] >= $current_date) : ?>
-                                    <a href="editMedicalCondition.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
-                                        <i class="fas fa-edit"></i> Edit
-                                    </a>
-                                <?php elseif ($user_type !== 'doctor' && $appointment['date'] >= $current_date) : ?>
-                                    <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    |
-                                    <a href="deleteAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">
-                                        <i class="fas fa-trash"></i>
-                                    </a>
-                                <?php endif; ?>
-                            </td>
+                            <?php if ($user_type ==='patient') : ?>
+                                <th>Self/Family</th>
+                                <th>Relationship Type</th>
+                                <th>Family Name</th> 
+                                <th>Action</th>
+                            <?php endif; ?>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
-    </div>
-</div>
+                    </thead>
 
+                    <tbody>
+                        <?php foreach ($appointments as $appointment) : ?>
+                            <tr class="<?= $appointment['is_for_self'] ? 'self-appointment' : 'family-appointment'; ?>">
+                                <td><?php echo htmlspecialchars($appointment['appointment_id']); ?></td>
+                                <td><?php echo htmlspecialchars($appointment['name']); ?></td>
+                                <td><?php echo htmlspecialchars($appointment['date']); ?></td>
+                                <td><?php echo htmlspecialchars($appointment['time']); ?></td>
+                                <td><?php echo htmlspecialchars($appointment['medical_condition']); ?></td>
+
+                                <!-- If the user is not a doctor, display relationship type and family name -->
+                                <?php if ($user_type !== 'doctor') : ?>
+                                    <td><?php echo $appointment['is_for_self'] ? 'Self' : 'Family'; ?></td>
+                                    <td><?php echo htmlspecialchars($appointment['relationship_type']); ?></td>
+                                    <td><?php echo $appointment['is_for_self'] ? '' : htmlspecialchars($appointment['family_name']); ?></td>
+                                <?php endif; ?>
+
+                                <!-- Display action buttons based on user type and appointment date -->
+                                <td class="action-buttons">
+                                    <?php if ($user_type === 'doctor' && $appointment['date'] >= $current_date) : ?>
+                                        <a href="editMedicalCondition.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
+                                            <i class="fas fa-edit"></i> Edit
+                                        </a>
+                                    <?php elseif ($user_type !== 'doctor' && $appointment['date'] >= $current_date) : ?>
+                                        <a href="editAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        |
+                                        <a href="deleteAppointment.php?appointment_id=<?php echo $appointment['appointment_id']; ?>" class="btn btn-delete">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    <?php endif; ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+
+            <!-- Display no appointments message if no appointments for today -->
+            <?php if ($user_type === 'doctor') : ?>
+                <p id="noAppointmentsMessage" style="display: <?php echo $has_today_appointments ? 'none' : 'block'; ?>;">There are no appointments made today.</p>
+            <?php endif; ?>
+        <?php endif; ?>
+        </div>
+    </div>
 
 
     <!-- Footer -->
@@ -403,42 +420,51 @@ $current_date = date('Y-m-d');
 
     </script>
 
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        if (window.location.href.includes('user_type=doctor')) {
-            const filterSelect = document.getElementById('appointmentFilter');
+        const filterSelect = document.getElementById('appointmentFilter');
+        const noAppointmentsMessage = document.getElementById('noAppointmentsMessage');
+        const rows = document.querySelectorAll('table tbody tr');
+        const currentDate = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
 
-            // Function to apply filter based on the selected value
-            function applyFilter(filterValue) {
-                const rows = document.querySelectorAll('table tbody tr');
-                const currentDate = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+        // Function to apply filter based on the selected value
+        function applyFilter(filterValue) {
+            let hasAppointments = false;
 
-                rows.forEach(row => {
-                    const appointmentDate = row.querySelector('td:nth-child(3)').textContent; // Get the appointment date from the 3rd column
+            rows.forEach(row => {
+                const appointmentDate = row.querySelector('td:nth-child(3)').textContent; // Get the appointment date from the 3rd column
 
-                    row.style.display = ''; // Reset display to default for all rows
+                row.style.display = ''; // Reset display to default for all rows
 
-                    if (filterValue === 'future' && appointmentDate <= currentDate) {
-                        row.style.display = 'none'; // Hide past and today's appointments
-                    } else if (filterValue === 'past' && appointmentDate >= currentDate) {
-                        row.style.display = 'none'; // Hide future and today's appointments
-                    } else if (filterValue === 'today' && appointmentDate !== currentDate) {
-                        row.style.display = 'none'; // Hide non-today appointments
-                    }
-                });
-            }
-
-            // Apply 'today' filter by default for doctors
-            applyFilter('today');
-
-            // Add event listener to filter dropdown
-            filterSelect.addEventListener('change', function() {
-                applyFilter(this.value);
+                if (filterValue === 'future' && appointmentDate <= currentDate) {
+                    row.style.display = 'none'; // Hide past and today's appointments
+                } else if (filterValue === 'past' && appointmentDate >= currentDate) {
+                    row.style.display = 'none'; // Hide future and today's appointments
+                } else if (filterValue === 'today' && appointmentDate !== currentDate) {
+                    row.style.display = 'none'; // Hide non-today appointments
+                } else {
+                    hasAppointments = true; // There are appointments for the selected filter
+                }
             });
+
+            // Show or hide the "no appointments" message based on the filter and appointment availability
+            if (filterValue === 'today') {
+                noAppointmentsMessage.style.display = hasAppointments ? 'none' : 'block';
+            } else {
+                noAppointmentsMessage.style.display = 'none'; // Hide the message for other filters
+            }
         }
+
+        // Apply the filter based on the current filter value
+        applyFilter(filterSelect.value);
+
+        // Add event listener to filter dropdown
+        filterSelect.addEventListener('change', function() {
+            applyFilter(this.value);
+        });
     });
 </script>
+
 
 
 
