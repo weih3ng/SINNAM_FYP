@@ -76,124 +76,101 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
     <link rel="stylesheet" href="style.css">
     <title>Add New Appointment</title>
     <style>
-        html, body {
-            background-color: #F1EDE2;  /* ensure the background color covers the entire viewport */
-        }
+/* General styling for the form */
+html, body {
+    background-color: #F1EDE2;
+}
 
-        .admin-panel-container {
-            display: flex; /* makes the container a flex container so that items are well-aligned */
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-color: #F1EDE2;
-            padding: 50px 20px;
-            min-height: calc(100vh - 150px);  /* ensure the container takes at least the full viewport height */
-        }
+.admin-panel-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #F1EDE2;
+    padding: 50px 20px;
+    min-height: calc(100vh - 150px);
+}
 
-        h2{
-            text-align: center;
-        }
+h2 {
+    text-align: center;
+}
 
-        .form-container {
-            background-color: #DECFBC;
-            padding: 20px;
-            border-radius: 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 50%;
-            margin-bottom: 40px;
-            align-items: center;
-            margin: 0 auto;
-        }
+.form-container {
+    background-color: #DECFBC;
+    padding: 20px;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 50%;
+    margin-bottom: 40px;
+    align-items: center;
+    margin: 0 auto;
+}
 
-        .form-container form {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-        }
+.form-container form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
 
-        .form-container label {
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
+.form-container label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
 
-        .form-container label.required-label::before {
-            content: " *";
-            color: red;
-            margin-left: 5px;
-            padding-right: 10px;
-        }
+.form-container label.required-label::before {
+    content: " *";
+    color: red;
+    margin-left: 5px;
+    padding-right: 10px;
+}
 
-        .form-container input,
-        .form-container select {
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 30px;
-            border: 1px solid #ccc;
-        }
+.form-container input,
+.form-container select,
+.form-container textarea {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 30px;
+    border: 1px solid #ccc;
+}
 
-        .form-container input[type="text"],
-        .form-container input[type="number"],
-        .form-container input[type="date"],
-        .form-container select {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #DC3545;
-            border-radius: 20px;
-            background-color: white;
-        }
+.form-container .button-container {
+    text-align: center; 
+}
 
-        .form-container textarea {
-            width: 610px;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #DC3545;
-            border-radius: 20px;
-            background-color: white;
-            box-sizing: border-box; /* ensure padding is included in the element's total width and height */
-        }
+.form-container button {
+    background-color: #80352F;
+    color: white;
+    margin: 5px;
+    padding: 10px 50px;
+    font-size: 16px;
+    width: 180px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+}
 
-        .form-container select {
-            width: 610px;
-        }
+.form-container button:hover {
+    background-color: #6b2c27;
+}
 
-        .form-container .button-container {
-            text-align: center; 
-        }
+/* Additional CSS styling for navigation bar */
+.navbar-links a.current {
+    position: relative;
+    color: white;
+}
 
-        .form-container button {
-            background-color: #80352F;
-            color: white;
-            margin: 5px;
-            padding: 10px 50px;
-            font-size: 16px;
-            width: 180px;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: bold;
-        }
- 
-        .form-container button:hover {
-            background-color: #6b2c27;
-        }
+.navbar-links a.current:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -10px;
+    height: 3px;
+    background-color: white;
+    border-radius: 2px;
+}
 
-        /* additional CSS styling for navigation bar */
-        .navbar-links a.current {
-            position: relative;
-            color: white; 
-        }
-        
-        .navbar-links a.current:after {
-            content: '';
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: -10px; 
-            height: 3px; 
-            background-color: white; 
-            border-radius: 2px; 
-        }
     </style>
 </head>
 <body>
@@ -230,50 +207,59 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
         <div class="admin-panel-container">
         <h1>Add New Appointment</h1>
         <div class="form-container">
-            <form action="adminAddAppointment.php" method="POST">
-                <label for="patients_id" class="required-label">
-                    <i class="fas fa-user"></i> Booking Name:</label>
-                <select id="patients_id" name="patients_id" required>
-                    <option value="">Select Patient</option>
-                    <?php foreach ($patients as $id => $name): ?>
-                        <option value="<?php echo $id; ?>"><?php echo $name; ?></option>
-                    <?php endforeach; ?>
-                </select>
-                <label for="date" class="required-label">
-                    <i class="fas fa-calendar-alt"></i> Date:</label>
-                <input type="date" id="date" name="date" required>
-                <label for="time" class="required-label">
-                    <i class="far fa-clock"></i> Time:</label>
-                <select id="time" name="time" required></select>
-                <label for="medical_condition" class="required-label">
-                    <i class="fas fa-laptop-medical"></i> Medical Condition:</label>
-                <textarea id="medical_condition" name="medical_condition" required rows="4" style="resize: none;"></textarea>
-                <label for="is_for_self" class="required-label">
-                    <i class="fas fa-users"></i> Booking for:</label>
-                <div>
-                    <input type="radio" id="is_for_self_myself" name="is_for_self" value="1" required>
-                    <label for="is_for_self_myself">Myself</label>
-                    <input type="radio" id="is_for_self_family" name="is_for_self" value="0" required>
-                    <label for="is_for_self_family">Family</label>
-                </div>
-                <div id="family_info" style="display: none;">
-                    <label for="relationship_type" class="required-label">
-                        <i class="fas fa-people-arrows"></i> Relationship Type:</label>
-                    <select id="relationship_type" name="relationship_type">
-                        <option value="spouse">Spouse</option>
-                        <option value="child">Child</option>
-                        <option value="parent">Parent</option>
-                        <option value="other">Other</option>
-                    </select>
-                    <label for="family_name" class="required-label">
-                        <i class="fas fa-user-tag"></i> Family member's name:</label>
-                    <input type="text" id="family_name" name="family_name">
-                </div>
-                <div class="button-container">
-                    <button type="submit">Add Appointment</button>
-                </div>
-            </form>
+
+    <form action="adminAddAppointment.php" method="POST">
+        <label for="patients_id" class="required-label">
+            <i class="fas fa-user"></i> Booking Name:</label>
+        <select id="patients_id" name="patients_id" style="width: 700px;" required>
+            <option value="">Select Patient</option>
+            <?php foreach ($patients as $id => $name): ?>
+                <option value="<?php echo $id; ?>"><?php echo $name; ?></option>
+            <?php endforeach; ?>
+        </select>
+        
+        <label for="date" class="required-label">
+            <i class="fas fa-calendar-alt"></i> Date:</label>
+        <input type="date" id="date" name="date" style="width: 680px;" required>
+        
+        <label for="time" class="required-label">
+            <i class="far fa-clock"></i> Time:</label>
+        <select id="time" name="time" style="width: 700px;" required></select>
+        
+        <label for="medical_condition" class="required-label">
+            <i class="fas fa-laptop-medical"></i> Medical Condition:</label>
+        <textarea id="medical_condition" name="medical_condition" style="width: 680px; height: 150px;" required rows="4" style="resize: none;"></textarea>
+        
+        <label for="is_for_self" class="required-label">
+            <i class="fas fa-users"></i> Booking for:</label>
+        <div>
+            <input type="radio" id="is_for_self_myself" name="is_for_self" value="1" required>
+            <label for="is_for_self_myself">Myself</label>
+            <input type="radio" id="is_for_self_family" name="is_for_self" value="0" required>
+            <label for="is_for_self_family">Family</label>
         </div>
+        <br>
+        <div id="family_info" style="display: none;">
+            <label for="relationship_type" class="required-label">
+                <i class="fas fa-people-arrows"></i> Relationship Type:</label>
+            <select id="relationship_type" name="relationship_type" style="width: 700px;">
+                <option value="spouse">Spouse</option>
+                <option value="child">Child</option>
+                <option value="parent">Parent</option>
+                <option value="other">Other</option>
+            </select>
+            <br>
+            <label for="family_name" class="required-label">
+                <i class="fas fa-user-tag"></i> Family member's name:</label>
+            <input type="text" id="family_name" name="family_name" style="width: 680px;">
+        </div>
+        
+        <div class="button-container">
+            <button type="submit">Add Appointment</button>
+        </div>
+    </form>
+</div>
+
     </div>
 
     <!-- Footer -->

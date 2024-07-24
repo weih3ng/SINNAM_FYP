@@ -110,226 +110,210 @@ $appointments_result = mysqli_query($link, $appointments_sql);
     <link rel="stylesheet" href="style.css">
     <title>Manage Appointments</title>
     <style>
-        html, body {
-            background-color: #F1EDE2;  /* ensure the background color covers the entire viewport */
-        }
-        .admin-panel-container {
-            display: flex; /* makes the container a flex container so that items are well-aligned */
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-color: #F1EDE2;
-            padding: 50px 20px;
-            min-height: calc(100vh - 150px); /* ensure the container takes at least the full viewport height */
-        }
+html, body {
+    background-color: #F1EDE2;  /* ensure the background color covers the entire viewport */
+}
+.admin-panel-container {
+    display: flex; /* makes the container a flex container so that items are well-aligned */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #F1EDE2;
+    padding: 50px 20px;
+    min-height: calc(100vh - 150px); /* ensure the container takes at least the full viewport height */
+}
 
-        h2{
-            text-align: center;
-        }
+h2 {
+    text-align: center;
+}
 
-        .statistics-container {
-            display: flex;
-            justify-content: space-around;
-            width: 65%;
-            margin-bottom: 30px;
-        }
+.statistics-container {
+    display: flex;
+    justify-content: space-around;
+    width: 65%;
+    margin-bottom: 30px;
+}
 
-        .stat-box {
-            background-color: #ffffff;
-            padding: 15px;
-            border-radius: 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 40%;
-        }
+.stat-box {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 40%;
+}
 
-        .stat-box h3 {
-            margin: 10px 0;
-            font-size: 20px;
-        }
+.stat-box h3 {
+    margin: 10px 0;
+    font-size: 20px;
+}
 
-        .form-container {
-            background-color: #DECFBC;
-            padding: 20px;
-            border-radius: 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 50%;
-            margin-bottom: 40px;
-            align-items: center;
-            margin: 0 auto;
-        }
+.form-container {
+    background-color: #DECFBC;
+    padding: 20px;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 50%;
+    margin-bottom: 40px;
+    align-items: center;
+    margin: 0 auto;
+}
 
-        .form-container form {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-        }
+.form-container form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
 
-        .form-container label {
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
+.form-container label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
 
-        .form-container input,
-        .form-container select {
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 30px;
-            border: 1px solid #ccc;
-        }
+.form-container input,
+.form-container select {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 30px;
+    border: 1px solid #ccc;
+}
 
-        .form-container input[type="text"],
-        .form-container input[type="number"],
-        .form-container input[type="date"],
-        .form-container select {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #DC3545;
-            border-radius: 20px;
-            background-color: white;
-        }
+.form-container textarea {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #DC3545;
+    border-radius: 20px;
+    background-color: white;
+    box-sizing: border-box; /* ensure padding is included in the element's total width and height */
+}
 
-        .form-container textarea {
-            width: 610px;
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #DC3545;
-            border-radius: 20px;
-            background-color: white;
-            box-sizing: border-box; /* ensure padding is included in the element's total width and height */
-        }
+.form-container .button-container {
+    text-align: center; 
+}
 
-        .form-container select {
-            width: 610px;
-        }
+.form-container button {
+    background-color: #80352F;
+    color: white;
+    margin: 5px;
+    padding: 10px 50px;
+    font-size: 16px;
+    width: 180px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+}
 
-        .form-container .button-container {
-            text-align: center; 
-        }
+.form-container button:hover {
+    background-color: #6b2c27;
+}
 
-        .form-container button {
-            background-color: #80352F;
-            color: white;
-            margin:5px;
-            padding: 10px 50px;
-            font-size: 16px;
-            width: 180px;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: bold;
-        }
- 
-        .form-container button:hover {
-            background-color: #6b2c27;
-        }
+.record-links {
+    text-align: center;
+}
 
-        .record-links {
-            text-align: center;
-        }
+.record-links a {
+    color: #80352F;
+    text-decoration: none;
+    margin: 0 10px;
+}
 
-        .record-links a {
-            color: #80352F;
-            text-decoration: none;
-            margin: 0 10px;
-        }
+.record-links a:hover {
+    text-decoration: underline;
+}
 
-        .record-links a:hover {
-            text-decoration: underline;
-        }
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #F1EDE2;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            background-color: #F1EDE2;
-        }
-        
-        th, td {
-            border: 1px solid #80352F;
-            padding: 10px;
-            text-align: left;
-        }
-        
-        th {
-            background-color: #80352F;
-            color: white;
-        }
-        
-        td a {
-            color: #80352F;
-            text-decoration: none;
-        }
+th, td {
+    border: 1px solid #80352F;
+    padding: 10px;
+    text-align: left;
+}
 
-        td a:hover {
-            text-decoration: underline;
-        }
+th {
+    background-color: #80352F;
+    color: white;
+}
 
-        .search-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+td a {
+    color: #80352F;
+    text-decoration: none;
+}
 
-        .search-container input[type="text"] {
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            width: 350px;
-        }
+td a:hover {
+    text-decoration: underline;
+}
 
-        .search-container button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #80352F;
-            color: white;
-            cursor: pointer;
-            margin-left: 10px;
-        }
-        
-        .button-container button {
-            text-align: center;
-            margin-bottom: 20px;
-            color: white;
-            background-color: #80352F;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: bold;
-            padding: 10px 50px;
-            font-size: 16px;
-            width: 180px;
-        }
+.search-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
 
-        .button-container button:hover {
-            background-color: #6b2c27;
-        }
+.search-container input[type="text"] {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 350px;
+}
 
-        td a.edit-link {
-            color: green;
-        }
+.search-container button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #80352F;
+    color: white;
+    cursor: pointer;
+    margin-left: 10px;
+}
 
-        .dataTables_length {
-            margin-bottom: 10px; 
-        }
+.button-container button {
+    text-align: center;
+    margin-bottom: 20px;
+    color: white;
+    background-color: #80352F;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 10px 50px;
+    font-size: 16px;
+    width: 180px;
+}
 
-        /* additional CSS styling for navigation bar */
-        .navbar-links a.current {
-            position: relative;
-            color: white; 
-        }
-        
-        .navbar-links a.current:after {
-            content: '';
-            position: absolute;
-            left: 0;
-            right: 0;
-            bottom: -10px; 
-            height: 3px; 
-            background-color: white; 
-            border-radius: 2px; 
-        }
+.button-container button:hover {
+    background-color: #6b2c27;
+}
+
+td a.edit-link {
+    color: green;
+}
+
+.dataTables_length {
+    margin-bottom: 10px; 
+}
+
+/* additional CSS styling for navigation bar */
+.navbar-links a.current {
+    position: relative;
+    color: white; 
+}
+
+.navbar-links a.current:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -10px; 
+    height: 3px; 
+    background-color: white; 
+    border-radius: 2px; 
+}
+
     </style>
 </head>
 <body>
@@ -433,45 +417,47 @@ $appointments_result = mysqli_query($link, $appointments_sql);
 
        <!-- Edit Appointment Form -->
        <div class="form-container" id="editAppointmentForm" style="display:none;">
-        <h2>Edit Appointment</h2>
-        <form action="adminManageAppointments.php" method="POST" onsubmit="enablePatientsId()">
-            <input type="hidden" id="edit_appointment_id" name="appointment_id">
-            <label for="edit_patients_id" ><i class="fas fa-user"></i> Booking Name:</label>
-            <select id="edit_patients_id" name="patients_id" required disabled>
+    <h2>Edit Appointment</h2>
+    <form action="adminManageAppointments.php" method="POST" onsubmit="enablePatientsId()">
+        <input type="hidden" id="edit_appointment_id" name="appointment_id">
+        <label for="edit_patients_id"><i class="fas fa-user"></i> Booking Name:</label>
+        <select id="edit_patients_id" name="patients_id" required disabled style="width: 720px;">
             <option value="">Select Patient</option>
             <?php foreach ($patients as $id => $name): ?>
                 <option value="<?php echo $id; ?>"><?php echo $name; ?></option>
             <?php endforeach; ?>
+        </select>
+        <label for="edit_date"><i class="fas fa-calendar-alt"></i> Date:</label>
+        <input type="date" id="edit_date" name="date" required style="width: 700px;">
+        <label for="edit_time"><i class="far fa-clock"></i> Time:</label>
+        <select id="edit_time" name="time" required style="width: 720px;"></select>
+        <label for="edit_medical_condition"><i class="fas fa-laptop-medical"></i> Medical Condition:</label>
+        <textarea id="edit_medical_condition" name="medical_condition" required rows="4" style="resize: none; width: 720px;"></textarea>
+        <label for="edit_is_for_self"><i class="fas fa-users"></i> Booking for:</label>
+        <div>
+            <input type="radio" id="edit_is_for_self_myself" name="is_for_self" value="1" required>
+            <label for="edit_is_for_self_myself">Myself</label>
+            <input type="radio" id="edit_is_for_self_family" name="is_for_self" value="0" required>
+            <label for="edit_is_for_self_family">Family</label>
+        </div><br>
+        <div id="edit_family_info" style="display: none;">
+            <label for="edit_relationship_type"><i class="fas fa-people-arrows"></i> Relationship Type:</label>
+            <select id="edit_relationship_type" name="relationship_type" style="width: 720px;">
+                <option value="spouse">Spouse</option>
+                <option value="child">Child</option>
+                <option value="parent">Parent</option>
+                <option value="other">Other</option>
             </select>
-            <label for="edit_date"><i class="fas fa-calendar-alt"></i> Date:</label>
-            <input type="date" id="edit_date" name="date" required>
-            <label for="edit_time"><i class="far fa-clock"></i> Time:</label>
-            <select id="edit_time" name="time" required></select>
-            <label for="edit_medical_condition"><i class="fas fa-laptop-medical"></i> Medical Condition:</label>
-            <textarea id="edit_medical_condition" name="medical_condition" required rows="4" style="resize: none;"></textarea>
-            <label for="edit_is_for_self"><i class="fas fa-users"></i> Booking for:</label>
-            <div>
-                <input type="radio" id="edit_is_for_self_myself" name="is_for_self" value="1" required>
-                <label for="edit_is_for_self_myself">Myself</label>
-                <input type="radio" id="edit_is_for_self_family" name="is_for_self" value="0" required>
-                <label for="edit_is_for_self_family">Family</label>
-            </div>
-            <div id="edit_family_info" style="display: none;">
-                <label for="edit_relationship_type"><i class="fas fa-people-arrows"></i> Relationship Type:</label>
-                <select id="edit_relationship_type" name="relationship_type">
-                    <option value="spouse">Spouse</option>
-                    <option value="child">Child</option>
-                    <option value="parent">Parent</option>
-                    <option value="other">Other</option>
-                </select>
-                <label for="edit_family_name"><i class="fas fa-user-tag"></i> Family Member's Name:</label>
-                <input type="text" id="edit_family_name" name="family_name">
-            </div>
-            <div class="button-container">
-                <button type="submit">Update Appointment</button>
-            </div>
-        </form>
-    </div>
+            <br>
+            <label for="edit_family_name"><i class="fas fa-user-tag"></i> Family Member's Name:</label>
+            <input type="text" id="edit_family_name" name="family_name" style="width: 700px;">
+        </div>
+        <div class="button-container">
+            <button type="submit">Update Appointment</button>
+        </div>
+    </form>
+</div>
+
     </div>
 
     <!-- Footer -->
