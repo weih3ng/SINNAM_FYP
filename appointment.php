@@ -10,6 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $medical_condition = $_POST['medical_conditions']; // Added medical condition (joc)
         $patients_id = $_SESSION['patients_id'];
         $doctor_id = 1; // Assuming a fixed doctor ID for now
+        $admin_id = 1; // Assuming a fixed admin ID for now
 
         // Ensure date format is YYYY-MM-DD
         $formatted_date = date('Y-m-d', strtotime($date));
@@ -36,10 +37,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 mysqli_stmt_close($check_stmt);
 
-                $sql = "INSERT INTO appointments (patients_id, doctor_id, date, time, is_for_self, relationship_type, family_name, medical_condition) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO appointments (patients_id, doctor_id, admin_id, date, time, is_for_self, relationship_type, family_name, medical_condition) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 if ($stmt = mysqli_prepare($link, $sql)) {
-                    mysqli_stmt_bind_param($stmt, "iississs", $patients_id, $doctor_id, $formatted_date, $time, $is_for_self, $relationship_type, $family_name, $medical_condition);
+                    mysqli_stmt_bind_param($stmt, "iiississs", $patients_id, $doctor_id, $admin_id, $formatted_date, $time, $is_for_self, $relationship_type, $family_name, $medical_condition);
                     if (mysqli_stmt_execute($stmt)) {
                         $newly_created_appointment_id = mysqli_insert_id($link);  // This captures the last inserted ID (joc)
                         $_SESSION['appointment_id'] = $newly_created_appointment_id;  // Store it in session to use later (joc)
