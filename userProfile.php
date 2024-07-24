@@ -243,7 +243,7 @@ mysqli_close($link);
                 </div>
 
                 <br>
-                <button type="submit" class="btn" onclick="confirmEdit()">Save Changes</button>
+                <button type="submit" class="btn" onclick="confirmEdit(event)">Save Changes</button>
                 <button type="button" class="btn" onclick="confirmDelete()">Delete Profile</button>
             </form>
         </div>
@@ -294,22 +294,12 @@ mysqli_close($link);
             }
         }
 
-        // Checked whether username is already taken or not
         window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            if(urlParams.has('error') && urlParams.get('error') === 'username_taken') {
-                alert('Username is already taken.');
-            }
-            if(urlParams.has('success') && urlParams.get('success') === 'profile_updated') {
-                alert('Profile updated successfully.');
-            }
-        }
-
-        // Set the max attribute for the date of birth field to today's date
-        window.onload = function() {
+            // Set the date to maximum by allowing the date of birth to today's date
             const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
             document.getElementById('dob').setAttribute('max', today);
 
+            // Check whether the username is already taken or not
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('error') && urlParams.get('error') === 'username_taken') {
                 alert('Username is already taken.');
@@ -318,6 +308,14 @@ mysqli_close($link);
                 alert('Profile updated successfully.');
             }
         }
+
+        // Function to confirm edit profile (alery box)
+        function confirmEdit(event) {
+            if (!confirm("Are you sure you want to edit your profile?")) {
+                event.preventDefault(); // Prevent the form from submitting if the user click on cancel button
+            }
+        }
+
     </script>
 
 </body>
