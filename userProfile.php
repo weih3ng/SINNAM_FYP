@@ -101,7 +101,7 @@ mysqli_close($link);
             padding: 10px;
             border-radius: 30px;
             background-color: #ffffff; 
-            border: 2px solid #80352F;
+            border: 2px solid black;
             flex: 1;
         }
 
@@ -135,7 +135,7 @@ mysqli_close($link);
             padding: 10px;
             padding-right: 40px; 
             border-radius: 30px;
-            border: 2px solid #80352F;
+            border: 2px solid black;
             background-color: #ffffff;
             flex-grow: 1;
         }

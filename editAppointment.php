@@ -170,46 +170,26 @@ mysqli_close($link);
             cursor: not-allowed; 
         }
 
-        /* Styles for editable fields */
-        input[type="date"]:not([readonly]), 
-        input[type="time"]:not([readonly]), 
-        input[type="text"]:not([readonly]) {
-            background-color: #ffffff; 
-            border: 2px solid #80352F; 
-        }
-
-        .form-group select,
-        .form-group input[type="text"] {
-            padding: 8px;
-        }
-
+        /* Styles for all the lables (joc) */
         .form-group label {
             width: 150px; /* Ensure all labels have the same width */
             text-align: right;
         }
 
-        /* Specific styles for relationship and family name fields for consistency */
-        #relationship_type, #family_name, #medical-conditions, #time {
+        /* Styles for editable fields (joc) */
+        #date, #time, #relationship_type, #family_name, #medical-conditions  {
             display: inline-block;
             width: 180px;
             flex-grow: 1; /* Allows the input to fill the space */
             background-color: #ffffff; 
-            border: 2px solid #80352F; 
+            border: 2px solid black; 
             padding: 8px;
+            border-radius: 30px; 
         }
 
         #relationship_type {
             width: 200px; /* Adjust the width to be longer */
             margin-left: 35px; /* Add margin to separate the fields */
-        }
-
-        .form-group select {
-            display: block;
-            width: 250px;
-            padding: 10px;
-            border-radius: 30px; /* Rounded corners */
-            border: 1px solid #ccc;
-            flex: 1;
         }
 
     </style>

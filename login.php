@@ -75,7 +75,7 @@ include 'dbfunctions.php';
             border-radius: 20px;
             width: 70%;
             height: 30px;
-            border: 1px solid #DC3545;
+            border: 1px solid black;
             background-color: white;
             margin-bottom: 15px;
             padding: 5px 5px;

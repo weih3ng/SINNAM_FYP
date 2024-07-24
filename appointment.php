@@ -126,10 +126,9 @@ mysqli_close($link);
             padding: 18px;
             font-size: 18px;
             border-radius: 8px;
-            border: 1px solid #ccc;
             width: 150px;
             background-color: #ffffff; 
-            border: 2px solid #80352F;
+            border: 2px solid black;
         }
 
         .timeslot-container {
@@ -162,7 +161,7 @@ mysqli_close($link);
             padding: 8px;
             border-radius: 8px;
             background-color: #ffffff; 
-            border: 2px solid #80352F; 
+            border: 2px solid black; 
             font-size: 15px;
             width: 100%; /* Forces the input to take full width of the line */
             box-sizing: border-box; /* Border and padding included in the width */
@@ -177,7 +176,20 @@ mysqli_close($link);
             width: 100%;
             box-sizing: border-box; /* Include padding and border in width calculation */
             background-color: #ffffff; 
-            border: 2px solid #80352F;
+            border: 2px solid black;
+        }
+
+        select[disabled] {
+            padding: 10px; /* Adjust padding as needed */
+            font-size: 17px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            width: 100%;
+            box-sizing: border-box; /* Include padding and border in width calculation */
+            background-color: #ffffff; 
+            border: 2px solid black;
+            opacity: 0.5; 
+            cursor: not-allowed; 
         }
 
         .btn-book {
@@ -195,14 +207,6 @@ mysqli_close($link);
 
         .btn-book:hover {
             background-color: #6b2c27;
-        }
-
-        /* Disabled state for the button (joc) */
-        .btn-book:disabled {
-            background-color: #ccc; 
-            color: #666; 
-            cursor: not-allowed; 
-            box-shadow: 5px 5px 15px grey;
         }
 
         /* Navigation Bar Styling (joc) */ 
@@ -398,7 +402,9 @@ mysqli_close($link);
                     <br><br><br> <!-- Add medical condition (joc) -->
                     <label for="medical-conditions"><b>Reason for consult (Medical Condition): <b></label>
                     <br><br>
-                    <textarea id="medical-conditions" name="medical_conditions" rows="4" style="width:100%;" disabled></textarea>
+                    <select id="medical-conditions-disabled" disabled>
+                        <option value=""></option>
+                    </select>
 
                     
                 </form>
