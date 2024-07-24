@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['patients_id'])) {
     $relationship_type = $_POST['relationship_type'] ?? '';
     $family_name = $_POST['family_name'] ?? '';
     $doctor_id = 1; // Fixed doctor ID
+    $admin_id = 1; //Fixed admin ID
 
     // Set relationship_type and family_name to empty string if booking is for self
     if ($is_for_self == '1') {
@@ -37,10 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['patients_id'])) {
         $_SESSION['error_message'] = "The date and time slot has been booked. Please choose another date and time slot.";
     } else {
     // Insert the new appointment into the database
-    $sql = "INSERT INTO appointments (patients_id, doctor_id, date, time, is_for_self, relationship_type, family_name, medical_condition) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO appointments (patients_id, doctor_id, admin_id, date, time, is_for_self, relationship_type, family_name, medical_condition) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($link, $sql);
-    mysqli_stmt_bind_param($stmt, 'iississs', $patients_id, $doctor_id, $date, $time, $is_for_self, $relationship_type, $family_name, $medical_condition);
+    mysqli_stmt_bind_param($stmt, 'iiississs', $patients_id, $doctor_id, $admin_id, $date, $time, $is_for_self, $relationship_type, $family_name, $medical_condition);
 
     if (mysqli_stmt_execute($stmt)) {
         // Set success message
