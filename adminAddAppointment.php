@@ -76,101 +76,100 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
     <link rel="stylesheet" href="style.css">
     <title>Add New Appointment</title>
     <style>
-/* General styling for the form */
-html, body {
-    background-color: #F1EDE2;
-}
+        /* General styling for the form */
+        html, body {
+            background-color: #F1EDE2;
+        }
 
-.admin-panel-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #F1EDE2;
-    padding: 50px 20px;
-    min-height: calc(100vh - 150px);
-}
+        .admin-panel-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #F1EDE2;
+            padding: 50px 20px;
+            min-height: calc(100vh - 150px);
+        }
 
-h2 {
-    text-align: center;
-}
+        h2 {
+            text-align: center;
+        }
 
-.form-container {
-    background-color: #DECFBC;
-    padding: 20px;
-    border-radius: 30px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 50%;
-    margin-bottom: 40px;
-    align-items: center;
-    margin: 0 auto;
-}
+        .form-container {
+            background-color: #DECFBC;
+            padding: 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 50%;
+            margin-bottom: 40px;
+            align-items: center;
+            margin: 0 auto;
+        }
 
-.form-container form {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
 
-.form-container label {
-    margin-bottom: 5px;
-    font-weight: bold;
-}
+        .form-container label {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
 
-.form-container label.required-label::before {
-    content: " *";
-    color: red;
-    margin-left: 5px;
-    padding-right: 10px;
-}
+        .form-container label.required-label::before {
+            content: " *";
+            color: red;
+            margin-left: 5px;
+            padding-right: 10px;
+        }
 
-.form-container input,
-.form-container select,
-.form-container textarea {
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 30px;
-    border: 1px solid #ccc;
-}
+        .form-container input,
+        .form-container select,
+        .form-container textarea {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 30px;
+            border: 1px solid black;
+        }
 
-.form-container .button-container {
-    text-align: center; 
-}
+        .form-container .button-container {
+            text-align: center; 
+        }
 
-.form-container button {
-    background-color: #80352F;
-    color: white;
-    margin: 5px;
-    padding: 10px 50px;
-    font-size: 16px;
-    width: 180px;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    font-weight: bold;
-}
+        .form-container button {
+            background-color: #80352F;
+            color: white;
+            margin: 5px;
+            padding: 10px 50px;
+            font-size: 16px;
+            width: 180px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+        }
 
-.form-container button:hover {
-    background-color: #6b2c27;
-}
+        .form-container button:hover {
+            background-color: #6b2c27;
+        }
 
-/* Additional CSS styling for navigation bar */
-.navbar-links a.current {
-    position: relative;
-    color: white;
-}
+        /* Additional CSS styling for navigation bar */
+        .navbar-links a.current {
+            position: relative;
+            color: white;
+        }
 
-.navbar-links a.current:after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -10px;
-    height: 3px;
-    background-color: white;
-    border-radius: 2px;
-}
-
+        .navbar-links a.current:after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -10px;
+            height: 3px;
+            background-color: white;
+            border-radius: 2px;
+        }
     </style>
 </head>
 <body>
@@ -203,10 +202,10 @@ h2 {
     <?php } ?>
     </div>
 
-        <!-- Admin Panel Container -->
-        <div class="admin-panel-container">
-        <h1>Add New Appointment</h1>
-        <div class="form-container">
+    <!-- Admin Panel Container -->
+    <div class="admin-panel-container">
+    <h1>Add New Appointment</h1>
+    <div class="form-container">
 
     <form action="adminAddAppointment.php" method="POST">
         <label for="patients_id" class="required-label">
@@ -258,8 +257,7 @@ h2 {
             <button type="submit">Add Appointment</button>
         </div>
     </form>
-</div>
-
+    </div>
     </div>
 
     <!-- Footer -->

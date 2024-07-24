@@ -61,7 +61,7 @@ include 'dbfunctions.php';
             width: calc(100% - 22px);
             padding: 10px;
             margin-bottom: 15px;
-            border: 1px solid #DC3545;
+            border: 1px solid black;
             border-radius: 20px;
             background-color: white;
 

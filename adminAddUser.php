@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
             margin-bottom: 10px;
             padding: 10px;
             border-radius: 30px;
-            border: 1px solid #ccc;
+            border: 1px solid black;
         }
 
         .form-container input[type="text"],
@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
             width: calc(100% - 22px);
             padding: 10px;
             margin-bottom: 15px;
-            border: 1px solid #DC3545;
+            border: 1px solid black;
             border-radius: 20px;
             background-color: white;
 
