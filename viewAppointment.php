@@ -187,7 +187,7 @@ if ($user_type === 'doctor') {
             margin-right: 0;
             width: 200px;
             border-radius: 5px;
-            border: 2px solid #80352F;
+            border: 2px solid black;
         }
 
         
