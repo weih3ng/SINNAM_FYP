@@ -319,9 +319,9 @@ if ($user_type === 'doctor') {
 
                                 <!-- If the user is not a doctor, display relationship type and family name -->
                                 <?php if ($user_type !== 'doctor') : ?>
-                                    <td><?php echo $appointment['is_for_self'] ? 'Self' : 'Family'; ?></td>
+                                    <td><?php echo $appointment['is_for_self'] ? 'Self' : 'Family'; ?></td> <!-- Display 'Self' or 'Family' -->
                                     <td><?php echo htmlspecialchars($appointment['relationship_type']); ?></td>
-                                    <td><?php echo $appointment['is_for_self'] ? '' : htmlspecialchars($appointment['family_name']); ?></td>
+                                    <td><?php echo $appointment['is_for_self'] ? '' : htmlspecialchars($appointment['family_name']); ?></td> <!-- Display family name if not self -->
                                 <?php endif; ?>
 
                                 <!-- Display action buttons based on user type and appointment date -->

@@ -297,19 +297,19 @@ mysqli_close($link);
         window.onload = function() {
             // Set the date to maximum by allowing the date of birth to today's date
             const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
-            document.getElementById('dob').setAttribute('max', today);
+            document.getElementById('dob').setAttribute('max', today); // Set the maximum date of birth to today's date
 
             // Check whether the username is already taken or not
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('error') && urlParams.get('error') === 'username_taken') {
+            const urlParams = new URLSearchParams(window.location.search); // Get the URL parameters
+            if (urlParams.has('error') && urlParams.get('error') === 'username_taken') { // Check if the error parameter is username_taken
                 alert('Username is already taken.');
             }
-            if (urlParams.has('success') && urlParams.get('success') === 'profile_updated') {
+            if (urlParams.has('success') && urlParams.get('success') === 'profile_updated') { // Check if the success parameter is profile_updated
                 alert('Profile updated successfully.');
             }
         }
 
-        // Function to confirm edit profile (alery box)
+        // Function to confirm edit profile (alert box)
         function confirmEdit(event) {
             if (!confirm("Are you sure you want to edit your profile?")) {
                 event.preventDefault(); // Prevent the form from submitting if the user click on cancel button

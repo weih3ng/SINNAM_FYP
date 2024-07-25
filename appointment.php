@@ -461,14 +461,14 @@ mysqli_close($link);
 
                 // Filter out timeslots that have passed if the selected date is today (joc)
                 if (isToday) {
-                    var currentHours = currentDate.getHours();
-                    var currentMinutes = currentDate.getMinutes();
-                    timeslotOptions = timeslotOptions.filter(function(timeslot) {
-                        var [hour, minutesPart] = timeslot.split(':');
-                        var minutes = minutesPart.split(' ')[0];
-                        var period = minutesPart.split(' ')[1];
-                        var hour24 = hour % 12 + (period === 'PM' ? 12 : 0);
-                        return hour24 > currentHours || (hour24 === currentHours && minutes > currentMinutes);
+                    var currentHours = currentDate.getHours(); // Get the current hours
+                    var currentMinutes = currentDate.getMinutes(); // Get the current minutes
+                    timeslotOptions = timeslotOptions.filter(function(timeslot) { // Filter out timeslots that have passed
+                        var [hour, minutesPart] = timeslot.split(':'); // Split the timeslot into hour and minutes
+                        var minutes = minutesPart.split(' ')[0]; // Extract the minutes
+                        var period = minutesPart.split(' ')[1]; // Extract the period such as (AM/PM)
+                        var hour24 = hour % 12 + (period === 'PM' ? 12 : 0); // Convert to 24-hour format
+                        return hour24 > currentHours || (hour24 === currentHours && minutes > currentMinutes); // Filter out timeslots that have passed
                     });
                 }
 
@@ -485,15 +485,15 @@ mysqli_close($link);
 
         
         // Add event listener to show family info when booking for family (joc)
-        document.querySelectorAll('input[name="booking_for"]').forEach(radio => {
-            radio.addEventListener('change', function() {
-                const familyInfo = document.getElementById('family_info');
-                const familyNameInput = document.getElementById('family_name'); // Get the family name input
-                if (this.value === 'family') {
-                    familyInfo.style.display = 'block';
+        document.querySelectorAll('input[name="booking_for"]').forEach(radio => { // Loop through each radio button
+            radio.addEventListener('change', function() { // Add change event listener
+                const familyInfo = document.getElementById('family_info'); 
+                const familyNameInput = document.getElementById('family_name'); 
+                if (this.value === 'family') { // Show family info if booking for family
+                    familyInfo.style.display = 'block'; // Display the family info
                     familyNameInput.required = true; // Make the family name required if family is selected
                 } else {
-                    familyInfo.style.display = 'none';
+                    familyInfo.style.display = 'none'; // Hide family info if booking for self
                     familyNameInput.required = false; // Not required if booking for self
                 }
             });
@@ -507,18 +507,18 @@ mysqli_close($link);
 
 
 
+        // Add event listener to show family info when the radio button is checked as "family" (joc)
+        document.addEventListener("DOMContentLoaded", function() { // Wait for the document to load
+            const form = document.querySelector("form.timeslot-container"); // Get the form element
 
-        document.addEventListener("DOMContentLoaded", function() {
-            const form = document.querySelector("form.timeslot-container");
-
-            form.addEventListener("submit", function(event) {
-                let isValid = true;
-                const selectedDate = document.getElementById("selected-date").value;
-                const timeslot = document.getElementById("timeslot").value;
-                const bookingFor = document.querySelector('input[name="booking_for"]:checked');
-                const medicalConditions = document.getElementById("medical-conditions").value;
-                const familyName = document.getElementById("family_name").value;
-                const relationshipType = document.getElementById("relationship");
+            form.addEventListener("submit", function(event) { // Add submit event listener to the form
+                let isValid = true; // Assume the form is valid by default
+                const selectedDate = document.getElementById("selected-date").value; 
+                const timeslot = document.getElementById("timeslot").value; 
+                const bookingFor = document.querySelector('input[name="booking_for"]:checked'); 
+                const medicalConditions = document.getElementById("medical-conditions").value; 
+                const familyName = document.getElementById("family_name").value; 
+                const relationshipType = document.getElementById("relationship"); 
 
                 // Check if all required fields are filled
                 if (!selectedDate || !timeslot || !bookingFor || !medicalConditions || (bookingFor.value === "family" && (!familyName || !relationshipType.value))) {
@@ -526,6 +526,7 @@ mysqli_close($link);
                     isValid = false;
                 }
 
+                // Check if the family name is filled if booking for family
                 if (!isValid) {
                     event.preventDefault(); // Prevent form submission
                     return false;
