@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $contactnumber = $_POST['contactnumber'];
     $dob = $_POST['dob'];
-    $password = $_POST['password'];
+    $password = sha1($_POST['password']); // Hash the password using sha1
     $gender = $_POST['gender'];
 
     // Check if the username already exists
@@ -50,3 +50,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     exit();
 }
 ?>
+

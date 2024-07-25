@@ -5,13 +5,13 @@ include 'dbfunctions.php';
 
 // Retrieving the email and password from POST request
 $email = $_POST['email'];
-$password = $_POST['password'];
+$password = sha1($_POST['password']); // Hash the password using sha1
 
 $msg = "";
 
 // Function to check user in a specific table
 function check_user($link, $email, $password, $table) {
-    $query = "SELECT * FROM $table WHERE email = ? AND Password = ?";
+    $query = "SELECT * FROM $table WHERE email = ? AND password = ?";
     $stmt = mysqli_prepare($link, $query);
     mysqli_stmt_bind_param($stmt, "ss", $email, $password);
     mysqli_stmt_execute($stmt);
@@ -56,6 +56,7 @@ if ($user) {
 
 mysqli_close($link); 
 ?>
+
 
 
 <!DOCTYPE html>
