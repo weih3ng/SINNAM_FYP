@@ -345,6 +345,11 @@ $inactive_patients = mysqli_num_rows($inactive_users_result);
             margin-top: 10px;
             border-radius: 5px;
         }
+
+        .dataTables_filter {
+            margin-bottom: 10px; /* Adds space below the search bar */
+            margin-top: 5px; /* Adds space above the search bar */
+        }
         /* additional CSS styling for navigation bar */
         .navbar-links a.current {
             position: relative;
@@ -399,7 +404,7 @@ $inactive_patients = mysqli_num_rows($inactive_users_result);
         <h1>Welcome to Admin Panel</h1><br>
         <div class="statistics-container">
             <div class="stat-box" id="activeUsers" data-tippy-content="Booked an appointment">
-                <h3><i class="fas fa-users"></i> Active Users</h3>
+                <h3><i class="fas fa-users" style="color:#4CAF50"></i> Active Users</h3>
                 <p><?php echo $active_patients; ?></p>
                 <button class="collapsible" id="showActiveUsersBtn">Show Users</button>
                 <div class="content" id="activeUsersContent">
@@ -424,7 +429,7 @@ $inactive_patients = mysqli_num_rows($inactive_users_result);
                 </div>
             </div>
             <div class="stat-box" id="inactiveUsers" data-tippy-content="Have not booked an appointment / account not in use">
-                <h3><i class="fas fa-user-times"></i> Inactive Users</h3>
+                <h3><i class="fas fa-user-times" style="color: #f44336;"></i> Inactive Users</h3>
                 <p><?php echo $inactive_patients; ?></p>
                 <button class="collapsible" id="showInactiveUsersBtn">Show Users</button>
                 <div class="content" id="inactiveUsersContent">
@@ -556,13 +561,11 @@ $inactive_patients = mysqli_num_rows($inactive_users_result);
 
         $(document).ready(function() {
             $('#activeAccs').DataTable({
-                searching: false // Disable the search bar
             });
         });
 
         $(document).ready(function() {
             $('#inactiveAccs').DataTable({
-                searching: false // Disable the search bar
             });
         });
 
@@ -660,13 +663,17 @@ $inactive_patients = mysqli_num_rows($inactive_users_result);
         document.addEventListener('DOMContentLoaded', function() {
             // Function for collapsible button leading to forms
             document.querySelectorAll('.collapsible').forEach(button => {
-                button.addEventListener('click', () => {
-                    button.classList.toggle('active');
+                button.addEventListener('click', () => { // Add a click event listener to each 'collapsible' button
+                    button.classList.toggle('active'); // Toggle the 'active' class on the clicked button
+
+                    // Get the next sibling element of the button, which is the collapsible content
                     let content = button.nextElementSibling;
+
+                    // Toggle the display property of the content between 'block' and 'none'
                     if (content.style.display === "block") {
-                        content.style.display = "none";
+                        content.style.display = "none"; //if the content is current displayed, hide it.
                     } else {
-                        content.style.display = "block";
+                        content.style.display = "block"; //if content is hidden, display it.
                     }
                 });
             });

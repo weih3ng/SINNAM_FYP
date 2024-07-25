@@ -242,8 +242,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
     <script>
     //script to allow input field only up to 8 digits
     document.getElementById('contactnumber').addEventListener('input', function (e) {
+        // Get the current value of the input field
         var value = e.target.value;
+
+        // Check if the length of the value exceeds 8 characters
         if (value.length > 8) {
+            // If it does, truncate the value to the first 8 characters
             e.target.value = value.slice(0, 8);
         }
     });

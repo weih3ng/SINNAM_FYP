@@ -533,8 +533,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
                 document.getElementById('edit_appointment_id').value = this.dataset.id;
                 document.getElementById('edit_patients_id').value = this.dataset.patients_id;
                 document.getElementById('edit_date').value = this.dataset.date;
-                populateTimeSlots(new Date(this.dataset.date));
-                document.getElementById('edit_time').value = this.dataset.time;
+                populateTimeSlots(new Date(this.dataset.date), this.dataset.time);
                 document.getElementById('edit_medical_condition').value = this.dataset.medical_condition;
                 if (this.dataset.is_for_self === '1') { // "1" indicates self
                     document.getElementById('edit_is_for_self_myself').checked = true;
@@ -549,16 +548,17 @@ $appointments_result = mysqli_query($link, $appointments_sql);
             });
         });
 
+
         // Disable past dates in the date picker
         document.addEventListener('DOMContentLoaded', function() {
-            var today = new Date().toISOString().split('T')[0];
-            document.getElementById('edit_date').setAttribute('min', today);
+            var today = new Date().toISOString().split('T')[0]; // Create a new Date object representing the current date and time
+            document.getElementById('edit_date').setAttribute('min', today); // Set the minimum selectable date for the date input field to today
         });
 
         // Disable Sundays and Mondays in the date picker
         document.getElementById('edit_date').addEventListener('input', function(e) {
             var day = new Date(this.value).getUTCDay();
-            if (day === 0 || day === 1) {
+            if (day === 0 || day === 1) { //if day selected is Sunday or Monday
                 alert('Booking on Sunday and Monday is not allowed. Please select another date.');
                 this.value = '';
             } else {
@@ -567,10 +567,10 @@ $appointments_result = mysqli_query($link, $appointments_sql);
         });
 
         // Populate time slots based on the selected date
-        function populateTimeSlots(selectedDate) {
-            var day = selectedDate.getUTCDay();
+        function populateTimeSlots(selectedDate, selectedTime) {
+            var day = selectedDate.getUTCDay(); // Get the day of the week for the selected date
             var timeSelect = document.getElementById('edit_time');
-            timeSelect.innerHTML = '';
+            timeSelect.innerHTML = ''; // Clear any existing options in the time select element
 
             var startTime, endTime;
 
@@ -582,26 +582,41 @@ $appointments_result = mysqli_query($link, $appointments_sql);
                 endTime = 16.25; // 4:15 PM
             }
 
-            for (var time = startTime; time <= endTime; time += 0.25) {
-                var hour = Math.floor(time);
-                var minutes = (time - hour) * 60;
-                var timeString = ('0' + hour).slice(-2) + ':' + ('0' + minutes).slice(-2) + ':00';
+            var now = new Date(); // Get the current date and time
+            var currentTime = now.getHours() + now.getMinutes() / 60; // Convert current time to decimal hours
 
+            var defaultTimeSet = false; // Flag to check if the default time is set
+
+            for (var time = startTime; time <= endTime; time += 0.25) {
+                var hour = Math.floor(time); // Get the hour part of the time slot
+                var minutes = (time - hour) * 60; // Get the minutes part of the time slot
+                var timeString = ('0' + hour).slice(-2) + ':' + ('0' + minutes).slice(-2) + ':00'; // Format time slot as HH:MM:SS
+
+                // Create a new option element for the time slot
                 var option = document.createElement('option');
                 option.value = timeString;
-                option.text = (hour % 12 || 12) + ':' + ('0' + minutes).slice(-2) + ' ' + (hour < 12 ? 'AM' : 'PM');
-                timeSelect.appendChild(option);
+                option.text = (hour % 12 || 12) + ':' + ('0' + minutes).slice(-2) + ' ' + (hour < 12 ? 'AM' : 'PM');  // Set the display text of the option
+                timeSelect.appendChild(option); // Add the option to the time select element
+
+                // Set the default time to the next available slot if selectedTime is not provided
+                if (!defaultTimeSet && (selectedDate.toDateString() !== now.toDateString() || time > currentTime)) {
+                    timeSelect.value = selectedTime || timeString; // Set the value of the select element to the current time slot or selected time
+                    defaultTimeSet = true; // Mark the default time as set
+                }
             }
 
-            // If today's date is selected, remove past time slots
-            var today = new Date();
-            if (selectedDate.toDateString() === today.toDateString()) {
-                var currentTime = today.getHours() + ':' + ('0' + today.getMinutes()).slice(-2) + ':00';
-                var options = timeSelect.options;
-                for (var i = options.length - 1; i >= 0; i--) {
-                    if (options[i].value < currentTime) {
-                        timeSelect.remove(i);
+            // If today's date is selected, remove past time slots and set the default time
+            if (selectedDate.toDateString() === now.toDateString()) {
+                var options = timeSelect.options; // Get all options in the time select element
+                for (var i = options.length - 1; i >= 0; i--) { // Loop through options in reverse
+                    // checks if the time represented by the current option element has already passed compared to the current time
+                    if (parseFloat(options[i].value.split(':')[0]) + parseFloat(options[i].value.split(':')[1]) / 60 <= currentTime) {
+                        timeSelect.remove(i); // Remove options for past time slots
                     }
+                }
+                 // Set the default time to the first available slot if no default time was set
+                if (!defaultTimeSet && timeSelect.options.length > 0) {
+                    timeSelect.value = timeSelect.options[0].value; // Set the value of the select element to the first available time slot
                 }
             }
         }

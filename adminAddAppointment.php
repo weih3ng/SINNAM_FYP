@@ -289,7 +289,7 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
         // Disable Sundays and Mondays in the date picker
         document.getElementById('date').addEventListener('input', function(e) {
             var day = new Date(this.value).getUTCDay();
-            if (day === 0 || day === 1) {
+            if (day === 0 || day === 1) { //if Sunday and Monday is selected
                 alert('Booking on Sunday and Monday is not allowed. Please select another date.');
                 this.value = '';
             } else {
@@ -298,14 +298,14 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
         });
 
         // Restrict past dates in the date picker
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('date').setAttribute('min', today);
+        const today = new Date().toISOString().split('T')[0];  // Get today's date in YYYY-MM-DD format
+        document.getElementById('date').setAttribute('min', today); // Set the minimum date attribute to today
 
         // Populate time slots based on the selected date
         function populateTimeSlots(selectedDate) {
             var day = selectedDate.getUTCDay();
-            var timeSelect = document.getElementById('time');
-            timeSelect.innerHTML = '';
+            var timeSelect = document.getElementById('time'); // Get the time select element
+            timeSelect.innerHTML = ''; // Clear any existing options
 
             var startTime, endTime;
 
@@ -317,25 +317,26 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
                 endTime = 16.25; // 4:15 PM
             }
 
+            // Loop through the time range and create options for each time slot
             for (var time = startTime; time <= endTime; time += 0.25) {
-                var hour = Math.floor(time);
-                var minutes = (time - hour) * 60;
-                var timeString = ('0' + hour).slice(-2) + ':' + ('0' + minutes).slice(-2) + ':00';
+                var hour = Math.floor(time); // Get the hour part of the time
+                var minutes = (time - hour) * 60; // Get the minutes part of the time
+                var timeString = ('0' + hour).slice(-2) + ':' + ('0' + minutes).slice(-2) + ':00'; // Format the time as HH:MM:SS
 
-                var option = document.createElement('option');
-                option.value = timeString;
-                option.text = (hour % 12 || 12) + ':' + ('0' + minutes).slice(-2) + ' ' + (hour < 12 ? 'AM' : 'PM');
-                timeSelect.appendChild(option);
+                var option = document.createElement('option'); // Create a new option element
+                option.value = timeString; // Set the value of the option
+                option.text = (hour % 12 || 12) + ':' + ('0' + minutes).slice(-2) + ' ' + (hour < 12 ? 'AM' : 'PM'); // Set the display text of the option
+                timeSelect.appendChild(option); // Append the option to the select element
             }
 
             // If today's date is selected, remove past time slots
-            var today = new Date();
-            if (selectedDate.toDateString() === today.toDateString()) {
-                var currentTime = today.getHours() + ':' + ('0' + today.getMinutes()).slice(-2) + ':00';
-                var options = timeSelect.options;
-                for (var i = options.length - 1; i >= 0; i--) {
-                    if (options[i].value < currentTime) {
-                        timeSelect.remove(i);
+            var today = new Date(); // Get the current date and time
+            if (selectedDate.toDateString() === today.toDateString()) { // Check if the selected date is today
+                var currentTime = today.getHours() + ':' + ('0' + today.getMinutes()).slice(-2) + ':00'; // Get the current time as HH:MM:SS
+                var options = timeSelect.options; // Get all the options in the time select element
+                for (var i = options.length - 1; i >= 0; i--) { // Loop through the options in reverse order
+                    if (options[i].value < currentTime) { // If the option's time is earlier than the current time
+                        timeSelect.remove(i); // Remove the option
                     }
                 }
             }
