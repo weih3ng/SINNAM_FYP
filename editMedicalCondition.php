@@ -1,19 +1,19 @@
 <?php 
-session_start(); // Start the session
+session_start(); // Start the session (Dep)
 
 include 'dbfunctions.php';
 
-// Check if the user is logged in
+// Check if the user is logged in (Dep)
 if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
     header('Location: login.php');
     exit;
 }
 
-// Check if appointment ID is provided
+// Check if appointment ID is provided (Dep)
 if (isset($_GET['appointment_id'])) {
     $appointment_id = $_GET['appointment_id'];
 
-    // Fetch existing appointment data
+// Fetching existing appointments (Dep)
     $query = "SELECT * FROM appointments WHERE appointment_id = $appointment_id";
     $result = mysqli_query($link, $query) or die(mysqli_error($link));
     
@@ -28,30 +28,30 @@ if (isset($_GET['appointment_id'])) {
     }
 }
 
-// Handle form submission
+// Form Submission (Dep)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $appointment_id = $_POST['appointment_id'];
     $medical_condition = $_POST['medical_conditions'];
 
-// Update the appointment in the database
+// Updating appointments in database (Dep)
 $query = "UPDATE appointments SET medical_condition = ? WHERE appointment_id = ?";
 if ($stmt = mysqli_prepare($link, $query)) {
     mysqli_stmt_bind_param($stmt, "si", $medical_condition, $appointment_id);
     if (mysqli_stmt_execute($stmt)) {
         mysqli_stmt_close($stmt);
 
-        // Redirect using JavaScript
-        header("Location: http://localhost/SINNAM_FYP/viewAppointment.php?user_type=doctor");
-        exit(); // Ensure script execution stops after redirection
+    header("Location: http://localhost/SINNAM_FYP/viewAppointment.php?user_type=doctor");
+    exit(); 
+
     } else {
         echo "Error updating record: " . mysqli_stmt_error($stmt);
     }
-} else {
-    echo "Error preparing statement: " . mysqli_error($link);
-}
+    } else {
+        echo "Error preparing statement: " . mysqli_error($link);
+    }
 }
 
-// Close database connection
+// Close Connection (Dep)
 mysqli_close($link);
 ?>
 
@@ -63,7 +63,8 @@ mysqli_close($link);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">  <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome --> 
     <link rel="stylesheet" href="style.css"> <!-- External stylesheet for navigation bar and footer -->
-    <title>Edit Appointment Page</title>
+    <title>Edit Medical Condition Page</title>
+
     <style>
         .edit-container {
             display: flex;
@@ -110,7 +111,7 @@ mysqli_close($link);
             padding: 10px;
             border-radius: 30px;
             border: 1px solid #ccc;
-            flex: 1; /* take up available space within the .form-group container */
+            flex: 1;
         }
 
         .form-group textarea {
@@ -119,7 +120,7 @@ mysqli_close($link);
             padding: 10px;
             border-radius: 10px;
             border: 1px solid #ccc;
-            resize: vertical; /* Allow vertical resizing */
+            resize: vertical; /* Allow Vertical Resizing (Dep) */
         }
 
 
@@ -141,14 +142,14 @@ mysqli_close($link);
             background-color: #6b2c27;
         }
 
-        /* Read-only and Disabled Input Fields */
+        /* Read-only and Disabled Input Fields (Dep)*/
         input[readonly] {
             background-color: #e0e0e0;
             color: #686868; 
             cursor: not-allowed; 
         }
 
-        /* Editable Fields */
+        /* Editable Fields (Dep) */
         input[type="date"]:not([readonly]), 
         input[type="time"]:not([readonly]), 
         input[type="text"]:not([readonly]),
@@ -169,7 +170,7 @@ mysqli_close($link);
             text-align: right;
         }
 
-        /* Specific styles for relationship and family name fields for consistency */
+        /* Specific styles for relationship and family name fields for consistency (Dep) */
         #relationship_type, #family_name {
             display: inline-block;
             width: auto;
@@ -177,6 +178,7 @@ mysqli_close($link);
         }
     </style>
 </head>
+
 <body>
     <!-- Navigation Bar -->
     <div class="navbar">
