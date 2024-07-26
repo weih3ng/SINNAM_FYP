@@ -12,8 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'])) {
     $dob = $_POST['dob'];
     $gender = $_POST['gender'];
     $username = $_POST['username'];
-    $password = $_POST['password'];
-
+    $password = sha1($_POST['password']);
 
     // Check if the username already exists
     $checkUsernameSql = "SELECT * FROM patients WHERE username = ?";
