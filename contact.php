@@ -160,7 +160,6 @@ include 'dbfunctions.php';
         </div>
 
         <!-- Sign Up & Login Button -->
-
         <?php if (isset($_SESSION['username'])): ?>
     <?php if ($_SESSION['username'] === 'doctor' || $_SESSION['username'] === 'admin'): ?>
         <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
@@ -222,13 +221,12 @@ include 'dbfunctions.php';
             @ 2024 Sin Nam Medical Hall All Rights Reserved
         </div>
         <div class="social-media">
-            <span style="margin-right: 10px;">Follow us</span> <!-- Added a span to apply margin -->
+            <span style="margin-right: 10px;">Follow us</span> 
             <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook"></i></a>
         </div>
     </footer>
 
-    <!-- Java Script code for submission of contact form -->
-
+<!-- Java Script code for submission of contact form -->
 <script>
 document.getElementById("contactForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent the form from submitting traditionally

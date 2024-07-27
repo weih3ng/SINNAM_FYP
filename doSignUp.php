@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $contactnumber = $_POST['contactnumber'];
     $dob = $_POST['dob'];
-    $password = sha1($_POST['password']); // Hash the password using sha1
+    $password = sha1($_POST['password']); // Hashing the Passwords using SHA1 (Dep)
     $gender = $_POST['gender'];
 
     // Check if the username already exists

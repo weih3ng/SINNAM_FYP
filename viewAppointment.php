@@ -62,8 +62,6 @@ if ($user_type === 'doctor') {
 }
 ?>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -231,7 +229,6 @@ if ($user_type === 'doctor') {
             <?php endif; ?>
         </div>
 
-
         <!-- Sign Up & Login Button -->
         <?php if (isset($_SESSION['username'])): ?>
             <?php if ($_SESSION['username'] === 'doctor' || $_SESSION['username'] === 'admin'): ?>
@@ -254,11 +251,6 @@ if ($user_type === 'doctor') {
             </a>  
         <?php endif; ?>
     </div>
-
-
-
-
-
 
     <!-- View Appointment Container -->
     <div class="view-appointment-container">

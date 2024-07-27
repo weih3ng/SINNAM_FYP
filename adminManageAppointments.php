@@ -111,16 +111,16 @@ $appointments_result = mysqli_query($link, $appointments_sql);
     <title>Manage Appointments</title>
     <style>
         html, body {
-            background-color: #F1EDE2;  /* ensure the background color covers the entire viewport */
+            background-color: #F1EDE2;  
         }
         .admin-panel-container {
-            display: flex; /* makes the container a flex container so that items are well-aligned */
+            display: flex; 
             flex-direction: column;
             align-items: center;
             justify-content: center;
             background-color: #F1EDE2;
             padding: 50px 20px;
-            min-height: calc(100vh - 150px); /* ensure the container takes at least the full viewport height */
+            min-height: calc(100vh - 150px); 
         }
 
         h2 {
@@ -184,7 +184,7 @@ $appointments_result = mysqli_query($link, $appointments_sql);
             border: 1px solid black;
             border-radius: 20px;
             background-color: white;
-            box-sizing: border-box; /* ensure padding is included in the element's total width and height */
+            box-sizing: border-box; 
         }
 
         .form-container .button-container {
@@ -297,7 +297,6 @@ $appointments_result = mysqli_query($link, $appointments_sql);
             margin-bottom: 10px; 
         }
 
-        /* additional CSS styling for navigation bar */
         .navbar-links a.current {
             position: relative;
             color: white; 

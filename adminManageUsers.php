@@ -120,17 +120,17 @@ $inactive_patients = mysqli_num_rows($inactive_users_result);
     <title>Manage Users</title>
     <style>
         html, body {
-            background-color: #F1EDE2;  /* ensure the background color covers the entire viewport */
+            background-color: #F1EDE2;  
         }
 
         .admin-panel-container {
-            display: flex; /* makes the container a flex container so that items are well-aligned */
+            display: flex; 
             flex-direction: column;
             align-items: center;
             justify-content: center;
             background-color: #F1EDE2;
             padding: 50px 20px;
-            min-height: calc(100vh - 150px);  /* ensure the container takes at least the full viewport height */
+            min-height: calc(100vh - 150px);  
         }
 
         h2{
@@ -347,10 +347,10 @@ $inactive_patients = mysqli_num_rows($inactive_users_result);
         }
 
         .dataTables_filter {
-            margin-bottom: 10px; /* Adds space below the search bar */
-            margin-top: 5px; /* Adds space above the search bar */
+            margin-bottom: 10px; 
+            margin-top: 5px; 
         }
-        /* additional CSS styling for navigation bar */
+
         .navbar-links a.current {
             position: relative;
             color: white; 

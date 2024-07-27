@@ -97,13 +97,13 @@ mysqli_close($link);
     <title>Edit Appointment Page</title>
     <style>
         .edit-container {
-            display: flex; /*lays out the flex items in a column, vertically from top to bottom */
+            display: flex; 
             flex-direction: column;
             align-items: center;
             justify-content: center;
             background-color: #F1EDE2;
             padding: 50px 20px;
-            height: calc(100vh - 100px); /* Adjust height to fit within the viewport */
+            height: calc(100vh - 100px); 
         }
 
         .edit-box {
@@ -120,7 +120,7 @@ mysqli_close($link);
         }
 
         .form-group {
-            display: flex; /* Makes the container a flex container so that items are well-aligned */
+            display: flex; 
             align-items: center;
             margin-bottom: 15px;
         }
@@ -130,22 +130,22 @@ mysqli_close($link);
             font-weight: bold;
             width: 80px; 
             text-align: right;
-            padding-right: 30px; /* Added padding for spacing */
+            padding-right: 30px; 
         }
 
         .form-group input[type="text"], 
         .form-group input[type="date"], 
         .form-group input[type="time"] {
-            display: block; /*starts on a new line and takes up the full width available */
-            width: 250px; /* Adjust the width to be longer */
+            display: block; 
+            width: 250px; 
             padding: 10px;
             border-radius: 30px;
             border: 1px solid #ccc;
-            flex: 1; /* take up available space within the .form-group container*/
+            flex: 1; 
         }
 
         .edit-box .btn {
-            display: inline-block; /*sit inline with any other inline or inline-block elements next to it */
+            display: inline-block; 
             padding: 10px 50px;
             margin: 5px;
             background-color: #80352F;
@@ -188,8 +188,8 @@ mysqli_close($link);
         }
 
         #relationship_type {
-            width: 200px; /* Adjust the width to be longer */
-            margin-left: 35px; /* Add margin to separate the fields */
+            width: 200px; 
+            margin-left: 35px; 
         }
 
     </style>
@@ -306,7 +306,7 @@ mysqli_close($link);
             @ 2024 Sin Nam Medical Hall All Rights Reserved
         </div>
         <div class="social-media">
-            <span style="margin-right: 10px;">Follow us</span> <!-- Added a span to apply margin -->
+            <span style="margin-right: 10px;">Follow us</span> 
             <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook"></i></a>
         </div>
     </footer>
@@ -318,7 +318,7 @@ mysqli_close($link);
             input.addEventListener('change', function() {
                 const isFamily = document.getElementById('for_family').checked;
                 document.getElementById('family_info').style.display = isFamily ? 'block' : 'none';
-                document.getElementById('family_name_group').style.display = isFamily ? 'block' : 'none'; // Add this line
+                document.getElementById('family_name_group').style.display = isFamily ? 'block' : 'none'; 
             });
         });
 
@@ -379,14 +379,6 @@ mysqli_close($link);
             // Update times when the date changes
             document.getElementById('date').addEventListener('change', updateAvailableTimes);
         });
-
-
-        
-        
-
-
     </script>
-
-
 </body>
 </html>

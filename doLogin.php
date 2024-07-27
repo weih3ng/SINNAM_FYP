@@ -5,7 +5,7 @@ include 'dbfunctions.php';
 
 // Retrieving the email and password from POST request
 $email = $_POST['email'];
-$password = sha1($_POST['password']); // Hash the password using sha1
+$password = sha1($_POST['password']); // Hashing of Passwords using SHA1 (Dep)
 
 $msg = "";
 
@@ -133,8 +133,6 @@ mysqli_close($link);
         </div>
 
         <!-- Sign Up & Login Button -->
-
-
         <?php if (isset($_SESSION['username'])): ?>
     <?php if ($_SESSION['username'] === 'doctor' || $_SESSION['username'] === 'admin'): ?>
         <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>

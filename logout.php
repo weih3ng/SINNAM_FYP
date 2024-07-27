@@ -93,9 +93,6 @@ $message = "You have logged out.";
         </div>
 
         <!-- Sign Up & Login Button -->
-
-
-
         <?php if (isset($_SESSION['username'])): ?>
     <?php if ($_SESSION['username'] === 'doctor' || $_SESSION['username'] === 'admin'): ?>
         <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>

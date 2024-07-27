@@ -13,7 +13,7 @@ include 'dbfunctions.php';
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">  <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->  
     <link rel="stylesheet" href="style.css">
-    <title>Sin Nam Medical Hall</title>
+    <title>About Us</title>
     
 
     <style>
@@ -44,14 +44,14 @@ include 'dbfunctions.php';
         }
 
         .who-we-are p {
-            font-size: 28px; /* Increase the font size for the text */
-            line-height: 1.5; /* Adjust line height for better readability */
+            font-size: 28px; 
+            line-height: 1.5; 
         }
 
         .who-we-are img {
             max-width: 100%;
             height: auto;
-            max-width: 650px; /* Increase the max width for the image */
+            max-width: 650px; 
         }
 
         .our-doctor {
@@ -63,14 +63,14 @@ include 'dbfunctions.php';
             gap: -100px;
         }
         .our-doctor p {
-            font-size: 28px; /* Increase the font size for the text */
-            line-height: 1.5; /* Adjust line height for better readability */
+            font-size: 28px; 
+            line-height: 1.5; 
         }
 
         .our-doctor img {
             max-width: 100%;
             height: auto;
-            max-width: 800px; /* Increase the max width for the image */
+            max-width: 800px; 
         }
 
         .our-doctor div {
@@ -85,28 +85,28 @@ include 'dbfunctions.php';
             display: flex;
             justify-content: center;
             gap: 80px;
-            font-size: 30px; /* Adjust font size */
+            font-size: 30px; 
         }
 
         .why-choose-us div {
             text-align: center;
-            width: 25%; /* Adjust width */
+            width: 25%; 
         }
 
         .why-choose-us img {
             margin-top: 60px;
-            width: 200px; /* Adjust image width */
-            height: 200px; /* Adjust image height */
-            margin-bottom: 15px; /* Add margin below the images */
+            width: 200px; 
+            height: 200px; 
+            margin-bottom: 15px; 
         }
 
         .why-choose-us p {
             font-size: 30px;
-            margin: 0; /* Remove default margin of paragraphs */
+            margin: 0; 
             margin-bottom: 45px;
         }
         p {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Change font to Segoe UI */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
         }
 
 
@@ -147,9 +147,6 @@ include 'dbfunctions.php';
         </div>
 
         <!-- Sign Up & Login Button -->
-
-
-
         <?php if (isset($_SESSION['username'])): ?>
     <?php if ($_SESSION['username'] === 'doctor' || $_SESSION['username'] === 'admin'): ?>
         <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
@@ -178,6 +175,7 @@ include 'dbfunctions.php';
     <div class="out-doctor-text">
         <p style="margin: 40px 0; text-align: center; font-size: 45px; color: #80352F;"><b>Who Are We?</b></p>
     </div>
+    
         <!-- Who Are We Section -->
         <div class="section who-we-are">
             
@@ -185,7 +183,7 @@ include 'dbfunctions.php';
                 <p>Sin Nam Medical Hall Pte Ltd is a family-run<br> business at #01-101 Yishun Street 71, Block<br> 729, Singapore. With one experienced TCM<br> doctor and a skilled admin, we offer<br> personalized, holistic healthcare solutions.<br> We blend traditional wisdom with modern<br> practices to ensure our community's well-<br>being.</p>
             </div>
             <div>
-                <img src="images/about1.png" alt="Decorative Image"> <!-- Replace with your image source -->
+                <img src="images/about1.png" alt="Decorative Image"> 
             </div>
         </div>
 
@@ -194,7 +192,7 @@ include 'dbfunctions.php';
         <p style="margin: 40px 0; text-align: center; font-size: 45px; color: #80352F;"><b>Our Doctor</b></p>
     </div>
         <div class="section our-doctor">
-            <img src="images/doc2.png" alt="Doctor Image"> <!-- Replace with your image source -->
+            <img src="images/doc2.png" alt="Doctor Image"> 
             <div>
                 <h1>Desmond Sin</h1>
                 <p>Desmond Sin is a distinguished<br> Traditional Chinese Medicine (TCM)<br> practitioner known for his expertise<br> in herbal medicine and TCM diagnostics. He is<br> dedicated to helping patients<br> achieve balance and well-being through<br> personalized treatment plans that integrate<br> traditional wisdom with modern insights.</p>
@@ -203,7 +201,7 @@ include 'dbfunctions.php';
         <div class="why-choose-us-text">
         <p style="margin: 40px 0; text-align: center; font-size: 45px; color: #80352F;"><b>Why Choose Us?</b></p>
     </div>
-        <!-- Why Choose Us Section -->
+
         <!-- Why Choose Us Section -->
         <div class="section why-choose-us">
             <div>

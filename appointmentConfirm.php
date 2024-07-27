@@ -16,13 +16,13 @@ include 'dbfunctions.php';
     <title>Appointment Confirmation Page</title>
     <style>
         .confirmation-container {
-            display: flex; /* Makes the container a flex container so that items are well-aligned */
+            display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             background-color: #F1EDE2;
             padding: 50px 20px;
-            height: calc(100vh - 100px); /* Adjust height to fit within the viewport */
+            height: calc(100vh - 100px); 
         }
 
         .confirmation-box {
@@ -50,12 +50,12 @@ include 'dbfunctions.php';
         .button-container {
             display: flex;
             justify-content: center;
-            gap: 60px; /* add more space between buttons */
+            gap: 60px; 
             margin-bottom: 10px;
         }
 
         .confirmation-box .btn {
-            display: inline-block; /*sit inline with any other inline or inline-block elements next to it */
+            display: inline-block; 
             padding: 10px 50px;
             margin: 5px;
             background-color: #80352F;
@@ -100,7 +100,6 @@ include 'dbfunctions.php';
         </div>
 
         <!-- Sign Up & Login Button -->
-
         <?php if (isset($_SESSION['username'])): ?>
     <?php if ($_SESSION['username'] === 'doctor' || $_SESSION['username'] === 'admin'): ?>
         <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
@@ -147,7 +146,7 @@ include 'dbfunctions.php';
             @ 2024 Sin Nam Medical Hall All Rights Reserved
         </div>
         <div class="social-media">
-            <span style="margin-right: 10px;">Follow us</span> <!-- Added a span to apply margin -->
+            <span style="margin-right: 10px;">Follow us</span> 
             <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook"></i></a>
         </div>
     </footer>

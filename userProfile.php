@@ -142,7 +142,7 @@ mysqli_close($link);
 
         .eye-toggle {
             position: absolute;
-            right: 10px; /* Position icon within the right padding area of the input */
+            right: 10px; 
             cursor: pointer;
             color: #686868; 
         }

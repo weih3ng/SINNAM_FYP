@@ -76,7 +76,7 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
     <link rel="stylesheet" href="style.css">
     <title>Add New Appointment</title>
     <style>
-        /* General styling for the form */
+
         html, body {
             background-color: #F1EDE2;
         }
@@ -154,7 +154,6 @@ if ($patients_result && mysqli_num_rows($patients_result) > 0) {
             background-color: #6b2c27;
         }
 
-        /* Additional CSS styling for navigation bar */
         .navbar-links a.current {
             position: relative;
             color: white;

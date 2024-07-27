@@ -80,9 +80,9 @@ mysqli_close($link);
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <style>
-        /* Adjusting Font Weight */
+
         footer {
-            font-weight: normal; /* Ensure normal font weight */
+            font-weight: normal; 
         }
 
         h1 {
@@ -92,17 +92,17 @@ mysqli_close($link);
 
         .required {
             color: red;
-            margin-left: 5px; /* Adjust space between label text and asterisk */
+            margin-left: 5px; 
         }
 
         .container {
-            display: flex; /* Makes the container a flex container so that items are well-aligned */
+            display: flex; 
             flex-direction: column;
             align-items: center;
             justify-content: center;
             background-color: #F1EDE2;
             padding: 50px 20px;
-            height: calc(130vh - 100px); /* Adjust height to fit within the viewport */
+            height: calc(130vh - 100px); 
         }
 
         .content-wrapper {
@@ -117,7 +117,6 @@ mysqli_close($link);
             max-width: 500px;
         }
 
-        /* Custom styles to make the calendar larger */
         .ui-datepicker {
             font-size: 1.5em; 
         }
@@ -142,17 +141,17 @@ mysqli_close($link);
         /* Custom styles for the family info (joc) */
         .field-container {
             display: flex;
-            flex-wrap: wrap; /* Allows wrapping into the next line */
+            flex-wrap: wrap; 
             align-items: center;
             margin-bottom: 20px;
-            justify-content: space-between; /* Distributes space between and around content items */
+            justify-content: space-between; 
         }
 
         .field-container label {
-            flex-basis: 100%; /* Takes full width of its parent on its own line */
+            flex-basis: 100%; 
             font-size: 17px;
             font-weight: bold;
-            margin-bottom: 5px; /* Space between label and input */
+            margin-bottom: 5px; 
         }
 
         .field-container input[type="text"],
@@ -164,28 +163,28 @@ mysqli_close($link);
             border: 2px solid black; 
             font-size: 15px;
             width: 100%; /* Forces the input to take full width of the line */
-            box-sizing: border-box; /* Border and padding included in the width */
+            box-sizing: border-box; 
         }
 
         /* Add custom styles for the textarea (joc) */
         #medical-conditions {
-            padding: 10px; /* Adjust padding as needed */
+            padding: 10px; 
             font-size: 17px;
             border-radius: 8px;
             border: 1px solid #ccc;
             width: 100%;
-            box-sizing: border-box; /* Include padding and border in width calculation */
+            box-sizing: border-box; 
             background-color: #ffffff; 
             border: 2px solid black;
         }
 
         select[disabled] {
-            padding: 10px; /* Adjust padding as needed */
+            padding: 10px; 
             font-size: 17px;
             border-radius: 8px;
             border: 1px solid #ccc;
             width: 100%;
-            box-sizing: border-box; /* Include padding and border in width calculation */
+            box-sizing: border-box; 
             background-color: #ffffff; 
             border: 2px solid black;
             opacity: 0.5; 
@@ -246,9 +245,6 @@ mysqli_close($link);
         </div>
 
         <!-- Sign Up & Login Button -->
-
-
-
         <?php if (isset($_SESSION['username'])): ?>
     <?php if ($_SESSION['username'] === 'doctor' || $_SESSION['username'] === 'admin'): ?>
         <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>

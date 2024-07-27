@@ -17,7 +17,6 @@ include 'dbfunctions.php';
     <title>Login Page</title>
 
     <style>
-        /* Existing styles */
         .login-container {
             display: flex;
             align-items: center;
@@ -44,7 +43,7 @@ include 'dbfunctions.php';
             align-items: center;
             max-width: 550px;
             width: 100%;
-            min-height: 400px; /* Ensure a longer height */
+            min-height: 400px; 
         }
 
         .login-form h1 {

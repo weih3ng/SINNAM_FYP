@@ -159,10 +159,10 @@ include 'dbfunctions.php';
         }
 
         .username-status {
-            margin-left: 10px; /* Adjust this value to move the message to the right */
-            margin-top: -50px; /* Adjust this value to move the message up */
-            color: red; /* You can change the color as needed */
-            font-size: 14px; /* Adjust font size if necessary */
+            margin-left: 10px; 
+            margin-top: -50px; 
+            color: red; 
+            font-size: 14px; 
         }
 
         .available {
@@ -192,9 +192,6 @@ include 'dbfunctions.php';
         </div>
     
         <!-- Sign Up & Login Button -->
-
-
-
         <?php if (isset($_SESSION['username'])): ?>
     <?php if ($_SESSION['username'] === 'doctor' || $_SESSION['username'] === 'admin'): ?>
         <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
@@ -339,6 +336,7 @@ include 'dbfunctions.php';
                 <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook"></i></a>
             </div>
         </footer>
+        
         <script>
         // Get the modal
         var modal = document.getElementById("termsModal");

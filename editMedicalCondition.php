@@ -258,7 +258,7 @@ mysqli_close($link);
                 @ 2024 Sin Nam Medical Hall All Rights Reserved
             </div>
             <div class="social-media">
-                <span style="margin-right: 10px;">Follow us</span> <!-- Added a span to apply margin -->
+                <span style="margin-right: 10px;">Follow us</span> 
                 <a href="https://www.facebook.com/profile.php?id=167794019905102&_rdr"><i class="fa-brands fa-facebook"></i></a>
             </div>
         </footer>

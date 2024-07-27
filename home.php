@@ -40,12 +40,12 @@ if (mysqli_num_rows($result) > 0) {
         .carousel-item img {
             width: 100%; 
             max-height: 500px; 
-            object-fit: cover; /* Image covers the area without distortion */
+            object-fit: cover; 
         }
 
         /* Styles for How To Book */
         .how-to-book-section {
-            padding: 40px 0; /* Top and bottom padding */
+            padding: 40px 0; 
         }
 
         .title-wrapper {
@@ -56,12 +56,12 @@ if (mysqli_num_rows($result) > 0) {
         }
 
         .title-wrapper h2 {
-            margin: 0 -30px; /* Adds spacing between the lines and the text */
+            margin: 0 -30px; 
             font-weight: bold;
         }
 
         .line {
-            flex-grow: 1; /* Allows the lines to take up available space */
+            flex-grow: 1; 
             border-top: 1.5px solid #000000; 
             max-width: 300px; 
         }
@@ -113,22 +113,22 @@ if (mysqli_num_rows($result) > 0) {
         }
 
         .testimonial-section img {
-            position: relative; /* Allows for positioning adjustments */
+            position: relative; 
             left: 8%;
             width: 650px;  
             height: 350px; 
-            object-fit: cover; /* Image covers the area without distortion */
+            object-fit: cover; 
         }
 
         .testimonial-content {
             position: absolute;
-            top: 50%;  /* Positions the top edge of the box */
-            right: 10%; /* Positions the right edge of the box */
+            top: 50%;  
+            right: 10%; 
             background: white;
             padding: 40px;
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
             width: 35%; 
-            transform: translateY(-50%); /* Center the box */ 
+            transform: translateY(-50%);
             margin-bottom: 30px; 
         }
 
@@ -186,7 +186,7 @@ if (mysqli_num_rows($result) > 0) {
         #carouselIndicators2 {
             position: absolute;
             bottom: -40px; /* Position the indicators below the content */
-            left: 20%; /* Move the indicators to the left */
+            left: 20%; 
             width: 100%;
             justify-content: center; 
             padding-left: 0;
