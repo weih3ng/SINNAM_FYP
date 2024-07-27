@@ -1,15 +1,15 @@
 <?php
-session_start(); // Starting the session 
+session_start(); // Starting the session (Dep)
 
 include 'dbfunctions.php';
 
-// Retrieving the email and password from POST request
+// Retrieving the email & password from POST request (Dep)
 $email = $_POST['email'];
-$password = sha1($_POST['password']); // Hashing of Passwords using SHA1 (Dep)
+$password = sha1($_POST['password']); // Hashing of passwords using SHA1 (Dep)
 
 $msg = "";
 
-// Function to check user in a specific table
+// Checking user (Dep)
 function check_user($link, $email, $password, $table) {
     $query = "SELECT * FROM $table WHERE email = ? AND password = ?";
     $stmt = mysqli_prepare($link, $query);
@@ -22,42 +22,40 @@ function check_user($link, $email, $password, $table) {
     return false;
 }
 
-// Check patients table
+// Checking if patients exists (Dep)
 $user = check_user($link, $email, $password, 'patients');
 $user_type = 'patient';
 $_SESSION['patients_id'] = $user['patients_id'];
-header('Location: viewAppointment.php?user_type=patient');
+header('Location: viewAppointment.php?user_type=patient'); // If found, direct to veiw appt page (Dep)
 
 if (!$user) {
-    // Check admins table
+    // Checking if admin exists (Dep)
     $user = check_user($link, $email, $password, 'admins');
     $user_type = 'admin';
-    header('Location: adminManageUsers.php'); // direct to admin panel page
+    header('Location: adminManageUsers.php'); // If found, direct to admin panel page (Dep)
 }
 
 if (!$user) {
-    // Check doctors table
+    // Checking if doctor exists (Dep)
     $user = check_user($link, $email, $password, 'doctors');
     $user_type = 'doctor';
-    header('Location: viewAppointment.php?user_type=doctor');
+    header('Location: viewAppointment.php?user_type=doctor'); // If found, direct to doctor's view appt page (Dep)
 }
 
-// If a user is found, set session variables and success message
+// If a user is found, indicate successful login & store username into db (Dep)
 if ($user) {
     $_SESSION['success_message'] = "Successfully logged in.";
     $_SESSION['username'] = $user['username'];
-    $_SESSION['loggedin'] = true; // Set the logged in session variable to true
+    $_SESSION['loggedin'] = true; 
 
 } else {
-    // If no user is found, set error message and redirect to login.php
+    // If no user is found, set error message and redirect to login page (Dep)
     $_SESSION['error_message'] = "Invalid email or password. Please try again.";
     header('Location: login.php');
 }
 
-mysqli_close($link); 
+mysqli_close($link); // Close db (Dep)
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -70,8 +68,6 @@ mysqli_close($link);
     <title>Login Successful Page</title>
 
     <style>
-
-
         .container {
             display: flex;
             align-items: center;
@@ -112,13 +108,10 @@ mysqli_close($link);
             cursor: pointer;
             font-weight: bold;
         }
-
-
-
     </style>
+
 </head>
 <body>
-
     <!-- Navigation Bar -->
     <div class="navbar">
         <a class="navbar-brand text-dark" href="home.php">
@@ -134,26 +127,22 @@ mysqli_close($link);
 
         <!-- Sign Up & Login Button -->
         <?php if (isset($_SESSION['username'])): ?>
-    <?php if ($_SESSION['username'] === 'doctor' || $_SESSION['username'] === 'admin'): ?>
-        <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
-    <?php else: ?>
-        <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: white;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
-    <?php endif; ?>
-<?php endif; ?>
-
-            <?php if (isset($_SESSION['username'])): ?>
-            <a class="nav-custom" href="logout.php">
-                <i class="fa-solid fa-right-to-bracket"></i> Logout
-            </a>  
-        <?php else: ?>
-            <a class="nav-custom" href="signUp.php">
-                <i class="fa-solid fa-user"></i> Sign Up
-            </a>
-            <a class="nav-custom" href="login.php">
-                <i class="fa-solid fa-right-to-bracket"></i> Login
-            </a>  
+            <?php if ($_SESSION['username'] === 'doctor' || $_SESSION['username'] === 'admin'): ?>
+                <p style='margin-top: 17px;'>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
+            <?php else: ?>
+                <p style='margin-top: 17px;'>Welcome, <a href='userProfile.php' style='text-decoration: underline; color: white;'><?php echo htmlspecialchars($_SESSION['username']); ?></a>!</p>
+            <?php endif; ?>
         <?php endif; ?>
 
+        <?php if (isset($_SESSION['username'])): ?>
+            <a class="nav-custom" href="logout.php">
+                <i class="fa-solid fa-right-to-bracket"></i> Logout</a>  
+        <?php else: ?>
+            <a class="nav-custom" href="signUp.php">
+                <i class="fa-solid fa-user"></i> Sign Up</a>
+            <a class="nav-custom" href="login.php">
+                <i class="fa-solid fa-right-to-bracket"></i> Login</a>  
+        <?php endif; ?>
         </div>
 
     <!-- Login Container -->
@@ -161,9 +150,7 @@ mysqli_close($link);
         <div class="content-box">
             <h1>Login Successful!</h1><br>
             <p>You have successfully logged in.</p><br>
-            <a href="home.php">
-                <button>Home</button>
-            </a>
+            <a href="home.php"><button>Home</button></a>
         </div>
     </div>
 

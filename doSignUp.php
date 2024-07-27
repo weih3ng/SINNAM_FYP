@@ -1,10 +1,10 @@
 <?php
-session_start(); // Start the session
+session_start(); // Start the session (Dep)
 
 include 'dbfunctions.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Get form data
+    // Get form data (Dep)
     $name = $_POST['name'];
     $username = $_POST['username'];
     $email = $_POST['email'];
@@ -21,19 +21,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     mysqli_stmt_store_result($stmt);
 
     if (mysqli_stmt_num_rows($stmt) > 0) {
-        // Username already exists
+        // If username exists, show error message (Dep)
         $_SESSION['error'] = "Username already exists. Please choose a different username.";
         header("Location: signUp.php");
         exit();
     }
 
-    // Insert the new user into the database
+    // Inserting new user into db (Dep)
     $query = "INSERT INTO patients (name, username, email, contactnumber, dob, password, gender) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($link, $query);
     mysqli_stmt_bind_param($stmt, "sssssss", $name, $username, $email, $contactnumber, $dob, $password, $gender);
 
     if (mysqli_stmt_execute($stmt)) {
-        // Registration successful
+        // If registration is sucessful, redirect to login page (Dep)
         $_SESSION['success'] = "Registration successful! You can now log in.";
         header("Location: login.php");
     } else {
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     mysqli_stmt_close($stmt);
     mysqli_close($link);
 } else {
-    // If the request method is not POST, redirect to the sign-up page
+    // If the request method is not POST, redirect to the sign-up page (Dep)
     header("Location: signUp.php");
     exit();
 }
