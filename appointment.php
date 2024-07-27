@@ -503,7 +503,7 @@ mysqli_close($link);
 
 
 
-        // Add event listener to show family info when the radio button is checked as "family" (joc)
+        // Check if all required fields are filled before submitting the form (joc)
         document.addEventListener("DOMContentLoaded", function() { // Wait for the document to load
             const form = document.querySelector("form.timeslot-container"); // Get the form element
 

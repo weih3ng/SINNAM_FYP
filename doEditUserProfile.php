@@ -12,7 +12,7 @@ $patients_id = $_SESSION['patients_id'];
 
 // Check if form data has been submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $name = mysqli_real_escape_string($link, $_POST['name']);
+    $name = mysqli_real_escape_string($link, $_POST['name']); // Escape any special characters to prevent SQL injection
     $username = mysqli_real_escape_string($link, $_POST['username']);
     $email = mysqli_real_escape_string($link, $_POST['email']);
     $dob = mysqli_real_escape_string($link, $_POST['dob']);

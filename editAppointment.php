@@ -35,9 +35,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $appointment_id = $_POST['appointment_id'];
     $date = $_POST['date'];
     $time = $_POST['time'];
-    $is_for_self = ($_POST['booking_for'] === 'self') ? 1 : 0;
-    $relationship_type = ($is_for_self == 0) ? $_POST['relationship_type'] : null;
-    $family_name = $is_for_self == 0 ? $_POST['family_name'] : null;
+    $is_for_self = ($_POST['booking_for'] === 'self') ? 1 : 0; // 1 for self, 0 for family member
+    $relationship_type = ($is_for_self == 0) ? $_POST['relationship_type'] : null; // Only applicable if booking for family member
+    $family_name = $is_for_self == 0 ? $_POST['family_name'] : null; // Only applicable if booking for family member
     $medical_condition = $_POST['medical_conditions'];
 
     // Validate date and time

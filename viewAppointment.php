@@ -32,15 +32,16 @@ if ($user_type === 'doctor') {
                 WHERE a.patients_id = ?";
 }
 
-if ($stmt = mysqli_prepare($link, $query)) {
-    if ($user_type !== 'doctor') {
-        mysqli_stmt_bind_param($stmt, "i", $patients_id);
-    }
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
 
-    $appointments = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    mysqli_free_result($result);
+if ($stmt = mysqli_prepare($link, $query)) { 
+    if ($user_type !== 'doctor') { 
+        mysqli_stmt_bind_param($stmt, "i", $patients_id); // Bind the patient's ID if user is not a doctor
+    }
+    mysqli_stmt_execute($stmt); //
+    $result = mysqli_stmt_get_result($stmt); // Get the result set from the executed query
+
+    $appointments = mysqli_fetch_all($result, MYSQLI_ASSOC); // Fetch all rows as an associative array
+    mysqli_free_result($result); 
     mysqli_stmt_close($stmt);
 } else {
     echo "ERROR: Could not prepare query: $query. " . mysqli_error($link);
@@ -302,7 +303,7 @@ if ($user_type === 'doctor') {
 
                     <tbody>
                         <?php foreach ($appointments as $appointment) : ?>
-                            <tr class="<?= $appointment['is_for_self'] ? 'self-appointment' : 'family-appointment'; ?>">
+                            <tr class="<?= $appointment['is_for_self'] ? 'self-appointment' : 'family-appointment'; ?>"> <!-- Add class based on 'Self' or 'Family' -->
                                 <td><?php echo htmlspecialchars($appointment['appointment_id']); ?></td>
                                 <td><?php echo htmlspecialchars($appointment['name']); ?></td>
                                 <td><?php echo htmlspecialchars($appointment['date']); ?></td>
