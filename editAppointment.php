@@ -335,6 +335,7 @@ mysqli_close($link);
         document.addEventListener('DOMContentLoaded', function() {
             const currentDate = new Date();
             const currentDateString = currentDate.toISOString().slice(0, 10); // Today's date in YYYY-MM-DD format
+            const originalDate = document.getElementById('date').value;
 
             // Set the minimum date attribute for the date input to prevent selecting past dates
             document.getElementById('date').min = currentDateString;
@@ -352,6 +353,8 @@ mysqli_close($link);
                 // Appointment cannot be scheduled on Sundays (0) or Mondays (1)
                 if (selectedDay === 0 || selectedDay === 1) {
                     alert('Appointments cannot be scheduled on Sundays or Mondays. Please choose another date.');
+                    document.getElementById('date').value = originalDate; 
+                    location.reload(); 
                     return;
                 }
 
