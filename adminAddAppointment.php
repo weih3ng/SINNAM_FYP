@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['patients_id'])) {
     mysqli_stmt_fetch($stmt);
     mysqli_stmt_close($stmt);
     
-    if ($count > 1) {
+    if ($count > 0) {
         $_SESSION['error_message'] = "The date and time slot has been booked. Please choose another date and time slot.";
     } else {
     // Insert the new appointment into the database
